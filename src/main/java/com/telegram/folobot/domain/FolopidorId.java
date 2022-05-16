@@ -1,0 +1,46 @@
+package com.telegram.folobot.domain;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+public class FolopidorId implements Serializable {
+    private long chatid;
+    private long userid;
+
+    // default constructor
+    public FolopidorId() {};
+
+    public FolopidorId(long chatid, long userid) {
+        this.chatid = chatid;
+        this.userid = userid;
+    }
+
+    public long getChatid() {
+        return chatid;
+    }
+
+    public void setChatid(long chatid) {
+        this.chatid = chatid;
+    }
+
+    public long getUserid() {
+        return userid;
+    }
+
+    public void setUserid(long userid) {
+        this.userid = userid;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FolopidorId)) return false;
+        FolopidorId that = (FolopidorId) o;
+        return chatid == that.chatid && userid == that.userid;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chatid, userid);
+    }
+}

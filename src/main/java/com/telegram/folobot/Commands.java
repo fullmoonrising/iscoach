@@ -1,7 +1,9 @@
 package com.telegram.folobot;
 
 public enum Commands {
-    SILENTSTREAM("/silentstream");
+    SILENTSTREAM("/silentstream"),
+    FOLOPIDOR("/folopidor"),
+    FOLOPIDORTOP("/folopidortop");
 
     public final String label;
 

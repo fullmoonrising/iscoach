@@ -5,36 +5,37 @@
 </head>
 <html>
     <body>
-
         <div>
             <form method="post" action="main">
-                <input type="text" name="text" placeholder="Введите сообщение" />
-                <input type="text" name="tag" placeholder="Тэг" />
+                <input type="text" name="chatid" placeholder="ChatId" />
+                <input type="text" name="userid" placeholder="UserId" />
+<!--                <input type="text" name="score" placeholder="Score" />-->
+                <input type="text" name="tag" placeholder="Tag" />
                 <button type="submit">Добавить</button>
             </form>
         </div>
 
         <form method="post" action="filter" >
-            <input type="text" name="filter" placeholder="Фильтр"/>
+            <input type="text" name="filter" placeholder="Фильтр по ChatId"/>
             <button type="submit">Найти</button>
         </form>
 
         <table border="1">
             <thead>
             <tr>
-                <th colspan="3">Список сообщений</th>
+                <th colspan="4">Список фолопидоров</th>
             </tr>
             </thead>
             <tbody>
-            {{#messages}}
+            {{#folopidors}}
                 <tr>
-                    <td><b>{{id}}</b></td>
-                    <td><span>{{text}}</span></td>
+                    <td><b>{{chatid}}</b></td>
+                    <td><b>{{userid}}</b></td>
+                    <td><span>{{score}}</span></td>
                     <td><i>{{tag}}</i></td>
                 </tr>
-            {{/messages}}
+            {{/folopidors}}
             </tbody>
         </table>
-
     </body>
 </html>
