@@ -1,7 +1,7 @@
-package com.example.twitor;
+package com.telegram.folobot;
 
-import com.example.twitor.domain.Message;
-import com.example.twitor.repos.MessageRepo;
+import com.telegram.folobot.domain.Folopidor;
+import com.telegram.folobot.repos.FolopidorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,20 +13,11 @@ import java.util.Map;
 @Controller
 public class MainController {
     @Autowired
-    private MessageRepo messageRepo;
-
-//    @GetMapping("/greeting")
-//    public String greeting(
-//            @RequestParam(name="name", required=false, defaultValue="World") String name,
-//            Map<String, Object> model
-//    ) {
-//        model.put("name", name);
-//        return "greeting";
-//    }
+    private FolopidorRepo folopidorRepo;
 
     @GetMapping
     public String main(Map<String, Object> model) {
-        Iterable<Message> messages = messageRepo.findAll();
+        Iterable<Folopidor> messages = folopidorRepo.findAll();
         model.put("messages", messages);
         return "main";
     }
@@ -37,8 +28,8 @@ public class MainController {
             @RequestParam String tag,
             Map<String, Object> model
     ) {
-        Message message = new Message(text, tag);
-        messageRepo.save(message);
+        Folopidor message = new Folopidor(text, tag);
+        folopidorRepo.save(message);
         return main(model);
     }
 
@@ -47,11 +38,11 @@ public class MainController {
             @RequestParam String filter,
             Map<String, Object> model
     ) {
-        Iterable<Message> messages;
+        Iterable<Folopidor> messages;
         if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
+            messages = folopidorRepo.findByTag(filter);
         } else {
-            messages = messageRepo.findAll();
+            messages = folopidorRepo.findAll();
         }
         model.put("messages", messages);
         return "main";

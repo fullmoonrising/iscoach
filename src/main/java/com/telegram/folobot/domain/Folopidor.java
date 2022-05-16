@@ -1,4 +1,4 @@
-package com.example.twitor.domain;
+package com.telegram.folobot.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,17 +6,17 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity // This tells Hibernate to make a table out of this class
-public class Message {
+public class Folopidor {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String text;
     private String tag;
 
-    public Message() {
+    public Folopidor() {
     }
 
-    public Message(String text, String tag) {
+    public Folopidor(String text, String tag) {
         this.text = text;
         this.tag = tag;
     }
