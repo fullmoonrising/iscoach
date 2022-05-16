@@ -3,14 +3,14 @@ package com.telegram.folobot.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class FolopidorId implements Serializable {
+public class FoloPidorId implements Serializable {
     private long chatid;
     private long userid;
 
     // default constructor
-    public FolopidorId() {};
+    public FoloPidorId() {};
 
-    public FolopidorId(long chatid, long userid) {
+    public FoloPidorId(long chatid, long userid) {
         this.chatid = chatid;
         this.userid = userid;
     }
@@ -34,8 +34,8 @@ public class FolopidorId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof FolopidorId)) return false;
-        FolopidorId that = (FolopidorId) o;
+        if (!(o instanceof FoloPidorId)) return false;
+        FoloPidorId that = (FoloPidorId) o;
         return chatid == that.chatid && userid == that.userid;
     }
 

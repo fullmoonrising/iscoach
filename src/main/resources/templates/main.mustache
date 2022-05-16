@@ -9,9 +9,13 @@
             <form method="post" action="main">
                 <input type="text" name="chatid" placeholder="ChatId" />
                 <input type="text" name="userid" placeholder="UserId" />
-<!--                <input type="text" name="score" placeholder="Score" />-->
                 <input type="text" name="tag" placeholder="Tag" />
                 <button type="submit">Добавить</button>
+            </form>
+            <form method="post" action="delete">
+                <input type="text" name="chatid" placeholder="ChatId" />
+                <input type="text" name="userid" placeholder="UserId" />
+                <button type="submit" >Удалить</button>
             </form>
         </div>
 
@@ -23,18 +27,26 @@
         <table border="1">
             <thead>
             <tr>
-                <th colspan="4">Список фолопидоров</th>
+                <th colspan="5">Список фолопидоров</th>
+            </tr>
+            <tr>
+                <th>ChatId</th>
+                <th>UserId</th>
+                <th>Счет</th>
+                <th>Тэг</th>
+                <th>Имя</th>
             </tr>
             </thead>
             <tbody>
-            {{#folopidors}}
-                <tr>
-                    <td><b>{{chatid}}</b></td>
-                    <td><b>{{userid}}</b></td>
-                    <td><span>{{score}}</span></td>
-                    <td><i>{{tag}}</i></td>
-                </tr>
-            {{/folopidors}}
+                {{#folopidors}}
+                    <tr>
+                        <td><b>{{chatid}}</b></td>
+                        <td><b>{{userid}}</b></td>
+                        <td><span>{{score}}</span></td>
+                        <td><i>{{tag}}</i></td>
+                        <td><i>{{name}}</i></td>
+                    </tr>
+                {{/folopidors}}
             </tbody>
         </table>
     </body>

@@ -1,4 +1,4 @@
-package com.telegram.folobot;
+package com.telegram.folobot.enums;
 
 public enum Commands {
     SILENTSTREAM("/silentstream"),

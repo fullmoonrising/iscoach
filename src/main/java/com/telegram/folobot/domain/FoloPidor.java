@@ -3,18 +3,16 @@ package com.telegram.folobot.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import java.io.Serializable;
-import java.util.Comparator;
 
 @Entity // This tells Hibernate to make a table out of this class
-@IdClass(FolopidorId.class)
+@IdClass(FoloPidorId.class)
 public class FoloPidor {
     @Id
-    private long chatid;
+    protected long chatid;
     @Id
-    private long userid;
-    private int score;
-    private String tag;
+    protected long userid;
+    protected int score;
+    protected String tag;
 
     public FoloPidor() {
     }
@@ -69,12 +67,5 @@ public class FoloPidor {
     public void setTag(String tag) {
         this.tag = tag;
     }
-
-//    @Override
-//    public int compareTo(FoloPidor o) {
-//        Comparator.comparing(FoloPidor::getChatid)
-//                .thenComparing(FoloPidor::getScore);
-//        return 0;
-//    }
 }
 

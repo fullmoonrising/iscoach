@@ -3,37 +3,28 @@ package com.telegram.folobot.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import java.util.Date;
 
 @Entity // This tells Hibernate to make a table out of this class
-@IdClass(FolopidorId.class)
+@IdClass(FoloDateId.class)
 public class FoloDate {
     @Id
     private long chatid;
     @Id
-    private long userid;
-    private int score;
-    private String tag;
+    private String type;
+    private Date date;
 
     public FoloDate() {
     }
 
-    public FoloDate(long chatid, long userid) {
-        this(chatid, userid, 0);
+    public FoloDate(long chatid, String type) {
+        this(chatid, type, new Date());
     }
 
-    public FoloDate(long chatid, long userid, int score) {
-        this(chatid, userid, score, "");
-    }
-
-    public FoloDate(long chatid, long userid, String tag) {
-        this(chatid, userid, 0, tag);
-    }
-
-    public FoloDate(long chatid, long userid, int score, String tag) {
+    public FoloDate(long chatid, String type, Date date) {
         this.chatid = chatid;
-        this.userid = userid;
-        this.score = score;
-        this.tag = tag;
+        this.type = type;
+        this.date = date;
     }
 
     public long getChatid() {
@@ -44,28 +35,20 @@ public class FoloDate {
         this.chatid = chatid;
     }
 
-    public long getUserid() {
-        return userid;
+    public String getType() {
+        return type;
     }
 
-    public void setUserid(long userid) {
-        this.userid = userid;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public int getScore() {
-        return score;
+    public Date getDate() {
+        return date;
     }
 
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setDate(Date date) {
+        this.date = date;
     }
 }
 
