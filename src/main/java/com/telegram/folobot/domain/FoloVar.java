@@ -3,28 +3,27 @@ package com.telegram.folobot.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
-import java.util.Date;
 
 @Entity // This tells Hibernate to make a table out of this class
-@IdClass(FoloDateId.class)
-public class FoloDate {
+@IdClass(FoloVarId.class)
+public class FoloVar {
     @Id
     private long chatid;
     @Id
     private String type;
-    private Date date;
+    private String value;
 
-    public FoloDate() {
+    public FoloVar() {
     }
 
-    public FoloDate(long chatid, String type) {
-        this(chatid, type, new Date());
+    public FoloVar(long chatid, String type) {
+        this(chatid, type, "");
     }
 
-    public FoloDate(long chatid, String type, Date date) {
+    public FoloVar(long chatid, String type, String value) {
         this.chatid = chatid;
         this.type = type;
-        this.date = date;
+        this.value = value;
     }
 
     public long getChatid() {
@@ -43,12 +42,12 @@ public class FoloDate {
         this.type = type;
     }
 
-    public Date getDate() {
-        return date;
+    public String getValue() {
+        return value;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setValue(String value) {
+        this.value = value;
     }
 }
 

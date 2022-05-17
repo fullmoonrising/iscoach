@@ -8,10 +8,10 @@ import javax.persistence.IdClass;
 @IdClass(FoloPidorId.class)
 public class FoloPidor {
     @Id
-    protected long chatid;
+    protected Long chatid;
     @Id
-    protected long userid;
-    protected int score;
+    protected Long userid;
+    protected Integer score;
     protected String tag;
 
     public FoloPidor() {
@@ -21,15 +21,15 @@ public class FoloPidor {
         this(chatid, userid, 0);
     }
 
-    public FoloPidor(long chatid, long userid, int score) {
+    public FoloPidor(Long chatid, Long userid, Integer score) {
         this(chatid, userid, score, "");
     }
 
-    public FoloPidor(long chatid, long userid, String tag) {
+    public FoloPidor(Long chatid, Long userid, String tag) {
         this(chatid, userid, 0, tag);
     }
 
-    public FoloPidor(long chatid, long userid, int score, String tag) {
+    public FoloPidor(Long chatid, Long userid, Integer score, String tag) {
         this.chatid = chatid;
         this.userid = userid;
         this.score = score;
@@ -66,6 +66,10 @@ public class FoloPidor {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    public boolean isEmpty() {
+        return this.chatid == null || this.userid == null;
     }
 }
 

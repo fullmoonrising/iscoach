@@ -37,7 +37,7 @@ public class MainController {
 
     @PostMapping("main")
     public String addFolopidor(
-            @RequestParam(name = "chatid", required = true, defaultValue = "-1001439088515" ) String chatid, //TODO поменять на константу
+            @RequestParam(name = "chatid", required = true ) String chatid,
             @RequestParam(name = "userid", required = true ) String userid,
             @RequestParam(name = "tag", required = false ) String tag,
             Map<String, Object> model
@@ -57,7 +57,7 @@ public class MainController {
     }
 
     @PostMapping("delete")
-    public String delete( //TODO сделать нормальный шаблон
+    public String delete( //TODO сделать нормальный шаблон, в идеале добавить кнопку удаления на таблицу
             @RequestParam(name = "chatid", required = true ) String chatid,
             @RequestParam(name = "userid", required = true ) String userid,
             Map<String, Object> model

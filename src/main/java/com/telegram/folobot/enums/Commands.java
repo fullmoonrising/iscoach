@@ -2,12 +2,13 @@ package com.telegram.folobot.enums;
 
 public enum Commands {
     SILENTSTREAM("/silentstream"),
+    FREELANCE("/freelance"),
     FOLOPIDOR("/folopidor"),
     FOLOPIDORTOP("/folopidortop");
 
     public final String label;
 
-    private Commands(String label) {
+    Commands(String label) {
         this.label = label;
     }
 
