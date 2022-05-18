@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Comparator;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -37,8 +36,7 @@ public class MainController {
     @PostMapping
     public String onAction(
             @RequestParam(name = "chatid", required = true) String chatid, //TODO команды в ENUM
-            @RequestParam(name = "filter", required = false) String filter,
-            @RequestParam(name = "userid", required = true) String userid,
+            @RequestParam(name = "userid", required = false) String userid,
             @RequestParam(name = "tag", required = false) String tag,
             @RequestParam(name = "action", required = true) String action,
             Map<String, Object> model
@@ -46,35 +44,27 @@ public class MainController {
         switch (action) {
             case "add":
                 if (!chatid.isEmpty() && !userid.isEmpty()) {
-                    //TODO оптимизировать
-//                    foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
-//                            .stream()
-//                            .findAny().isPresent()
-//                            .forEach();
-
-
-                    List<FoloPidor> folopidors = foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid));
-                    if (!folopidors.isEmpty()) {
-                        folopidors.forEach(foloPidor -> {
-                            foloPidor.setTag(tag);
-                            foloPidorRepo.save(foloPidor);
-                        });
-                    } else {
+                    if (foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid)).isEmpty()) {
                         foloPidorRepo.save(new FoloPidor(Long.parseLong(chatid), Long.parseLong(userid), tag));
                     }
                 }
                 break;
             case "update":
                 foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
-                        .forEach(foloPidor -> { foloPidor.setTag(tag); foloPidorRepo.save(foloPidor); } );
+                        .forEach(foloPidor -> {
+                            foloPidor.setTag(tag);
+                            foloPidorRepo.save(foloPidor);
+                        });
                 break;
             case "delete":
                 foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
-                        .forEach(foloPidor -> { foloPidorRepo.delete(foloPidor); } );
+                        .forEach(foloPidor -> {
+                            foloPidorRepo.delete(foloPidor);
+                        });
                 break;
             case "filter":
-                model.put("folopidors", prepareToShow( filter != null && !filter.isEmpty()
-                        ? foloPidorRepo.findByChatid(Long.parseLong(filter))
+                model.put("folopidors", prepareToShow(chatid != null && !chatid.isEmpty()
+                        ? foloPidorRepo.findByChatid(Long.parseLong(chatid))
                         : foloPidorRepo.findAll()));
                 return "main";
         }
@@ -92,5 +82,4 @@ public class MainController {
                 })
                 .collect(Collectors.toList());
     }
-
 }

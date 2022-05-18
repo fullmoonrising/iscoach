@@ -1,9 +1,13 @@
 package com.telegram.folobot.domain;
 
+import com.telegram.folobot.repos.FoloPidorRepo;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Transient;
+import java.util.List;
 
 @Entity // This tells Hibernate to make a table out of this class
 @IdClass(FoloPidorId.class)
@@ -21,7 +25,7 @@ public class FoloPidor {
     public FoloPidor() {
     }
 
-    public FoloPidor(long chatid, long userid) {
+    public FoloPidor(Long chatid, Long userid) {
         this(chatid, userid, 0);
     }
 
@@ -44,7 +48,7 @@ public class FoloPidor {
         return chatid;
     }
 
-    public void setChatid(long chatid) {
+    public void setChatid(Long chatid) {
         this.chatid = chatid;
     }
 
@@ -52,7 +56,7 @@ public class FoloPidor {
         return userid;
     }
 
-    public void setUserid(long userid) {
+    public void setUserid(Long userid) {
         this.userid = userid;
     }
 
@@ -60,7 +64,7 @@ public class FoloPidor {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(Integer score) {
         this.score = score;
     }
 
@@ -76,6 +80,7 @@ public class FoloPidor {
     public void setNew(boolean aNew) {
         isNew = aNew;
     }
+
     @Transient
     public boolean isNew() {
         return isNew;
