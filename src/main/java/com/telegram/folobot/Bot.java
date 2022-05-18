@@ -184,6 +184,9 @@ public class Bot extends TelegramLongPollingBot {
                 case FREELANCE:
                     frelanceTimer(update);
                     break;
+                case NOFAP:
+                    nofapTimer(update);
+                    break;
                 case FOLOPIDOR:
                     foloPidor(update);
                     break;
@@ -200,16 +203,19 @@ public class Bot extends TelegramLongPollingBot {
      * @param update {@link Update}
      */
     private void frelanceTimer(Update update) {
-        LocalDate fDate = LocalDate.of(2019, 11, 18);
-        LocalDate curDate = LocalDate.now();
-        Period period = Period.between(fDate, curDate);
-
-        sendMessage("18 ноября 2019 года я уволился с завода по своему желанию.", update);
-        sendMessage("С тех пор я стремительно вхожу в IT вот уже\n*" +
-                Utils.getNumText(Math.abs(period.getYears()), NumType.YEAR) + ", " +
-                Utils.getNumText(Math.abs(period.getMonths()), NumType.MONTH) + " и " +
-                Utils.getNumText(Math.abs(period.getDays()), NumType.DAY) + "!*", update);
+        sendMessage("18 ноября 2019 года я уволился с завода по своему желанию.\n" +
+                "С тех пор я стремительно вхожу в IT вот уже\n*" +
+                Utils.getDateText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now())) +
+                "*!", update);
     }
+
+    private void nofapTimer(Update update) {
+        sendMessage("Для особо озабоченных в десятый раз повторяю тут Вам, " +
+                "что я с Нового 2020 Года и до сих пор вот уже *" +
+                Utils.getDateText(Period.between(LocalDate.of(2020, 01, 01), LocalDate.now())) +
+                "* твёрдо и уверенно держу \"Но Фап\".", update);
+    }
+
 
     /**
      * Определяет фолопидора дня. Если уже определен показывает кто
@@ -258,34 +264,47 @@ public class Bot extends TelegramLongPollingBot {
      */
     public LocalDate getLastFolopidorDate(Long chatid) {
         List<FoloVar> foloVars = foloVarRepo.findByChatidAndType(chatid, VarType.LAST_FOLOPIDOR_DATE.name());
-        if (!foloVars.isEmpty()) {
-            return LocalDate.parse(foloVars.get(0).getValue());
-        } else {
-            return LocalDate.parse("1900-01-01");
-        }
+        return !foloVars.isEmpty() ? LocalDate.parse(foloVars.get(0).getValue()) : LocalDate.parse("1900-01-01");
     }
 
-    //TODO описание
+    /**
+     * Сохранить дату последнего опрделения фолопидора
+     *
+     * @param chatid
+     * @param value
+     */
     public void setLastFolopidorDate(Long chatid, LocalDate value) {
         foloVarRepo.save(new FoloVar(chatid, VarType.LAST_FOLOPIDOR_DATE.name(), value.toString()));
     }
 
-    //TODO описание
+    /**
+     * Последний фолопидор
+     *
+     * @param chatid
+     * @return
+     */
     public Long getLastFolopidorWinner(Long chatid) {
         List<FoloVar> foloVars = foloVarRepo.findByChatidAndType(chatid, VarType.LAST_FOLOPIDOR_USERID.name());
-        if (!foloVars.isEmpty()) {
-            return Long.parseLong(foloVars.get(0).getValue());
-        } else {
-            return null;
-        }
+        return !foloVars.isEmpty() ? Long.parseLong(foloVars.get(0).getValue()) : null;
     }
 
-    //TODO описание
+    /**
+     * Сохранить последнего фолопидора
+     *
+     * @param chatid
+     * @param value
+     */
     public void setLastFolopidorWinner(Long chatid, Long value) {
         foloVarRepo.save(new FoloVar(chatid, VarType.LAST_FOLOPIDOR_USERID.name(), Long.toString(value)));
     }
 
-    //TODO описание
+    /**
+     * Получение объекта фолопидора. Если не найден - возвращает пустого фолопидора
+     *
+     * @param chatid
+     * @param userid
+     * @return {@link FoloPidor}
+     */
     public FoloPidor getFoloPidor(Long chatid, Long userid) {
         List<FoloPidor> foloPidors = foloPidorRepo.findByChatidAndUserid(chatid, userid);
         if (!foloPidors.isEmpty()) {
@@ -297,12 +316,17 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
-    //TODO описание
+    /**
+     * Выбор случайного фолопидора
+     *
+     * @param chatid
+     * @return {@link FoloPidor}
+     */
     public FoloPidor getFoloPidor(Long chatid) {
         //Получаем список фолопидоров для чата
-        List<FoloPidor> folopidors = foloPidorRepo.findByChatid(chatid);
+        List<FoloPidor> foloPidors = foloPidorRepo.findByChatid(chatid);
         //Выбираем случайного
-        return folopidors.get((int) (Math.random() * folopidors.size()));
+        return foloPidors.get((int) (Math.random() * foloPidors.size()));
     }
 
     /**
@@ -417,10 +441,10 @@ public class Bot extends TelegramLongPollingBot {
                                 "Name: " + getUserName(update.getMessage().getFrom()) +
                                 "\nСообщение:\n" + update.getMessage().getText())
                         .build());
-                //Ответ Андрею стикером с фо TODO
-//                if ((update.getMessage().getFrom().getId()).equals(ANDREW_ID)) {
-//                    sendSticker(getRandomSticker(), update);
-//                }
+                //Ответ Андрею стикером с фо
+                if ((update.getMessage().getFrom().getId()).equals(ANDREW_ID) && new Random().nextInt(10) == 5) {
+                    sendSticker(getRandomSticker(), update);
+                }
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
@@ -558,7 +582,7 @@ public class Bot extends TelegramLongPollingBot {
                 "CAACAgIAAxkBAAICCWKCCLoO6Itf6HSKKGedTPzbyeioAAJQFAACey0pSznSfTz0daK-JAQ",
                 "CAACAgIAAxkBAAICCmKCCN_lePGRwqFYK4cPGBD4k_lpAAJcGQACmGshS9K8iR0VSuDVJAQ",
         };
-        return new InputFile(stickers[(int) (Math.random() * (3))]);
+        return new InputFile(stickers[(int) (Math.random() * stickers.length)]);
     }
 
     // Геттеры, которые необходимы для наследования от TelegramLongPollingBot

@@ -3,6 +3,7 @@ package com.telegram.folobot;
 import com.telegram.folobot.enums.NumType;
 
 import java.text.ChoiceFormat;
+import java.time.Period;
 
 public class Utils {
     /**
@@ -35,6 +36,12 @@ public class Utils {
         ChoiceFormat format = new ChoiceFormat(limits, strings);
         int rule = 11 <= (part % 100) && (part % 100) <= 14 ? part : part % 10;
         return String.valueOf(part) + ' ' + format.format(rule);
+    }
+
+    public static String getDateText(Period period) {
+        return getNumText(Math.abs(period.getYears()), NumType.YEAR) + ", " +
+                getNumText(Math.abs(period.getMonths()), NumType.MONTH) + " и " +
+                getNumText(Math.abs(period.getDays()), NumType.DAY);
     }
 
 }

@@ -3,6 +3,7 @@ package com.telegram.folobot.enums;
 public enum Commands {
     SILENTSTREAM("/silentstream"),
     FREELANCE("/freelance"),
+    NOFAP("/nofap"),
     FOLOPIDOR("/folopidor"),
     FOLOPIDORTOP("/folopidortop");
 

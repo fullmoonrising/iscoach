@@ -36,7 +36,7 @@ public class MainController {
     //TODO описание
     @PostMapping
     public String onAction(
-            @RequestParam(name = "chatid", required = true) String chatid,
+            @RequestParam(name = "chatid", required = true) String chatid, //TODO команды в ENUM
             @RequestParam(name = "filter", required = false) String filter,
             @RequestParam(name = "userid", required = true) String userid,
             @RequestParam(name = "tag", required = false) String tag,
