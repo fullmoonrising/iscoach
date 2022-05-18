@@ -3,6 +3,7 @@ package com.telegram.folobot.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.Transient;
 
 @Entity // This tells Hibernate to make a table out of this class
 @IdClass(FoloPidorId.class)
@@ -13,6 +14,9 @@ public class FoloPidor {
     protected Long userid;
     protected Integer score;
     protected String tag;
+
+    @Transient
+    private boolean isNew;
 
     public FoloPidor() {
     }
@@ -68,8 +72,22 @@ public class FoloPidor {
         this.tag = tag;
     }
 
+    @Transient
+    public void setNew(boolean aNew) {
+        isNew = aNew;
+    }
+    @Transient
+    public boolean isNew() {
+        return isNew;
+    }
+
     public boolean isEmpty() {
         return this.chatid == null || this.userid == null;
     }
+
+    public boolean hasScore() {
+        return this.score > 0;
+    }
+
 }
 

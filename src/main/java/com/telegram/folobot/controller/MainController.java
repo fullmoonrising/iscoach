@@ -24,64 +24,73 @@ public class MainController {
     @Autowired
     private FoloUserRepo foloUserRepo;
 
+    //TODO вынести стили в CSS файл
+
+    //TODO описание
     @GetMapping
     public String main(Map<String, Object> model) {
-        List<FoloPidorView> folopidors = StreamSupport.stream(foloPidorRepo.findAll().spliterator(), false)
+        model.put("folopidors", prepareToShow(foloPidorRepo.findAll()));
+        return "main";
+    }
+
+    //TODO описание
+    @PostMapping
+    public String onAction(
+            @RequestParam(name = "chatid", required = true) String chatid,
+            @RequestParam(name = "filter", required = false) String filter,
+            @RequestParam(name = "userid", required = true) String userid,
+            @RequestParam(name = "tag", required = false) String tag,
+            @RequestParam(name = "action", required = true) String action,
+            Map<String, Object> model
+    ) {
+        switch (action) {
+            case "add":
+                if (!chatid.isEmpty() && !userid.isEmpty()) {
+                    //TODO оптимизировать
+//                    foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
+//                            .stream()
+//                            .findAny().isPresent()
+//                            .forEach();
+
+
+                    List<FoloPidor> folopidors = foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid));
+                    if (!folopidors.isEmpty()) {
+                        folopidors.forEach(foloPidor -> {
+                            foloPidor.setTag(tag);
+                            foloPidorRepo.save(foloPidor);
+                        });
+                    } else {
+                        foloPidorRepo.save(new FoloPidor(Long.parseLong(chatid), Long.parseLong(userid), tag));
+                    }
+                }
+                break;
+            case "update":
+                foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
+                        .forEach(foloPidor -> { foloPidor.setTag(tag); foloPidorRepo.save(foloPidor); } );
+                break;
+            case "delete":
+                foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
+                        .forEach(foloPidor -> { foloPidorRepo.delete(foloPidor); } );
+                break;
+            case "filter":
+                model.put("folopidors", prepareToShow( filter != null && !filter.isEmpty()
+                        ? foloPidorRepo.findByChatid(Long.parseLong(filter))
+                        : foloPidorRepo.findAll()));
+                return "main";
+        }
+        return main(model);
+    }
+
+    //TODO описание
+    private Iterable<FoloPidorView> prepareToShow(Iterable<FoloPidor> foloPidors) {
+        return StreamSupport.stream(foloPidors.spliterator(), false)
                 .sorted(Comparator.comparingLong(FoloPidor::getChatid).thenComparingInt(FoloPidor::getScore).reversed())
                 .map(FoloPidorView::new)
-                .map(f -> { f.setName(foloUserRepo.findById(f.getUserid()).orElse(new FoloUser()).getName()); return f; } )
+                .map(foloPidor -> {
+                    foloPidor.setName(foloUserRepo.findById(foloPidor.getUserid()).orElse(new FoloUser()).getName());
+                    return foloPidor;
+                })
                 .collect(Collectors.toList());
-        model.put("folopidors", folopidors);
-        return "main";
-    }
-
-    @PostMapping("main")
-    public String addFolopidor(
-            @RequestParam(name = "chatid", required = true ) String chatid,
-            @RequestParam(name = "userid", required = true ) String userid,
-            @RequestParam(name = "tag", required = false ) String tag,
-            Map<String, Object> model
-    ) {
-        if (!chatid.isEmpty() && !userid.isEmpty()) {
-            List<FoloPidor> folopidors = foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid));
-            if (!folopidors.isEmpty()) {
-                folopidors.forEach(f -> {
-                    f.setTag(tag);
-                    foloPidorRepo.save(f);
-                });
-            } else {
-                foloPidorRepo.save(new FoloPidor(Long.parseLong(chatid), Long.parseLong(userid), tag));
-            }
-        }
-        return main(model);
-    }
-
-    @PostMapping("delete")
-    public String delete( //TODO сделать нормальный шаблон, в идеале добавить кнопку удаления на таблицу
-            @RequestParam(name = "chatid", required = true ) String chatid,
-            @RequestParam(name = "userid", required = true ) String userid,
-            Map<String, Object> model
-    ){
-        if (!chatid.isEmpty() && !userid.isEmpty()) {
-            List<FoloPidor> folopidors = foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid));
-            folopidors.forEach(f -> foloPidorRepo.delete(f) );
-        }
-        return main(model);
-    }
-
-    @PostMapping("filter")
-    public String filter( //TODO починить фильтр (сделать общий метод для обогащения данных)
-            @RequestParam String filter,
-            Map<String, Object> model
-    ) {
-        Iterable<FoloPidor> foloPidors;
-        if (filter != null && !filter.isEmpty()) {
-            foloPidors = foloPidorRepo.findByChatid(Long.parseLong(filter));
-        } else {
-            foloPidors = foloPidorRepo.findAll();
-        }
-        model.put("folopidors", foloPidors);
-        return "main";
     }
 
 }

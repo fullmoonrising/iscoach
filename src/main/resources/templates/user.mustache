@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<head>
+    <title>User</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<html>
+    <body>
+        <div>
+            <form method="post">
+                <button type="submit">Актуализировать</button>
+            </form>
+        </div>
+
+        <table border="1">
+            <thead>
+            <tr>
+                <th colspan="2">Список пользователей</th>
+            </tr>
+            <tr>
+                <th>UserId</th>
+                <th>Имя</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#folousers}}
+                    <tr>
+                        <td><b>{{userid}}</b></td>
+                        <td><i>{{name}}</i></td>
+                    </tr>
+                {{/folousers}}
+            </tbody>
+        </table>
+    </body>
+</html>
