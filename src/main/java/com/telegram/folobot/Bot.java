@@ -70,7 +70,7 @@ public class Bot extends TelegramLongPollingBot {
                     user = message.getNewChatMembers().get(0);
                 }
                 if (user != null) {
-                    // Фолопользователь //TODO сохранять username
+                    // Фолопользователь //TODO понаблюдать
 //                    if (foloUserRepo.findById(user.getId()).isEmpty()) {
                         foloUserRepo.save(new FoloUser(user.getId(), getUserName(user)));
 //                    }
@@ -376,9 +376,6 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage("Привет, уважаемый фолофил!", update, true);
             } else if (isAndrew(update.getMessage().getFrom())) {
                 sendMessage("Привет, моя сладкая бориспольская булочка!", update, true);
-            } else if (isVitalik(update.getMessage().getFrom())) {
-                sendMessage("Как же я горю сейчас", update);
-                sendMessage("Слово мужчини", update);
             } else {
                 sendMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
             }
@@ -394,6 +391,9 @@ public class Bot extends TelegramLongPollingBot {
         List<User> users = update.getMessage().getNewChatMembers();
         if (isAndrew(users.get(0))) {
             sendMessage("Наконец то ты вернулся, мой сладкий пирожочек Андрюша!", update, true);
+        } else if (isVitalik(users.get(0))) {
+            sendMessage("Как же я горю сейчас", update);
+            sendMessage("Слово мужчини", update);
         } else {
             if (update.getMessage().getChat().getId().equals(FOLOCHAT_ID)) {
                 sendMessage("Добро пожаловать в замечательный высокоинтеллектуальный фолочат, "
