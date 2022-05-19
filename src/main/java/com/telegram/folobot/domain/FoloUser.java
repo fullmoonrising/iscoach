@@ -9,7 +9,8 @@ public class FoloUser {
     private Long userid;
     private String name;
 
-    public FoloUser() {}
+    public FoloUser() {
+    }
 
     public FoloUser(Long userid, String name) {
         this.userid = userid;

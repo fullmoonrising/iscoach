@@ -1,16 +1,11 @@
 package com.telegram.folobot.controller;
 
-import com.telegram.folobot.domain.FoloPidor;
-import com.telegram.folobot.domain.FoloPidorView;
-import com.telegram.folobot.domain.FoloUser;
-import com.telegram.folobot.enums.ControllerCommands;
-import com.telegram.folobot.repos.FoloPidorRepo;
-import com.telegram.folobot.repos.FoloUserRepo;
+import com.telegram.folobot.domain.*;
+import com.telegram.folobot.enums.*;
+import com.telegram.folobot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -26,7 +21,7 @@ public class MainController {
 
     /**
      * Заполнение основного экрана
-     * @param model
+     * @param model Map с переменными
      * @return Имя экрана
      */
     @GetMapping
@@ -41,7 +36,7 @@ public class MainController {
      * @param userid ID пользователя
      * @param tag Переопределеннои имя
      * @param action Команда
-     * @param model
+     * @param model Map с переменными
      * @return Имя экрана
      */
     @PostMapping
@@ -69,9 +64,7 @@ public class MainController {
                 break;
             case delete:
                 foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
-                        .forEach(foloPidor -> {
-                            foloPidorRepo.delete(foloPidor);
-                        });
+                        .forEach(foloPidor -> foloPidorRepo.delete(foloPidor));
                 break;
             case filter:
                 model.put("folopidors", prepareToShow(chatid != null && !chatid.isEmpty()
@@ -91,10 +84,7 @@ public class MainController {
         return StreamSupport.stream(foloPidors.spliterator(), false)
                 .sorted(Comparator.comparingLong(FoloPidor::getChatid).thenComparingInt(FoloPidor::getScore).reversed())
                 .map(FoloPidorView::new)
-                .map(foloPidor -> {
-                    foloPidor.setName(foloUserRepo.findById(foloPidor.getUserid()).orElse(new FoloUser()).getName());
-                    return foloPidor;
-                })
+                .peek(foloPidor -> foloPidor.setName(foloUserRepo.findById(foloPidor.getUserid()).orElse(new FoloUser()).getName()))
                 .collect(Collectors.toList());
     }
 }
