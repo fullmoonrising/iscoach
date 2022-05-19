@@ -24,8 +24,6 @@ public class MainController {
     @Autowired
     private FoloUserRepo foloUserRepo;
 
-    //TODO вынести стили в CSS файл
-
     /**
      * Заполнение основного экрана
      * @param model
