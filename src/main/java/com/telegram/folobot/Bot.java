@@ -4,7 +4,7 @@ import com.telegram.folobot.domain.FoloPidor;
 import com.telegram.folobot.domain.FoloUser;
 import com.telegram.folobot.domain.FoloVar;
 import com.telegram.folobot.enums.Actions;
-import com.telegram.folobot.enums.Commands;
+import com.telegram.folobot.enums.BotCommands;
 import com.telegram.folobot.enums.NumType;
 import com.telegram.folobot.enums.VarType;
 import com.telegram.folobot.repos.FoloPidorRepo;
@@ -175,7 +175,7 @@ public class Bot extends TelegramLongPollingBot {
      * @param update {@link Update}
      */
     private void onCommand(Update update) {
-        Commands command = Commands.valueOfLabel(update.getMessage().getText().split("@")[0]);
+        BotCommands command = BotCommands.valueOfLabel(update.getMessage().getText().split("@")[0]);
         if (command != null) {
             switch (command) {
                 case SILENTSTREAM:
