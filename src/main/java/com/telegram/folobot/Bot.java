@@ -244,8 +244,8 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(Text.getSetup(), update);
                 sendMessage(Text.getPunch(getUserName(folopidor)), update);
             } else {
-                sendMessage("Фолопидор дня уже выбран, это " + getUserName(getFoloPidor(chatid, lastWinner)) +
-                        ". Пойду лучше лампово попержу в диван", update);
+                sendMessage("Фолопидор дня уже выбран, это *" + getUserName(getFoloPidor(chatid, lastWinner)) +
+                        "*. Пойду лучше лампово попержу в диван", update);
             }
 
         } else {
