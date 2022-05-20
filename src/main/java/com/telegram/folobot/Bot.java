@@ -4,6 +4,7 @@ import com.telegram.folobot.domain.*;
 import com.telegram.folobot.enums.*;
 import com.telegram.folobot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.*;
@@ -30,9 +31,10 @@ public class Bot extends TelegramLongPollingBot {
     private final Long VITALIK_ID = 800522859L;
     private final Long MY_ID = 50496196L;
 
-    // TODO брать из properties
-    private String botUsername = "FoloNewsBot";
-    private String botToken = "1355996036:AAGnc3B93ALckw6W5WGsZ1DN29y1bYat1cw";
+    @Value("${bot.username}")
+    private String botUsername;
+    @Value("${bot.token}")
+    private String botToken;
 
     @Autowired
     private FoloPidorRepo foloPidorRepo;
