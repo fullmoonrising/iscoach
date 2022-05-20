@@ -242,9 +242,9 @@ public class Bot extends TelegramLongPollingBot {
 
                 //Поздравляем
                 sendMessage(Text.getSetup(), update);
-                sendMessage(Text.getPunch(getUserNameLinked(folopidor)), update);
+                sendMessage(Text.getPunch(getUserName(folopidor)), update);
             } else {
-                sendMessage("Фолопидор дня уже выбран, это " + getUserNameLinked(getFoloPidor(chatid, lastWinner)) +
+                sendMessage("Фолопидор дня уже выбран, это " + getUserName(getFoloPidor(chatid, lastWinner)) +
                         ". Пойду лучше лампово попержу в диван", update);
             }
 
@@ -358,7 +358,7 @@ public class Bot extends TelegramLongPollingBot {
                         place = "  *" + (i + 1) + "*.  ";
                 }
                 FoloPidor foloPidor = foloPidors.get(i);
-                top.add(place + getUserNameLinked(foloPidor) + " — _" +
+                top.add(place + getUserName(foloPidor) + " — _" +
                         Utils.getNumText(foloPidor.getScore(), NumType.COUNT) + "_");
             }
             sendMessage(top.toString(), update);

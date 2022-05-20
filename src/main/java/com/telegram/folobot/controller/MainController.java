@@ -12,6 +12,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+//TODO расширение функциональности кокпита
+
 @Controller
 public class MainController {
     @Autowired
