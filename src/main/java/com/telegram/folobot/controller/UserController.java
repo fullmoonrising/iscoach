@@ -19,7 +19,7 @@ public class UserController {
     private FoloUserRepo foloUserRepo;
 
     @GetMapping("/user")
-    public String user(Map<String, Object> model) {
+    public String user(Map<String, Object> model) { //Добавить расширенную инфу на просмотре
         Iterable<FoloUser> foloUsers = foloUserRepo.findAll();
         model.put("folousers", foloUsers);
         return "user";

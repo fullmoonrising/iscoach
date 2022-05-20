@@ -17,6 +17,7 @@ import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+//TODO переезд в облако
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
@@ -70,9 +71,9 @@ public class Bot extends TelegramLongPollingBot {
                     user = message.getNewChatMembers().get(0);
                 }
                 if (user != null) {
-                    // Фолопользователь //TODO понаблюдать
+                    // Фолопользователь
 //                    if (foloUserRepo.findById(user.getId()).isEmpty()) {
-                        foloUserRepo.save(new FoloUser(user.getId(), getUserName(user)));
+                    foloUserRepo.save(new FoloUser(user.getId(), getUserName(user)));
 //                    }
                     // И фолопидор
                     if (!message.isUserMessage() && getFoloPidor(message.getChatId(), user.getId()).isNew()) {
@@ -267,7 +268,7 @@ public class Bot extends TelegramLongPollingBot {
      * Сохранить дату последнего опрделения фолопидора
      *
      * @param chatid ID чата
-     * @param value Дата
+     * @param value  Дата
      */
     public void setLastFolopidorDate(Long chatid, LocalDate value) {
         foloVarRepo.save(new FoloVar(chatid, VarType.LAST_FOLOPIDOR_DATE.name(), value.toString()));
@@ -288,7 +289,7 @@ public class Bot extends TelegramLongPollingBot {
      * Сохранить последнего фолопидора
      *
      * @param chatid ID чата
-     * @param value {@link Long} userid
+     * @param value  {@link Long} userid
      */
     public void setLastFolopidorWinner(Long chatid, Long value) {
         foloVarRepo.save(new FoloVar(chatid, VarType.LAST_FOLOPIDOR_USERID.name(), Long.toString(value)));
@@ -389,19 +390,23 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void onUserNew(Update update) { //TODO отдельное сообщение если добавили самого себя
-        List<User> users = update.getMessage().getNewChatMembers();
-        if (isAndrew(users.get(0))) {
+    private void onUserNew(Update update) {
+        User user = update.getMessage().getNewChatMembers().get(0);
+        if (isAndrew(user)) {
             sendMessage("Наконец то ты вернулся, мой сладкий пирожочек Андрюша!", update, true);
-        } else if (isVitalik(users.get(0))) {
+        } else if (isVitalik(user)) {
             sendMessage("Как же я горю сейчас", update);
             sendMessage("Слово мужчини", update);
+        } else if (isSelf(user)) {
+            sendMessage("Привет, с вами я, сильный и незаурядный репер МС Фоломкин.", update);
+            sendMessage("Спасибо, что вы смотрите мои замечательные видеоклипы.", update);
+            sendMessage("Я читаю текст, вы слушаете текст", update);
         } else {
             if (update.getMessage().getChat().getId().equals(FOLOCHAT_ID)) {
                 sendMessage("Добро пожаловать в замечательный высокоинтеллектуальный фолочат, "
-                        + getUserName(users.get(0)) + "!", update, true);
+                        + getUserName(user) + "!", update, true);
             } else {
-                sendMessage("Это не настоящий фолочат, " + getUserName(users.get(0)) + "!", update);
+                sendMessage("Это не настоящий фолочат, " + getUserName(user) + "!", update);
                 sendMessage("настоящий тут: \nt.me/alexfolomkin", update);
             }
         }
@@ -477,6 +482,7 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * Получение кликабельного имени пользователя
+     *
      * @param user {@link User}
      * @return Имя пользователя
      */
@@ -486,6 +492,7 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * Получение кликабельного имени фолопидора
+     *
      * @param foloPidor {@link FoloPidor}
      * @return Имя фолопидора
      */
@@ -512,6 +519,20 @@ public class Bot extends TelegramLongPollingBot {
      */
     private boolean isVitalik(User user) {
         return user != null && user.getId().equals(VITALIK_ID);
+    }
+
+    /**
+     * Определение является ли пользователь Виталиком
+     *
+     * @param user {@link User}
+     * @return да/нет
+     */
+    private boolean isSelf(User user) {
+        try {
+            return user != null && user.getId().equals(getMe().getId());
+        } catch (TelegramApiException e) {
+            return false;
+        }
     }
 
     /**
@@ -585,6 +606,7 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * Пересылка сообщений
+     *
      * @param chatid Чат куда будет переслано сообщение
      * @param update {@link Update}
      */
@@ -603,6 +625,7 @@ public class Bot extends TelegramLongPollingBot {
 
     /**
      * Отправить статус "печатает"
+     *
      * @param update {@link Update}
      */
     private void SendChatTyping(Update update) {
