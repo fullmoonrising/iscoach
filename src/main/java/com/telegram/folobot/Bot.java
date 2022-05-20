@@ -18,7 +18,6 @@ import java.time.Period;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-//TODO переезд в облако
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
