@@ -552,7 +552,7 @@ public class Bot extends TelegramLongPollingBot {
                         .text(text)
                         .build());
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                printExeptionMessage(e);
             }
         }
     }
@@ -578,7 +578,7 @@ public class Bot extends TelegramLongPollingBot {
                             .replyToMessageId(update.getMessage().getMessageId())
                             .build());
                 } catch (TelegramApiException e) {
-                    e.printStackTrace();
+                    printExeptionMessage(e);
                 }
             }
         }
@@ -600,7 +600,7 @@ public class Bot extends TelegramLongPollingBot {
                         .replyToMessageId(update.getMessage().getMessageId())
                         .build());
             } catch (TelegramApiException e) {
-                e.printStackTrace();
+                printExeptionMessage(e);
             }
         }
     }
@@ -620,7 +620,7 @@ public class Bot extends TelegramLongPollingBot {
                     .fromChatId(Long.toString(update.getMessage().getChatId()))
                     .build());
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            printExeptionMessage(e);
         }
     }
 
@@ -637,7 +637,7 @@ public class Bot extends TelegramLongPollingBot {
                     .action(String.valueOf(ActionType.TYPING))
                     .build());
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            printExeptionMessage(e);
         }
     }
 
@@ -654,6 +654,10 @@ public class Bot extends TelegramLongPollingBot {
                 "CAACAgIAAxkBAAICCmKCCN_lePGRwqFYK4cPGBD4k_lpAAJcGQACmGshS9K8iR0VSuDVJAQ",
         };
         return new InputFile(stickers[(int) (Math.random() * stickers.length)]);
+    }
+
+    private void printExeptionMessage(Throwable throwable) {
+        System.out.println(throwable.getStackTrace()[0] + " > " + throwable.getMessage());
     }
 
     // Геттеры, которые необходимы для наследования от TelegramLongPollingBot
