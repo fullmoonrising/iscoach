@@ -374,7 +374,7 @@ public class Bot extends TelegramWebhookBot {
      *
      * @param update {@link Update}
      */
-    private BotApiMethod<?> onReply(Update update) {
+    private BotApiMethod<?> onReply(Update update) { //TODO если привет то отвечает всегда, иначе с небольшим шансом
         if (update.getMessage().getText().toLowerCase().contains("гурманыч") ||
                 update.getMessage().getText().toLowerCase().contains(botUsername.toLowerCase())) {
             String userName = getUserName(update.getMessage().getFrom());
