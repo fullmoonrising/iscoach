@@ -44,4 +44,9 @@ public class Utils {
                 getNumText(Math.abs(period.getDays()), NumType.DAY);
     }
 
+    public static void printExeptionMessage(Throwable throwable) {
+        StackTraceElement[] stackTrace = throwable.getStackTrace();
+        System.out.println(stackTrace[stackTrace.length - 1] + " > " + throwable.getMessage());
+    }
+
 }

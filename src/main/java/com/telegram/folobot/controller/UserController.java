@@ -25,7 +25,7 @@ public class UserController {
         return "user";
     }
 
-    @PostMapping("user")
+    @PostMapping("/user")
     public String updateUsers(Map<String, Object> model) {
         Iterable<FoloPidor> foloPidors = foloPidorRepo.findAll();
         foloPidorRepo.findAll().forEach(f -> {

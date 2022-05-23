@@ -1,6 +1,7 @@
 package com.telegram.folobot.domain;
 
 import com.telegram.folobot.repos.FoloPidorRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.Entity;

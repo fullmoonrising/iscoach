@@ -6,7 +6,7 @@ import com.telegram.folobot.repos.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.api.methods.*;
 import org.telegram.telegrambots.meta.api.methods.send.*;
@@ -19,10 +19,13 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+
+import static com.telegram.folobot.Utils.printExeptionMessage;
+
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
 // Наследуемся от TelegramLongPollingBot - абстрактного класса Telegram API
-public class Bot extends TelegramLongPollingBot {
+public class Bot extends TelegramWebhookBot {
     private final Long FOLOCHAT_ID = -1001439088515L;
     private final Long POC_ID = -1001154453685L;
     private final Long ANDREWSLEGACY_ID = -1001210743498L;
@@ -35,6 +38,9 @@ public class Bot extends TelegramLongPollingBot {
     @Value("${bot.token}")
     private String botToken;
 
+    @Value("${bot.path}")
+    private String botPath;
+
     @Autowired
     private FoloPidorRepo foloPidorRepo;
     @Autowired
@@ -42,20 +48,25 @@ public class Bot extends TelegramLongPollingBot {
     @Autowired
     private FoloVarRepo foloVarRepo;
 
+    /**
+     * Пришел update от Telegram
+     *
+     * @param update {@link Update}
+     * @return {@link BotApiMethod<?>}
+     */
     @Override
-    public void onUpdateReceived(Update update) {
-        if (!update.hasMessage()) {
-            return;
+    public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
+        if (update.hasMessage()) {
+            //Добавление фолопользователя в бд
+            addFoloUser(update);
+
+            //Пересылка личных сообщений в спецчат
+            forwardPrivate(update);
+
+            //Действие в зависимости от содержимого update
+            return onAction(getAction(update), update);
         }
-
-        //Добавление фолопользователя в бд
-        addFoloUser(update);
-
-        //Пересылка личных сообщений в спецчат
-        forwardPrivate(update);
-
-        //Действие в зависимости от содержимого update
-        onAction(getAction(update), update);
+        return null;
     }
 
     /**
@@ -73,9 +84,7 @@ public class Bot extends TelegramLongPollingBot {
                 }
                 if (user != null) {
                     // Фолопользователь
-//                    if (foloUserRepo.findById(user.getId()).isEmpty()) {
                     foloUserRepo.save(new FoloUser(user.getId(), getUserName(user)));
-//                    }
                     // И фолопидор
                     if (!message.isUserMessage() && getFoloPidor(message.getChatId(), user.getId()).isNew()) {
                         foloPidorRepo.save(new FoloPidor(message.getChatId(), user.getId()));
@@ -142,28 +151,24 @@ public class Bot extends TelegramLongPollingBot {
      * @param action {@link Actions}
      * @param update пробрасывается из onUpdateReceived
      */
-    private void onAction(Actions action, Update update) {
-        if (action == null || action == Actions.UNDEFINED) {
-            return;
-        }
+    private BotApiMethod<?> onAction(Actions action, Update update) {
+        if (action != null && action != Actions.UNDEFINED) {
 
-        // Отправка чат статуса
-        SendChatTyping(update);
+            // Отправка чат статуса
+            SendChatTyping(update);
 
-        switch (action) {
-            case COMMAND:
-                onCommand(update);
-                break;
-            case REPLY:
-                onReply(update);
-                break;
-            case USERNEW:
-                onUserNew(update);
-                break;
-            case USERLEFT:
-                onUserLeft(update);
-                break;
+            switch (action) {
+                case COMMAND:
+                    return onCommand(update);
+                case REPLY:
+                    return onReply(update);
+                case USERNEW:
+                    return onUserNew(update);
+                case USERLEFT:
+                    return onUserLeft(update);
+            }
         }
+        return null;
     }
 
     /**
@@ -171,27 +176,24 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void onCommand(Update update) {
+    private BotApiMethod<?> onCommand(Update update) {
         BotCommands command = BotCommands.valueOfLabel(update.getMessage().getText().split("@")[0]);
         if (command != null) {
             switch (command) {
                 case SILENTSTREAM:
-                    sendSticker(getRandomSticker(), update);
+                    sendSticker(getRandomSticker(), update); //TODO возвращать BotApiMethod
                     break;
                 case FREELANCE:
-                    frelanceTimer(update);
-                    break;
+                    return frelanceTimer(update);
                 case NOFAP:
-                    nofapTimer(update);
-                    break;
+                    return nofapTimer(update);
                 case FOLOPIDOR:
-                    foloPidor(update);
-                    break;
+                    return foloPidor(update);
                 case FOLOPIDORTOP:
-                    foloPidorTop(update);
-                    break;
+                    return foloPidorTop(update);
             }
         }
+        return null;
     }
 
     /**
@@ -199,15 +201,15 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void frelanceTimer(Update update) {
-        sendMessage("18 ноября 2019 года я уволился с завода по своему желанию.\n" +
+    private BotApiMethod<?> frelanceTimer(Update update) {
+        return buildMessage("18 ноября 2019 года я уволился с завода по своему желанию.\n" +
                 "С тех пор я стремительно вхожу в IT вот уже\n*" +
                 Utils.getDateText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now())) +
                 "*!", update);
     }
 
-    private void nofapTimer(Update update) {
-        sendMessage("Для особо озабоченных в десятый раз повторяю тут Вам, " +
+    private BotApiMethod<?> nofapTimer(Update update) {
+        return buildMessage("Для особо озабоченных в десятый раз повторяю тут Вам, " +
                 "что я с Нового 2020 Года и до сих пор вот уже *" +
                 Utils.getDateText(Period.between(LocalDate.of(2020, 1, 1), LocalDate.now())) +
                 "* твёрдо и уверенно держу \"Но Фап\".", update);
@@ -219,7 +221,7 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void foloPidor(Update update) {
+    private BotApiMethod<?> foloPidor(Update update) {
         Long chatid = update.getMessage().getChatId();
 //        if (chatid.equals(FOLOCHAT_ID)) {
         if (!update.getMessage().isUserMessage()) {
@@ -244,14 +246,15 @@ public class Bot extends TelegramLongPollingBot {
                 sendMessage(Text.getSetup(), update);
                 sendMessage(Text.getPunch(getUserName(folopidor)), update);
             } else {
-                sendMessage("Фолопидор дня уже выбран, это *" + getUserName(getFoloPidor(chatid, lastWinner)) +
+                return buildMessage("Фолопидор дня уже выбран, это *" + getUserName(getFoloPidor(chatid, lastWinner)) +
                         "*. Пойду лучше лампово попержу в диван", update);
             }
 
         } else {
-            sendMessage("Для меня вы все фолопидоры, " +
+            return buildMessage("Для меня вы все фолопидоры, " +
                     getUserName(update.getMessage().getFrom()), update, true);
         }
+        return null;
     }
 
     /**
@@ -332,8 +335,7 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void foloPidorTop(Update update) {
-//        if (update.getMessage().getChatId().equals(FOLOCHAT_ID)) {
+    private BotApiMethod<?>  foloPidorTop(Update update) {
         if (!update.getMessage().isUserMessage()) {
             StringJoiner top = new StringJoiner("\n").add("Топ 10 *фолопидоров*:\n");
             List<FoloPidor> foloPidors =
@@ -361,9 +363,9 @@ public class Bot extends TelegramLongPollingBot {
                 top.add(place + getUserName(foloPidor) + " — _" +
                         Utils.getNumText(foloPidor.getScore(), NumType.COUNT) + "_");
             }
-            sendMessage(top.toString(), update);
+            return buildMessage(top.toString(), update);
         } else {
-            sendMessage("Андрей - почетный фолопидор на все времена!", update);
+            return buildMessage("Андрей - почетный фолопидор на все времена!", update);
         }
     }
 
@@ -372,18 +374,19 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void onReply(Update update) {
+    private BotApiMethod<?> onReply(Update update) {
         if (update.getMessage().getText().toLowerCase().contains("гурманыч") ||
                 update.getMessage().getText().toLowerCase().contains(botUsername.toLowerCase())) {
             String userName = getUserName(update.getMessage().getFrom());
             if (userName == null || userName.isEmpty()) {
-                sendMessage("Привет, уважаемый фолофил!", update, true);
+                return buildMessage("Привет, уважаемый фолофил!", update, true);
             } else if (isAndrew(update.getMessage().getFrom())) {
-                sendMessage("Привет, моя сладкая бориспольская булочка!", update, true);
+                return buildMessage("Привет, моя сладкая бориспольская булочка!", update, true);
             } else {
-                sendMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
+                return buildMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
             }
         }
+        return null;
     }
 
     /**
@@ -391,10 +394,10 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void onUserNew(Update update) {
+    private BotApiMethod<?> onUserNew(Update update) {
         User user = update.getMessage().getNewChatMembers().get(0);
         if (isAndrew(user)) {
-            sendMessage("Наконец то ты вернулся, мой сладкий пирожочек Андрюша!", update, true);
+            return buildMessage("Наконец то ты вернулся, мой сладкий пирожочек Андрюша!", update, true);
         } else if (isVitalik(user)) {
             sendMessage("Как же я горю сейчас", update);
             sendMessage("Слово мужчини", update);
@@ -404,13 +407,14 @@ public class Bot extends TelegramLongPollingBot {
             sendMessage("Я читаю текст, вы слушаете текст", update);
         } else {
             if (update.getMessage().getChat().getId().equals(FOLOCHAT_ID)) {
-                sendMessage("Добро пожаловать в замечательный высокоинтеллектуальный фолочат, "
+                return buildMessage("Добро пожаловать в замечательный высокоинтеллектуальный фолочат, "
                         + getUserName(user) + "!", update, true);
             } else {
                 sendMessage("Это не настоящий фолочат, " + getUserName(user) + "!", update);
                 sendMessage("настоящий тут: \nt.me/alexfolomkin", update);
             }
         }
+        return null;
     }
 
     /**
@@ -418,12 +422,12 @@ public class Bot extends TelegramLongPollingBot {
      *
      * @param update {@link Update}
      */
-    private void onUserLeft(Update update) {
+    private BotApiMethod<?> onUserLeft(Update update) {
         User user = update.getMessage().getLeftChatMember();
         if (isAndrew(user)) {
-            sendMessage("Сладкая бориспольская булочка покинула чат", update);
+            return buildMessage("Сладкая бориспольская булочка покинула чат", update);
         } else {
-            sendMessage("Куда же ты, " + getUserName(user) + "! Не уходи!", update);
+            return buildMessage("Куда же ты, " + getUserName(user) + "! Не уходи!", update);
         }
     }
 
@@ -498,7 +502,6 @@ public class Bot extends TelegramLongPollingBot {
      * @return Имя фолопидора
      */
     private String getUserNameLinked(FoloPidor foloPidor) {
-        String test = "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getUserid() + ")";
         return "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getUserid() + ")";
     }
 
@@ -536,6 +539,23 @@ public class Bot extends TelegramLongPollingBot {
         }
     }
 
+    //TODO javadoc
+    private SendMessage buildMessage(String text, Update update) {
+        return SendMessage
+                .builder()
+                .parseMode(ParseMode.MARKDOWN)
+                .chatId(Long.toString(update.getMessage().getChatId()))
+                .text(text)
+                .build();
+    }
+
+    //TODO javadoc
+    private SendMessage buildMessage(String text, Update update, boolean reply) {
+        SendMessage sendMessage = buildMessage(text, update);
+        if (reply) sendMessage.setReplyToMessageId(update.getMessage().getMessageId());
+        return sendMessage;
+    }
+
     /**
      * Отправить сообщение
      *
@@ -543,17 +563,10 @@ public class Bot extends TelegramLongPollingBot {
      * @param update {@link Update}
      */
     private void sendMessage(String text, Update update) {
-        if (text != null && !text.isEmpty()) {
-            try {
-                execute(SendMessage
-                        .builder()
-                        .parseMode(ParseMode.MARKDOWN)
-                        .chatId(Long.toString(update.getMessage().getChatId()))
-                        .text(text)
-                        .build());
-            } catch (TelegramApiException e) {
-                printExeptionMessage(e);
-            }
+        try {
+            execute(buildMessage(text, update));
+        } catch (TelegramApiException e) {
+            printExeptionMessage(e);
         }
     }
 
@@ -568,20 +581,25 @@ public class Bot extends TelegramLongPollingBot {
         if (!reply) {
             this.sendMessage(text, update);
         } else {
-            if (text != null && !text.isEmpty()) {
-                try {
-                    execute(SendMessage
-                            .builder()
-                            .parseMode(ParseMode.MARKDOWN)
-                            .chatId(Long.toString(update.getMessage().getChatId()))
-                            .text(text)
-                            .replyToMessageId(update.getMessage().getMessageId())
-                            .build());
-                } catch (TelegramApiException e) {
-                    printExeptionMessage(e);
-                }
+            try {
+                execute(buildMessage(text, update, reply));
+            } catch (TelegramApiException e) {
+                printExeptionMessage(e);
             }
         }
+    }
+
+    //TODO javadoc + возвращаться должно BotApiMethod
+    private SendSticker buildSticker(InputFile stickerFile, Update update) {
+        if (stickerFile != null) {
+            return SendSticker
+                    .builder()
+                    .chatId(Long.toString(update.getMessage().getChatId()))
+                    .sticker(stickerFile)
+                    .replyToMessageId(update.getMessage().getMessageId())
+                    .build();
+        }
+        return null;
     }
 
     /**
@@ -593,12 +611,7 @@ public class Bot extends TelegramLongPollingBot {
     private void sendSticker(InputFile stickerFile, Update update) {
         if (stickerFile != null) {
             try {
-                execute(SendSticker
-                        .builder()
-                        .chatId(Long.toString(update.getMessage().getChatId()))
-                        .sticker(stickerFile)
-                        .replyToMessageId(update.getMessage().getMessageId())
-                        .build());
+                execute(buildSticker(stickerFile, update));
             } catch (TelegramApiException e) {
                 printExeptionMessage(e);
             }
@@ -656,16 +669,19 @@ public class Bot extends TelegramLongPollingBot {
         return new InputFile(stickers[(int) (Math.random() * stickers.length)]);
     }
 
-    private void printExeptionMessage(Throwable throwable) {
-        System.out.println(throwable.getStackTrace()[0] + " > " + throwable.getMessage());
-    }
-
-    // Геттеры, которые необходимы для наследования от TelegramLongPollingBot
+    // Геттеры, которые необходимы для наследования
+    @Override
     public String getBotUsername() {
         return botUsername;
     }
 
+    @Override
     public String getBotToken() {
         return botToken;
+    }
+
+    @Override
+    public String getBotPath() {
+        return botPath;
     }
 }

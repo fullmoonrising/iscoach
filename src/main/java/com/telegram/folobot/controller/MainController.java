@@ -26,7 +26,7 @@ public class MainController {
      * @param model Map с переменными
      * @return Имя экрана
      */
-    @GetMapping
+    @GetMapping("/main")
     public String main(Map<String, Object> model) {
         model.put("folopidors", prepareToShow(foloPidorRepo.findAll()));
         return "main";
@@ -41,7 +41,7 @@ public class MainController {
      * @param model Map с переменными
      * @return Имя экрана
      */
-    @PostMapping
+    @PostMapping("/main")
     public String onAction(
             @RequestParam(name = "chatid", required = true) String chatid,
             @RequestParam(name = "userid", required = false) String userid,
