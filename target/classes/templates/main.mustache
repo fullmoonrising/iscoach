@@ -1,58 +1,44 @@
 <!DOCTYPE html>
 <head>
-    <title>Main</title>
-    <meta http-equiv="Content-Type" content="text/html" charset=UTF-8"/>
+    <title>Amaizing folobot</title>
+    <meta http-equiv="Content-Type" content="text/html" charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <script src="js/main.js"></script>
 </head>
 <html>
-<body>
-<div>
-    <form method="post">
-        <input id="chatid" type="text" name="chatid" placeholder="ChatId"/>
-        <input id="userid" type="text" name="userid" placeholder="UserId"/>
-        <input type="text" name="tag" placeholder="Tag"/>
-        <button type="submit" name="action" value="add">Добавить</button>
-    </form>
-</div>
+    <body>
+        <div>
+            <a href="/folopidor">
+                <button>Фолопидоры</button>
+            </a>
+            <a href="/user">
+                <button>Пользователи</button>
+            </a>
+        </div>
+        <br>
 
-<form id="filterform" method="post">
-    <input id="filter" type="text" name="chatid" placeholder="Фильтр по ChatId"/>
-    <button type="submit" name="action" value="filter">Отфильтровать</button>
-</form>
-
-<table id="maintab">
-    <thead>
-    <tr>
-        <th>ChatId</th>
-        <th>UserId</th>
-        <th>Счет</th>
-        <th>Тэг</th>
-        <th>Имя</th>
-        <th colspan="2">Действие</th>
-    </tr>
-    </thead>
-    <tbody>
-    {{#folopidors}}
-        <tr>
-            <form method="post">
-                <td width=10% align="center"><input onclick="onClickChatid({{chatid}})"
-                                                    type="text" name="chatid" value={{chatid}} readonly/></td>
-                <td width=10% align="center"><input onclick="onClickUserid({{userid}})"
-                                                    type="text" name="userid" value={{userid}} readonly/></td>
-                <td width=5% align="center"><span>{{score}}</span></td>
-                <td width=50%><i><input type="text" name="tag" value="{{tag}}"/></i></td>
-                <td width="20%"><i>{{name}}</i></td>
-                <td width="5%" align="center">
-                    <button type="submit" name="action" value="update">Обновить</button>
-                </td>
-                <td width="5%" align="center">
-                    <button type="submit" name="action" value="delete">Удалить</button>
-                </td>
-            </form>
-        </tr>
-    {{/folopidors}}
-    </tbody>
-</table>
-</body>
+        <table id="maintab">
+            <tbody>
+                <tr bgcolor="#acf6fa">
+                    <form method="post">
+                       <td width="20%" height="30"><input id="chatid" type="text" name="chatid" placeholder="ChatId"/></td>
+                       <td width="70%" height="30"><input type="text" name="message" placeholder="Сообщение"/></td>
+                       <td width="10%" height="30"><button type="submit">Отправить</button></td>
+                    </form>
+                <tr>
+                <tr onclick="onClick(146072069)">
+                    <td width="20%"><i>146072069</i></td>
+                    <td width="80%">Андрей</td>
+                </tr>
+                <tr onclick="onClick(800522859)">
+                    <td width="20%"><i>800522859</i></td>
+                    <td width="80%">Виталик</td>
+                </tr>
+                <tr onclick="onClick(-1001439088515)">
+                    <td width="20%"><i>-1001439088515</i></td>
+                    <td width="80%">Фолочат</td>
+                </tr>
+            </tbody>
+        </table>
+    </body>
 </html>

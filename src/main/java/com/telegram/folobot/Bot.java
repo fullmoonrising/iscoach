@@ -19,7 +19,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-
 import static com.telegram.folobot.Utils.printExeptionMessage;
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
@@ -269,7 +268,7 @@ public class Bot extends TelegramWebhookBot {
     }
 
     /**
-     * Сохранить дату последнего опрделения фолопидора
+     * Сохранить дату последнего определения фолопидора
      *
      * @param chatid ID чата
      * @param value  Дата
@@ -539,7 +538,12 @@ public class Bot extends TelegramWebhookBot {
         }
     }
 
-    //TODO javadoc
+    /**
+     * Собрать объект {@link SendMessage}
+     * @param text Текст сообщения
+     * @param update {@link Update}
+     * @return {@link SendMessage}
+     */
     private SendMessage buildMessage(String text, Update update) {
         return SendMessage
                 .builder()
@@ -549,11 +553,30 @@ public class Bot extends TelegramWebhookBot {
                 .build();
     }
 
-    //TODO javadoc
+    /**
+     * Собрать объект {@link SendMessage}
+     * @param text Текст сообщения
+     * @param update {@link Update}
+     * @param reply В ответ на сообщение
+     * @return {@link SendMessage}
+     */
     private SendMessage buildMessage(String text, Update update, boolean reply) {
         SendMessage sendMessage = buildMessage(text, update);
         if (reply) sendMessage.setReplyToMessageId(update.getMessage().getMessageId());
         return sendMessage;
+    }
+
+    public void sendMessage(String text, Long chatid) {
+        try {
+            execute(SendMessage
+                    .builder()
+                    .parseMode(ParseMode.MARKDOWN)
+                    .chatId(Long.toString(chatid))
+                    .text(text)
+                    .build());
+        } catch (TelegramApiException e) {
+            printExeptionMessage(e);
+        }
     }
 
     /**
