@@ -112,7 +112,7 @@ public class Text {
     }
 
     public static String getPunch(String userName) {
-        return String.format(foloPidorPunch[new SplittableRandom().nextInt(foloPidorSetup.length)], userName);
+        return String.format(foloPidorPunch[new SplittableRandom().nextInt(foloPidorPunch.length)], userName);
     }
 
 }
