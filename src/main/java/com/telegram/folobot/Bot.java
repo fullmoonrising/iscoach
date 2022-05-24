@@ -158,9 +158,6 @@ public class Bot extends TelegramWebhookBot {
     private BotApiMethod<?> onAction(Actions action, Update update) {
         if (action != null && action != Actions.UNDEFINED) {
 
-            // Отправка чат статуса
-            SendChatTyping(update);
-
             switch (action) {
                 case COMMAND:
                     return onCommand(update);
@@ -186,6 +183,7 @@ public class Bot extends TelegramWebhookBot {
     private BotApiMethod<?> onCommand(Update update) {
         BotCommands command = BotCommands.valueOfLabel(update.getMessage().getText().split("@")[0]);
         if (command != null) {
+            SendChatTyping(update);
             switch (command) {
                 case SILENTSTREAM:
                     sendSticker(getRandomSticker(), update); //TODO возвращать BotApiMethod
@@ -396,6 +394,7 @@ public class Bot extends TelegramWebhookBot {
         String text = update.getMessage().getText().toLowerCase();
         if (text.contains("привет") || new SplittableRandom().nextInt(100) < 20) {
             String userName = getUserName(update.getMessage().getFrom());
+            SendChatTyping(update);
             if (userName == null || userName.isEmpty()) {
                 return buildMessage("Привет, уважаемый фолофил!", update, true);
             } else if (isAndrew(update.getMessage().getFrom())) {
@@ -414,6 +413,7 @@ public class Bot extends TelegramWebhookBot {
      * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onUserNew(Update update) {
+        SendChatTyping(update);
         User user = update.getMessage().getNewChatMembers().get(0);
         if (isAndrew(user)) {
             return buildMessage("Наконец то ты вернулся, мой сладкий пирожочек Андрюша!", update, true);
@@ -443,6 +443,7 @@ public class Bot extends TelegramWebhookBot {
      * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onUserLeft(Update update) {
+        SendChatTyping(update);
         User user = update.getMessage().getLeftChatMember();
         if (isAndrew(user)) {
             return buildMessage("Сладкая бориспольская булочка покинула чат", update);
