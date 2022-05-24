@@ -386,7 +386,7 @@ public class Bot extends TelegramWebhookBot {
         } else { //Личное сообщение
             if (isAndrew(update.getMessage().getFrom()) &&
                     new SplittableRandom().nextInt(100) < 20) {
-                return buildMessage("", update, true); //TODO
+                return buildMessage("", update, true); //TODO подключить библиотеку Димана
             }
         }
         return null;
