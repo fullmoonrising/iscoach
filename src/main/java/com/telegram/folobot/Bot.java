@@ -19,24 +19,19 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.telegram.folobot.ChatId.*;
 import static com.telegram.folobot.Utils.printExeptionMessage;
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
 // Наследуемся от TelegramLongPollingBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
-    private final Long FOLOCHAT_ID = -1001439088515L;
-    private final Long POC_ID = -1001154453685L;
-    private final Long ANDREWSLEGACY_ID = -1001210743498L;
-    private final Long ANDREW_ID = 146072069L;
-    private final Long VITALIK_ID = 800522859L;
-    private final Long MY_ID = 50496196L;
+
 
     @Value("${bot.username}")
     private String botUsername;
     @Value("${bot.token}")
     private String botToken;
-
     @Value("${bot.path}")
     private String botPath;
 
@@ -389,7 +384,8 @@ public class Bot extends TelegramWebhookBot {
                 }
             }
         } else { //Личное сообщение
-            if (isAndrew(update.getMessage().getFrom()) && new SplittableRandom().nextInt(100) < 20) {
+            if (isAndrew(update.getMessage().getFrom()) &&
+                    new SplittableRandom().nextInt(100) < 20) {
                 return buildMessage("", update, true); //TODO
             }
         }
@@ -413,7 +409,7 @@ public class Bot extends TelegramWebhookBot {
             sendMessage("Спасибо, что вы смотрите мои замечательные видеоклипы.", update);
             sendMessage("Я читаю текст, вы слушаете текст", update);
         } else {
-            if (update.getMessage().getChat().getId().equals(FOLOCHAT_ID)) {
+            if (isFolochat(update.getMessage().getChat())) {
                 return buildMessage("Добро пожаловать в замечательный высокоинтеллектуальный фолочат, "
                         + getUserName(user) + "!", update, true);
             } else {
@@ -446,9 +442,9 @@ public class Bot extends TelegramWebhookBot {
     private void forwardPrivate(Update update) {
         if (update.hasMessage())
             if (update.getMessage().isUserMessage()) {
-                forwardMessage(POC_ID, update);
-            } else if (update.getMessage().getFrom().getId().equals(ANDREW_ID)) {
-                forwardMessage(ANDREWSLEGACY_ID, update);
+                forwardMessage(ChatId.getPOC_ID(), update);
+            } else if (isAndrew(update.getMessage().getFrom())) {
+                forwardMessage(ChatId.getANDREWSLEGACY_ID(), update);
             }
     }
 
@@ -512,32 +508,6 @@ public class Bot extends TelegramWebhookBot {
         return "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getUserid() + ")";
     }
 
-    /**
-     * Определение является ли пользователь Андреем
-     *
-     * @param user {@link User}
-     * @return да/нет
-     */
-    private boolean isAndrew(User user) {
-        return user != null && user.getId().equals(ANDREW_ID);
-    }
-
-    /**
-     * Определение является ли пользователь Виталиком
-     *
-     * @param user {@link User}
-     * @return да/нет
-     */
-    private boolean isVitalik(User user) {
-        return user != null && user.getId().equals(VITALIK_ID);
-    }
-
-    /**
-     * Определение является ли пользователь Виталиком
-     *
-     * @param user {@link User}
-     * @return да/нет
-     */
     private boolean isSelf(User user) {
         try {
             return user != null && user.getId().equals(getMe().getId());
