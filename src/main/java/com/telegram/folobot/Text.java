@@ -1,5 +1,7 @@
 package com.telegram.folobot;
 
+import java.util.SplittableRandom;
+
 public class Text {
     public static String[] foloPidorSetup = {
             "Разогреваю сало в микроволновке\nЭкстра порция майонеза\nЗамечательно, всё готово",
@@ -106,11 +108,11 @@ public class Text {
     };
 
     public static String getSetup() {
-        return foloPidorSetup[(int) (Math.random() * foloPidorSetup.length)];
+        return foloPidorSetup[new SplittableRandom().nextInt(foloPidorSetup.length)];
     }
 
     public static String getPunch(String userName) {
-        return String.format(foloPidorPunch[(int) (Math.random() * foloPidorPunch.length)], userName);
+        return String.format(foloPidorPunch[new SplittableRandom().nextInt(foloPidorSetup.length)], userName);
     }
 
 }

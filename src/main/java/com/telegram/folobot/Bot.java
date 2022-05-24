@@ -326,7 +326,7 @@ public class Bot extends TelegramWebhookBot {
         //Получаем список фолопидоров для чата
         List<FoloPidor> foloPidors = foloPidorRepo.findByChatid(chatid);
         //Выбираем случайного
-        return foloPidors.get((int) (Math.random() * foloPidors.size()));
+        return foloPidors.get(new SplittableRandom().nextInt(foloPidors.size()));
     }
 
     /**
@@ -705,7 +705,7 @@ public class Bot extends TelegramWebhookBot {
                 "CAACAgIAAxkBAAICCWKCCLoO6Itf6HSKKGedTPzbyeioAAJQFAACey0pSznSfTz0daK-JAQ",
                 "CAACAgIAAxkBAAICCmKCCN_lePGRwqFYK4cPGBD4k_lpAAJcGQACmGshS9K8iR0VSuDVJAQ",
         };
-        return new InputFile(stickers[(int) (Math.random() * stickers.length)]);
+        return new InputFile(stickers[new SplittableRandom().nextInt(stickers.length)]);
     }
 
     // Геттеры, которые необходимы для наследования
