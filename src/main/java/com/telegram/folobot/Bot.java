@@ -24,7 +24,7 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
-// Наследуемся от TelegramLongPollingBot - абстрактного класса Telegram API
+// Наследуемся от TelegramWebhookBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
     private String botUsername;
@@ -384,7 +384,7 @@ public class Bot extends TelegramWebhookBot {
         } else { //Личное сообщение
             if (isAndrew(update.getMessage().getFrom()) &&
                     new SplittableRandom().nextInt(100) < 20) {
-                return buildMessage("", update, true); //TODO подключить библиотеку Димана
+                return buildMessage( Text.getQuoteforAndrew(), update, true);
             }
         }
         return null;

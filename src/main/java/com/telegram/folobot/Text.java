@@ -296,4 +296,8 @@ public class Text {
         return String.format(foloPidorPunch[new SplittableRandom().nextInt(foloPidorPunch.length)], userName);
     }
 
+    public static String getQuoteforAndrew() {
+        return quotesforAndrew[new SplittableRandom().nextInt(quotesforAndrew.length)];
+    }
+
 }
