@@ -26,8 +26,6 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 @Component
 // Наследуемся от TelegramLongPollingBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
-
-
     @Value("${bot.username}")
     private String botUsername;
     @Value("${bot.token}")
