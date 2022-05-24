@@ -3,6 +3,7 @@ package com.telegram.folobot;
 import com.telegram.folobot.domain.*;
 import com.telegram.folobot.enums.*;
 import com.telegram.folobot.repos.*;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,10 +28,13 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 // Наследуемся от TelegramWebhookBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
+    @Getter
     private String botUsername;
     @Value("${bot.token}")
+    @Getter
     private String botToken;
     @Value("${bot.path}")
+    @Getter
     private String botPath;
 
     @Autowired
@@ -44,7 +48,7 @@ public class Bot extends TelegramWebhookBot {
      * Пришел update от Telegram
      *
      * @param update {@link Update}
-     * @return {@link BotApiMethod<?>}
+     * @return {@link BotApiMethod}
      */
     @Override
     public BotApiMethod<?> onWebhookUpdateReceived(Update update) {
@@ -114,15 +118,22 @@ public class Bot extends TelegramWebhookBot {
 
         Message message = update.getMessage();
 
+        // Команда
         if (message.hasText()) {
-            String text = message.getText();
-            // Команда
-            if (message.getChat().isUserChat() && text.startsWith("/") ||
-                    !message.getChat().isUserChat() && text.startsWith("/") && text.endsWith("@" + botUsername)) {
+            if (message.getChat().isUserChat() && message.getText().startsWith("/") ||
+                    !message.getChat().isUserChat() && message.getText().startsWith("/") &&
+                            message.getText().endsWith("@" + botUsername)) {
                 return Actions.COMMAND;
             }
-            // Ответ на обращение
-            if (text.toLowerCase().contains("гурманыч") || text.toLowerCase().contains(botUsername.toLowerCase())) {
+        }
+        // Личное сообщение
+        if (message.isUserMessage()) {
+            return Actions.USERMESSAGE;
+        }
+        // Ответ на обращение
+        if (message.hasText()) {
+            if (message.getText().toLowerCase().contains("гурманыч") ||
+                    message.getText().toLowerCase().contains(botUsername.toLowerCase())) {
                 return Actions.REPLY;
             }
         }
@@ -142,6 +153,7 @@ public class Bot extends TelegramWebhookBot {
      *
      * @param action {@link Actions}
      * @param update пробрасывается из onUpdateReceived
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onAction(Actions action, Update update) {
         if (action != null && action != Actions.UNDEFINED) {
@@ -152,6 +164,8 @@ public class Bot extends TelegramWebhookBot {
             switch (action) {
                 case COMMAND:
                     return onCommand(update);
+                case USERMESSAGE:
+                    return onUserMessage(update);
                 case REPLY:
                     return onReply(update);
                 case USERNEW:
@@ -167,6 +181,7 @@ public class Bot extends TelegramWebhookBot {
      * Выполнение команды
      *
      * @param update {@link Update}
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onCommand(Update update) {
         BotCommands command = BotCommands.valueOfLabel(update.getMessage().getText().split("@")[0]);
@@ -199,7 +214,6 @@ public class Bot extends TelegramWebhookBot {
                 Utils.getDateText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now())) +
                 "*!", update);
     }
-
     private BotApiMethod<?> nofapTimer(Update update) {
         return buildMessage("Для особо озабоченных в десятый раз повторяю тут Вам, " +
                 "что я с Нового 2020 Года и до сих пор вот уже *" +
@@ -212,6 +226,7 @@ public class Bot extends TelegramWebhookBot {
      * Определяет фолопидора дня. Если уже определен показывает кто
      *
      * @param update {@link Update}
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> foloPidor(Update update) {
         Long chatid = update.getMessage().getChatId();
@@ -326,6 +341,7 @@ public class Bot extends TelegramWebhookBot {
      * Показывает топ фолопидоров
      *
      * @param update {@link Update}
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> foloPidorTop(Update update) {
         if (!update.getMessage().isUserMessage()) {
@@ -362,29 +378,36 @@ public class Bot extends TelegramWebhookBot {
     }
 
     /**
+     * Ответ на личное сообщение
+     * @param update {@link Update}
+     * @return {@link BotApiMethod}
+     */
+    private BotApiMethod<?> onUserMessage(Update update) {
+        if (isAndrew(update.getMessage().getFrom()) &&
+                new SplittableRandom().nextInt(100) < 20) {
+            return buildMessage(Text.getQuoteforAndrew(), update, true);
+        }
+        return null;
+    }
+
+
+    /**
      * Ответ на обращение
      *
      * @param update {@link Update}
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onReply(Update update) {
         // Cообщение в чат
-        if (!update.getMessage().isUserMessage()) {
-            String text = update.getMessage().getText().toLowerCase();
-            if ((text.contains("гурманыч") || text.contains(botUsername.toLowerCase())) &&
-                    (text.contains("привет") || new SplittableRandom().nextInt(100) < 20)) {
-                String userName = getUserName(update.getMessage().getFrom());
-                if (userName == null || userName.isEmpty()) {
-                    return buildMessage("Привет, уважаемый фолофил!", update, true);
-                } else if (isAndrew(update.getMessage().getFrom())) {
-                    return buildMessage("Привет, моя сладкая бориспольская булочка!", update, true);
-                } else {
-                    return buildMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
-                }
-            }
-        } else { //Личное сообщение
-            if (isAndrew(update.getMessage().getFrom()) &&
-                    new SplittableRandom().nextInt(100) < 20) {
-                return buildMessage( Text.getQuoteforAndrew(), update, true);
+        String text = update.getMessage().getText().toLowerCase();
+        if (text.contains("привет") || new SplittableRandom().nextInt(100) < 20) {
+            String userName = getUserName(update.getMessage().getFrom());
+            if (userName == null || userName.isEmpty()) {
+                return buildMessage("Привет, уважаемый фолофил!", update, true);
+            } else if (isAndrew(update.getMessage().getFrom())) {
+                return buildMessage("Привет, моя сладкая бориспольская булочка!", update, true);
+            } else {
+                return buildMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
             }
         }
         return null;
@@ -394,6 +417,7 @@ public class Bot extends TelegramWebhookBot {
      * Пользователь зашел в чат
      *
      * @param update {@link Update}
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onUserNew(Update update) {
         User user = update.getMessage().getNewChatMembers().get(0);
@@ -422,6 +446,7 @@ public class Bot extends TelegramWebhookBot {
      * Пользователь покинул чат
      *
      * @param update {@link Update}
+     * @return {@link BotApiMethod}
      */
     private BotApiMethod<?> onUserLeft(Update update) {
         User user = update.getMessage().getLeftChatMember();
@@ -506,6 +531,11 @@ public class Bot extends TelegramWebhookBot {
         return "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getUserid() + ")";
     }
 
+    /**
+     * Проверка что {@link User} это этот бот
+     * @param user {@link User}
+     * @return да/нет
+     */
     private boolean isSelf(User user) {
         try {
             return user != null && user.getId().equals(getMe().getId());
@@ -677,18 +707,18 @@ public class Bot extends TelegramWebhookBot {
     }
 
     // Геттеры, которые необходимы для наследования
-    @Override
-    public String getBotUsername() {
-        return botUsername;
-    }
-
-    @Override
-    public String getBotToken() {
-        return botToken;
-    }
-
-    @Override
-    public String getBotPath() {
-        return botPath;
-    }
+//    @Override
+//    public String getBotUsername() {
+//        return botUsername;
+//    }
+//
+//    @Override
+//    public String getBotToken() {
+//        return botToken;
+//    }
+//
+//    @Override
+//    public String getBotPath() {
+//        return botPath;
+//    }
 }
