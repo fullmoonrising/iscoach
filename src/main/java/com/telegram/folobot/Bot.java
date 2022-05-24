@@ -356,7 +356,7 @@ public class Bot extends TelegramWebhookBot {
                         place = "\uD83E\uDD49";
                         break;
                     default:
-                        place = "\u00A0*" + (i + 1) + "*.\u00A0";
+                        place = "\u2004*" + (i + 1) + "*.\u2004";
                 }
                 FoloPidor foloPidor = foloPidors.get(i);
                 top.add(place + getUserName(foloPidor) + " — _" +
