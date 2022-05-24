@@ -334,7 +334,7 @@ public class Bot extends TelegramWebhookBot {
      *
      * @param update {@link Update}
      */
-    private BotApiMethod<?>  foloPidorTop(Update update) {
+    private BotApiMethod<?> foloPidorTop(Update update) {
         if (!update.getMessage().isUserMessage()) {
             StringJoiner top = new StringJoiner("\n").add("Топ 10 *фолопидоров*:\n");
             List<FoloPidor> foloPidors =
@@ -373,16 +373,24 @@ public class Bot extends TelegramWebhookBot {
      *
      * @param update {@link Update}
      */
-    private BotApiMethod<?> onReply(Update update) { //TODO если привет то отвечает всегда, иначе с небольшим шансом
-        if (update.getMessage().getText().toLowerCase().contains("гурманыч") ||
-                update.getMessage().getText().toLowerCase().contains(botUsername.toLowerCase())) {
-            String userName = getUserName(update.getMessage().getFrom());
-            if (userName == null || userName.isEmpty()) {
-                return buildMessage("Привет, уважаемый фолофил!", update, true);
-            } else if (isAndrew(update.getMessage().getFrom())) {
-                return buildMessage("Привет, моя сладкая бориспольская булочка!", update, true);
-            } else {
-                return buildMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
+    private BotApiMethod<?> onReply(Update update) {
+        // Cообщение в чат
+        if (!update.getMessage().isUserMessage()) {
+            String text = update.getMessage().getText().toLowerCase();
+            if ((text.contains("гурманыч") || text.contains(botUsername.toLowerCase())) &&
+                    (text.contains("привет") || new SplittableRandom().nextInt(100) < 20)) {
+                String userName = getUserName(update.getMessage().getFrom());
+                if (userName == null || userName.isEmpty()) {
+                    return buildMessage("Привет, уважаемый фолофил!", update, true);
+                } else if (isAndrew(update.getMessage().getFrom())) {
+                    return buildMessage("Привет, моя сладкая бориспольская булочка!", update, true);
+                } else {
+                    return buildMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
+                }
+            }
+        } else { //Личное сообщение
+            if (isAndrew(update.getMessage().getFrom()) && new SplittableRandom().nextInt(100) < 20) {
+                return buildMessage("", update, true); //TODO
             }
         }
         return null;
@@ -540,7 +548,8 @@ public class Bot extends TelegramWebhookBot {
 
     /**
      * Собрать объект {@link SendMessage}
-     * @param text Текст сообщения
+     *
+     * @param text   Текст сообщения
      * @param update {@link Update}
      * @return {@link SendMessage}
      */
@@ -555,9 +564,10 @@ public class Bot extends TelegramWebhookBot {
 
     /**
      * Собрать объект {@link SendMessage}
-     * @param text Текст сообщения
+     *
+     * @param text   Текст сообщения
      * @param update {@link Update}
-     * @param reply В ответ на сообщение
+     * @param reply  В ответ на сообщение
      * @return {@link SendMessage}
      */
     private SendMessage buildMessage(String text, Update update, boolean reply) {
@@ -566,6 +576,12 @@ public class Bot extends TelegramWebhookBot {
         return sendMessage;
     }
 
+    /**
+     * Отправить сообщение
+     *
+     * @param text   текст сообщения
+     * @param chatid ID чата(пользователя)
+     */
     public void sendMessage(String text, Long chatid) {
         try {
             execute(SendMessage
