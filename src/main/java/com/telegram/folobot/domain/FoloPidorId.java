@@ -7,7 +7,6 @@ public class FoloPidorId implements Serializable {
     private long chatid;
     private long userid;
 
-    // default constructor
     public FoloPidorId() {};
 
     public FoloPidorId(long chatid, long userid) {

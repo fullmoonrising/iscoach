@@ -1,11 +1,16 @@
 package com.telegram.folobot.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 @IdClass(FoloVarId.class)
+@Getter
+@Setter
 public class FoloVar {
     @Id
     private long chatid;
@@ -23,30 +28,6 @@ public class FoloVar {
     public FoloVar(long chatid, String type, String value) {
         this.chatid = chatid;
         this.type = type;
-        this.value = value;
-    }
-
-    public long getChatid() {
-        return chatid;
-    }
-
-    public void setChatid(long chatid) {
-        this.chatid = chatid;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
         this.value = value;
     }
 }

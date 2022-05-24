@@ -56,15 +56,14 @@ public class FolopidorController {
                 }
                 break;
             case update:
-                foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
-                        .forEach(foloPidor -> {
-                            foloPidor.setTag(tag);
-                            foloPidorRepo.save(foloPidor);
-                        });
+                FoloPidor foloPidor = foloPidorRepo
+                        .findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid));
+                foloPidor.setTag(tag);
+                foloPidorRepo.save(foloPidor);
                 break;
             case delete:
-                foloPidorRepo.findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid))
-                        .forEach(foloPidor -> foloPidorRepo.delete(foloPidor));
+                foloPidorRepo.delete(foloPidorRepo.
+                        findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid)));
                 break;
             case filter:
                 model.put("folopidors", prepareToShow(chatid != null && !chatid.isEmpty()

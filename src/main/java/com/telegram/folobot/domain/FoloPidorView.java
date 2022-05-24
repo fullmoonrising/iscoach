@@ -1,7 +1,6 @@
 package com.telegram.folobot.domain;
 
 public class FoloPidorView extends FoloPidor { //TODO переделать на джойн
-
     private String name;
 
     public FoloPidorView() {};

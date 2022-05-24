@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface FoloPidorRepo extends CrudRepository<FoloPidor, FoloPidorId> {
-    List<FoloPidor> findByChatidAndUserid(long chatid, long userid);
+    FoloPidor findByChatidAndUserid(long chatid, long userid);
 
     List<FoloPidor> findByChatid(long chatid);
 }

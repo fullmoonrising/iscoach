@@ -271,8 +271,8 @@ public class Bot extends TelegramWebhookBot {
      * @return {@link LocalDate}
      */
     public LocalDate getLastFolopidorDate(Long chatid) {
-        List<FoloVar> foloVars = foloVarRepo.findByChatidAndType(chatid, VarType.LAST_FOLOPIDOR_DATE.name());
-        return !foloVars.isEmpty() ? LocalDate.parse(foloVars.get(0).getValue()) : LocalDate.parse("1900-01-01");
+        FoloVar foloVar = foloVarRepo.findByChatidAndType(chatid, VarType.LAST_FOLOPIDOR_DATE.name());
+        return foloVar != null ? LocalDate.parse(foloVar.getValue()) : LocalDate.parse("1900-01-01");
     }
 
     /**
@@ -292,8 +292,8 @@ public class Bot extends TelegramWebhookBot {
      * @return {@link Long} userid
      */
     public Long getLastFolopidorWinner(Long chatid) {
-        List<FoloVar> foloVars = foloVarRepo.findByChatidAndType(chatid, VarType.LAST_FOLOPIDOR_USERID.name());
-        return !foloVars.isEmpty() ? Long.parseLong(foloVars.get(0).getValue()) : null;
+        FoloVar foloVar = foloVarRepo.findByChatidAndType(chatid, VarType.LAST_FOLOPIDOR_USERID.name());
+        return foloVar != null ? Long.parseLong(foloVar.getValue()) : null;
     }
 
     /**
@@ -314,14 +314,8 @@ public class Bot extends TelegramWebhookBot {
      * @return {@link FoloPidor}
      */
     public FoloPidor getFoloPidor(Long chatid, Long userid) {
-        List<FoloPidor> foloPidors = foloPidorRepo.findByChatidAndUserid(chatid, userid);
-        if (!foloPidors.isEmpty()) {
-            return foloPidors.get(0);
-        } else {
-            FoloPidor foloPidor = new FoloPidor(chatid, userid);
-            foloPidor.setNew(true);
-            return foloPidor;
-        }
+        return Optional.ofNullable(foloPidorRepo.findByChatidAndUserid(chatid, userid))
+                .orElse(FoloPidor.createNew(chatid, userid));
     }
 
     /**

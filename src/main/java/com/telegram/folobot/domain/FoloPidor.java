@@ -1,17 +1,15 @@
 package com.telegram.folobot.domain;
 
-import com.telegram.folobot.repos.FoloPidorRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Transient;
-import java.util.List;
+import javax.persistence.*;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 @IdClass(FoloPidorId.class)
+@Getter
+@Setter
 public class FoloPidor {
     @Id
     protected Long chatid;
@@ -45,47 +43,17 @@ public class FoloPidor {
         this.tag = tag;
     }
 
-    public long getChatid() {
-        return chatid;
-    }
-
-    public void setChatid(Long chatid) {
-        this.chatid = chatid;
-    }
-
-    public long getUserid() {
-        return userid;
-    }
-
-    public void setUserid(Long userid) {
-        this.userid = userid;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public String getTag() {
-        return tag;
-    }
-
-    public void setTag(String tag) {
-        this.tag = tag;
-    }
-
-    @Transient
-    public void setNew(boolean aNew) {
-        isNew = aNew;
-    }
-
     @Transient
     public boolean isNew() {
         return isNew;
     }
+
+    public static FoloPidor createNew(Long chatid, Long userid) {
+        FoloPidor foloPidor = new FoloPidor(chatid, userid);
+        foloPidor.setNew(true);
+        return foloPidor;
+    }
+
 
     public boolean isEmpty() {
         return this.chatid == null || this.userid == null;
