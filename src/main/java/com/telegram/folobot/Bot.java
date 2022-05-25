@@ -3,9 +3,9 @@ package com.telegram.folobot;
 import com.telegram.folobot.domain.*;
 import com.telegram.folobot.enums.*;
 import com.telegram.folobot.repos.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
@@ -26,7 +26,7 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
-@AllArgsConstructor
+@RequiredArgsConstructor
 // Наследуемся от TelegramWebhookBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
