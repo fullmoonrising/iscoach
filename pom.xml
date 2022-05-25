@@ -54,10 +54,6 @@
 
     </dependencies>
 
-    <properties>
-        <java.version>18</java.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
