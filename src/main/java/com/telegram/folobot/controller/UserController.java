@@ -4,6 +4,7 @@ import com.telegram.folobot.domain.FoloPidor;
 import com.telegram.folobot.domain.FoloUser;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.Map;
 
 @Controller
+@AllArgsConstructor
 public class UserController {
-    @Autowired
-    private FoloPidorRepo foloPidorRepo;
-    @Autowired
-    private FoloUserRepo foloUserRepo;
+    private final FoloPidorRepo foloPidorRepo;
+    private final FoloUserRepo foloUserRepo;
 
     @GetMapping("/user")
     public String user(Map<String, Object> model) {

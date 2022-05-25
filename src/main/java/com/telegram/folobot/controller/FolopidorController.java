@@ -3,7 +3,7 @@ package com.telegram.folobot.controller;
 import com.telegram.folobot.domain.*;
 import com.telegram.folobot.enums.*;
 import com.telegram.folobot.repos.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,11 +13,10 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Controller
+@AllArgsConstructor
 public class FolopidorController {
-    @Autowired
-    private FoloPidorRepo foloPidorRepo;
-    @Autowired
-    private FoloUserRepo foloUserRepo;
+    private final FoloPidorRepo foloPidorRepo;
+    private final FoloUserRepo foloUserRepo;
 
     /**
      * Заполнение основного экрана

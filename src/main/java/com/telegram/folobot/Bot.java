@@ -3,6 +3,7 @@ package com.telegram.folobot;
 import com.telegram.folobot.domain.*;
 import com.telegram.folobot.enums.*;
 import com.telegram.folobot.repos.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,7 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 
 // Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
+@AllArgsConstructor
 // Наследуемся от TelegramWebhookBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
@@ -37,12 +39,9 @@ public class Bot extends TelegramWebhookBot {
     @Getter
     private String botPath;
 
-    @Autowired
-    private FoloPidorRepo foloPidorRepo;
-    @Autowired
-    private FoloUserRepo foloUserRepo;
-    @Autowired
-    private FoloVarRepo foloVarRepo;
+    private final FoloPidorRepo foloPidorRepo;
+    private final FoloUserRepo foloUserRepo;
+    private final FoloVarRepo foloVarRepo;
 
     /**
      * Пришел update от Telegram

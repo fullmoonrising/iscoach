@@ -54,7 +54,6 @@ public class FoloPidor {
         return foloPidor;
     }
 
-
     public boolean isEmpty() {
         return this.chatid == null || this.userid == null;
     }
