@@ -29,7 +29,7 @@ public class FoloUser {
         this.tag = tag;
     }
 
-    public String getName() { return tag != null && !tag.isBlank() ? tag : name != null ? name : ""; }
+    public String getName() { return tag != null && !tag.isEmpty() ? tag : name != null ? name : ""; }
 
     public String getRealName() { return name != null ? name : ""; }
 
