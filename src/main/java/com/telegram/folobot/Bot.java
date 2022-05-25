@@ -24,10 +24,8 @@ import java.util.stream.Stream;
 import static com.telegram.folobot.ChatId.*;
 import static com.telegram.folobot.Utils.printExeptionMessage;
 
-// Аннотация @Component необходима, чтобы класс распознавался Spring, как полноправный Bean
 @Component
 @RequiredArgsConstructor
-// Наследуемся от TelegramWebhookBot - абстрактного класса Telegram API
 public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
     @Getter
@@ -79,7 +77,9 @@ public class Bot extends TelegramWebhookBot {
                 }
                 if (user != null) {
                     // Фолопользователь
-                    foloUserRepo.save(new FoloUser(user.getId(), getUserName(user)));
+                    FoloUser foloUser = foloUserRepo.findById(user.getId()).orElse(new FoloUser(user.getId()));
+                    foloUser.setName(getUserName(user));
+                    foloUserRepo.save(foloUser);
                     // И фолопидор
                     if (!message.isUserMessage() && getFoloPidor(message.getChatId(), user.getId()).isNew()) {
                         foloPidorRepo.save(new FoloPidor(message.getChatId(), user.getId()));
@@ -227,7 +227,6 @@ public class Bot extends TelegramWebhookBot {
      */
     private BotApiMethod<?> foloPidor(Update update) {
         Long chatid = update.getMessage().getChatId();
-//        if (chatid.equals(FOLOCHAT_ID)) {
         if (!update.getMessage().isUserMessage()) {
             //Определяем дату и победителя предыдущего запуска
             LocalDate lastDate = getLastFolopidorDate(chatid);
@@ -243,7 +242,7 @@ public class Bot extends TelegramWebhookBot {
                 foloPidorRepo.save(folopidor);
 
                 //Обновляем текущего победителя
-                setLastFolopidorWinner(chatid, folopidor.getUserid());
+                setLastFolopidorWinner(chatid, folopidor.getFoloUser().getUserid());
                 setLastFolopidorDate(chatid, LocalDate.now());
 
                 //Поздравляем
@@ -499,7 +498,7 @@ public class Bot extends TelegramWebhookBot {
         try {
             return !foloPidor.getTag().isEmpty() ? foloPidor.getTag() :
                     getUserName(execute(new GetChatMember(Long.toString(foloPidor.getChatid()),
-                            foloPidor.getUserid())).getUser());
+                            foloPidor.getFoloUser().getUserid())).getUser());
         } catch (TelegramApiException ignored) {
             return null;
         }
@@ -522,7 +521,7 @@ public class Bot extends TelegramWebhookBot {
      * @return Имя фолопидора
      */
     private String getUserNameLinked(FoloPidor foloPidor) {
-        return "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getUserid() + ")";
+        return "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getFoloUser().getUserid() + ")";
     }
 
     /**
@@ -699,20 +698,4 @@ public class Bot extends TelegramWebhookBot {
         };
         return new InputFile(stickers[new SplittableRandom().nextInt(stickers.length)]);
     }
-
-    // Геттеры, которые необходимы для наследования
-//    @Override
-//    public String getBotUsername() {
-//        return botUsername;
-//    }
-//
-//    @Override
-//    public String getBotToken() {
-//        return botToken;
-//    }
-//
-//    @Override
-//    public String getBotPath() {
-//        return botPath;
-//    }
 }

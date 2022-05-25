@@ -7,5 +7,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface FoloVarRepo extends CrudRepository<FoloVar, FoloVarId> {
-    FoloVar findByChatidAndType(long chatid, String type);
+    FoloVar findByChatidAndType(Long chatid, String type);
 }

@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <head>
-    <title>User</title>
+    <title>Пользователи</title>
     <meta http-equiv="Content-Type" content="text/html" charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/user.css">
 </head>
 <html>
     <body>
         <div>
             <form method="post">
-                <button type="submit">Актуализировать</button>
+                <input id="userid" type="text" name="userid" placeholder="UserId"/>
+                <input type="text" name="tag" placeholder="Tag"/>
+                <button type="submit" name="action" value="add">Добавить</button>
             </form>
         </div>
-
-        <table border="1">
+        <table id="maintab">
             <thead>
-            <tr>
-                <th colspan="2">Список пользователей</th>
-            </tr>
             <tr>
                 <th>UserId</th>
                 <th>Имя</th>
+                <th>Тэг</th>
+                <th colspan="2">Действие</th>
             </tr>
             </thead>
             <tbody>
-                {{#folousers}}
-                    <tr>
-                        <td><b>{{userid}}</b></td>
-                        <td><i>{{name}}</i></td>
-                    </tr>
-                {{/folousers}}
+            {{#folousers}}
+                <tr>
+                    <form method="post">
+                        <td width=10% align="center"><input type="text" name="userid" value={{userid}} readonly/></td>
+                        <td width="20%"><i>{{RealName}}</i></td>
+                        <td width=50%><i><input type="text" name="tag" value="{{tag}}"/></i></td>
+                        <td width="10%" align="center">
+                            <button type="submit" name="action" value="update">Обновить</button>
+                        </td>
+                        <td width="10%" align="center">
+                            <button type="submit" name="action" value="delete" disabled>Удалить</button>
+                        </td>
+                    </form>
+                </tr>
+            {{/folousers}}
             </tbody>
         </table>
     </body>

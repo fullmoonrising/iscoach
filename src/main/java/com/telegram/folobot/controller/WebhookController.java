@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
-
 @RestController
 @AllArgsConstructor
 public class WebhookController {
