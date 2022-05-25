@@ -10,6 +10,7 @@ public class ChatId {
     @Getter private static final Long ANDREWSLEGACY_ID = -1001210743498L;
     @Getter private static final Long ANDREW_ID = 146072069L;
     @Getter private static final Long VITALIK_ID = 800522859L;
+    @Getter private static final Long FOLOMKIN_ID = 362689512L;
     @Getter private static final Long MOONMOON_ID = 50496196L;
 
     public static boolean isFolochat(Chat chat) {
