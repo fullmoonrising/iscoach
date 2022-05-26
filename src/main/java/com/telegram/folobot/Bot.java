@@ -40,16 +40,16 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 
 @Component
 @RequiredArgsConstructor
-public class Bot extends TelegramWebhookBot {
+public class Bot extends TelegramWebhookBot { //TODO сделать bat? вносящий значения в системные переменные
     @Value("${bot.username}")
     @Getter
-    private String botUsername;// = System.getenv("bot.username");
+    private String botUsername;
     @Value("${bot.token}")
     @Getter
-    private String botToken;// = System.getenv("bot.token");
+    private String botToken;
     @Value("${bot.path}")
     @Getter
-    private String botPath;// = System.getenv("bot.path");
+    private String botPath;
 
     private final FoloPidorRepo foloPidorRepo;
     private final FoloUserRepo foloUserRepo;
@@ -389,7 +389,7 @@ public class Bot extends TelegramWebhookBot {
     private BotApiMethod<?> onUserMessage(Update update) {
         if (isAndrew(update.getMessage().getFrom()) &&
                 new SplittableRandom().nextInt(100) < 20) {
-            return buildMessage(Text.getQuoteforAndrew(), update, true);
+            forwardMessage(ChatId.getPOC_ID(), sendMessage(Text.getQuoteforAndrew(), update, true));
         }
         return null;
     }
@@ -586,10 +586,11 @@ public class Bot extends TelegramWebhookBot {
      *
      * @param text   текст сообщения
      * @param chatid ID чата(пользователя)
+     * @return {@link Message}
      */
-    public void sendMessage(String text, Long chatid) {
+    public Message sendMessage(String text, Long chatid) {
         try {
-            execute(SendMessage
+            return execute(SendMessage
                     .builder()
                     .parseMode(ParseMode.MARKDOWN)
                     .chatId(Long.toString(chatid))
@@ -598,6 +599,7 @@ public class Bot extends TelegramWebhookBot {
         } catch (TelegramApiException e) {
             printExeptionMessage(e);
         }
+        return null;
     }
 
     /**
@@ -605,13 +607,15 @@ public class Bot extends TelegramWebhookBot {
      *
      * @param text   текст сообщения
      * @param update {@link Update}
+     * @return {@link Message}
      */
-    private void sendMessage(String text, Update update) {
+    public Message sendMessage(String text, Update update) {
         try {
-            execute(buildMessage(text, update));
+            return execute(buildMessage(text, update));
         } catch (TelegramApiException e) {
             printExeptionMessage(e);
         }
+        return null;
     }
 
     /**
@@ -620,17 +624,19 @@ public class Bot extends TelegramWebhookBot {
      * @param text   текст сообщения
      * @param update {@link Update}
      * @param reply  да/нет
+     * @return {@link Message}
      */
-    private void sendMessage(String text, Update update, boolean reply) {
+    private Message sendMessage(String text, Update update, boolean reply) {
         if (!reply) {
-            this.sendMessage(text, update);
+            return this.sendMessage(text, update);
         } else {
             try {
-                execute(buildMessage(text, update, reply));
+                return execute(buildMessage(text, update, reply));
             } catch (TelegramApiException e) {
                 printExeptionMessage(e);
             }
         }
+        return null;
     }
 
     //TODO javadoc + возвращаться должно BotApiMethod
@@ -678,6 +684,21 @@ public class Bot extends TelegramWebhookBot {
                     .build());
         } catch (TelegramApiException e) {
             printExeptionMessage(e);
+        }
+    }
+
+    private void forwardMessage(Long chatid, Message message) {
+        if (message != null) {
+            try {
+                execute(ForwardMessage
+                        .builder()
+                        .chatId(Long.toString(chatid))
+                        .messageId(message.getMessageId())
+                        .fromChatId(Long.toString(message.getChatId()))
+                        .build());
+            } catch (TelegramApiException e) {
+                printExeptionMessage(e);
+            }
         }
     }
 
