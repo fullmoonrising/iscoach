@@ -40,7 +40,7 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 
 @Component
 @RequiredArgsConstructor
-public class Bot extends TelegramWebhookBot { //TODO сделать bat? вносящий значения в системные переменные
+public class Bot extends TelegramWebhookBot { //TODO сделать bat? вносящий значения в системные переменные Windows
     @Value("${bot.username}")
     @Getter
     private String botUsername;
