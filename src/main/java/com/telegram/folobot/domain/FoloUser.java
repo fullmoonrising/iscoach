@@ -3,16 +3,20 @@ package com.telegram.folobot.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 public class FoloUser {
     @Id
+    @Column(name = "userid")
     private Long userid;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userid", orphanRemoval = true)
+    private Set<FoloPidor> foloPidors = new HashSet<>();
     private String name;
     private String tag;
 

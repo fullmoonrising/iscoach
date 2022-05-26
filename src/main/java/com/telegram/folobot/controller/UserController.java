@@ -1,12 +1,9 @@
 package com.telegram.folobot.controller;
 
-import com.telegram.folobot.domain.FoloPidor;
 import com.telegram.folobot.domain.FoloUser;
 import com.telegram.folobot.enums.ControllerCommands;
-import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +18,7 @@ public class UserController {
 
     @GetMapping("/user")
     public String user(Map<String, Object> model) {
-        Iterable<FoloUser> foloUsers = foloUserRepo.findAll();
-        model.put("folousers", foloUsers);
+        model.put("folousers", foloUserRepo.findAll());
         return "user";
     }
 
@@ -35,9 +31,9 @@ public class UserController {
      */
     @PostMapping("/user")
     public String onAction(
-            @RequestParam(name = "userid", required = true) String userid,
-            @RequestParam(name = "tag", required = false) String tag,
-            @RequestParam(name = "action", required = true) String action,
+            @RequestParam String userid,
+            @RequestParam(required = false) String tag,
+            @RequestParam String action,
             Map<String, Object> model
     ) {
         switch (ControllerCommands.valueOf(action)) {

@@ -1,7 +1,6 @@
 package com.telegram.folobot.controller;
 
 import com.telegram.folobot.domain.FoloPidor;
-import com.telegram.folobot.domain.FoloUser;
 import com.telegram.folobot.enums.ControllerCommands;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
@@ -16,6 +15,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import static com.telegram.folobot.domain.FoloPidor.*;
+
 @Controller
 @AllArgsConstructor
 public class FolopidorController {
@@ -29,12 +30,7 @@ public class FolopidorController {
      */
     @GetMapping("/folopidor")
     public String main(Map<String, Object> model) {
-        model.put("folopidors", StreamSupport.stream(foloPidorRepo.findAll().spliterator(), false)
-                .sorted(Comparator
-                        .comparingLong(FoloPidor::getChatid)
-                        .thenComparingInt(FoloPidor::getScore)
-                        .reversed())
-                .collect(Collectors.toList()));
+        model.put("folopidors", sort(foloPidorRepo.findAll()));
         return "folopidor";
     }
 
@@ -49,18 +45,18 @@ public class FolopidorController {
      */
     @PostMapping("/folopidor")
     public String onAction(
-            @RequestParam(name = "chatid", required = true) String chatid,
-            @RequestParam(name = "userid", required = false) String userid,
-            @RequestParam(name = "score", required = false) String score,
-            @RequestParam(name = "action", required = true) String action,
+            @RequestParam String chatid,
+            @RequestParam(required = false) String userid,
+            @RequestParam(required = false) String score,
+            @RequestParam String action,
             Map<String, Object> model
     ) {
         switch (ControllerCommands.valueOf(action)) {
-            case add: //TODO после добавления не подтягивается имя
+            case add:
                 if (!chatid.isEmpty() && !userid.isEmpty() &&
                         !foloPidorRepo.existsByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid)) &&
                         foloUserRepo.existsById(Long.parseLong(userid))) {
-                    foloPidorRepo.save(new FoloPidor(Long.parseLong(chatid),
+                    foloPidorRepo.save(createNew(Long.parseLong(chatid),
                             Long.parseLong(userid),
                             Integer.parseInt(score)));
                 }
@@ -77,10 +73,19 @@ public class FolopidorController {
                 break;
             case filter:
                 model.put("folopidors", chatid != null && !chatid.isEmpty()
-                        ? foloPidorRepo.findByChatid(Long.parseLong(chatid))
-                        : foloPidorRepo.findAll());
+                        ? sort(foloPidorRepo.findByChatid(Long.parseLong(chatid)))
+                        : sort(foloPidorRepo.findAll()));
                 return "folopidor";
         }
         return main(model);
+    }
+
+    private Iterable<FoloPidor> sort(Iterable<FoloPidor> foloPidors) {
+        return StreamSupport.stream(foloPidors.spliterator(), false)
+                .sorted(Comparator
+                        .comparingLong(FoloPidor::getChatid)
+                        .thenComparingInt(FoloPidor::getScore)
+                        .reversed())
+                .collect(Collectors.toList());
     }
 }

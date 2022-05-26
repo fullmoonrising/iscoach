@@ -1,6 +1,5 @@
 package com.telegram.folobot.domain;
 
-import com.telegram.folobot.repos.FoloPidorRepo;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ public class FoloPidor {
     @Column(name = "userid")
     private Long userid;
 
-    @ManyToOne(fetch = FetchType.LAZY) //TODO удаление User влечет за собой удаление FoloPidor
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "userid", insertable = false, updatable = false)
     private FoloUser foloUser;
 
@@ -47,10 +46,15 @@ public class FoloPidor {
     public String getTag() { return Optional.ofNullable(foloUser).orElse(new FoloUser()).getTag(); }
 
     public static FoloPidor createNew(Long chatid, Long userid) {
-        FoloPidor foloPidor = new FoloPidor(chatid, userid);
+        return createNew(chatid, userid, 0);
+    }
+    public static FoloPidor createNew(Long chatid, Long userid, Integer score) {
+        FoloPidor foloPidor = new FoloPidor(chatid, userid, score);
+        foloPidor.foloUser = new FoloUser(userid);
         foloPidor.setNew(true);
         return foloPidor;
     }
+
     public boolean isNew() {
         return isNew;
     }
@@ -58,6 +62,5 @@ public class FoloPidor {
     public boolean hasScore() {
         return this.score > 0;
     }
-
 }
 
