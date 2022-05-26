@@ -43,13 +43,13 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
     @Getter
-    private String botUsername;
+    private String botUsername;// = System.getenv("bot.username");
     @Value("${bot.token}")
     @Getter
-    private String botToken;
+    private String botToken;// = System.getenv("bot.token");
     @Value("${bot.path}")
     @Getter
-    private String botPath;
+    private String botPath;// = System.getenv("bot.path");
 
     private final FoloPidorRepo foloPidorRepo;
     private final FoloUserRepo foloUserRepo;

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -22,11 +23,13 @@ public class UserController {
         return "user";
     }
 
-     /** Post-запрос на выполнение команды с основного экрана
+    /**
+     * Post-запрос на выполнение команды с основного экрана
+     *
      * @param userid ID пользователя
-     * @param tag Переопределеннои имя
+     * @param tag    Переопределеннои имя
      * @param action Команда
-     * @param model Map с переменными
+     * @param model  Map с переменными
      * @return Имя экрана
      */
     @PostMapping("/user")
@@ -36,20 +39,24 @@ public class UserController {
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        switch (ControllerCommands.valueOf(action)) {
-            case add:
-                if (!userid.isEmpty() && !foloUserRepo.existsById(Long.parseLong(userid))) {
-                    foloUserRepo.save(new FoloUser(Long.parseLong(userid), tag));
-                }
-                break;
-            case update:
-                FoloUser foloUser = foloUserRepo.findById(Long.parseLong(userid)).orElseThrow();
-                foloUser.setTag(tag);
-                foloUserRepo.save(foloUser);
-                break;
-            case delete:
-                foloUserRepo.delete(foloUserRepo.findById(Long.parseLong(userid)).orElseThrow());
-                break;
+        if (!userid.isEmpty()) {
+            Optional<FoloUser> foloUser = foloUserRepo.findById(Long.parseLong(userid));
+            switch (ControllerCommands.valueOf(action)) {
+                case add:
+                    if (!foloUser.isPresent()) {
+                        foloUserRepo.save(new FoloUser(Long.parseLong(userid), tag));
+                    }
+                    break;
+                case update:
+                    if (foloUser.isPresent()) {
+                        foloUser.get().setTag(tag);
+                        foloUserRepo.save(foloUser.get());
+                    }
+                    break;
+                case delete:
+                    foloUser.ifPresent(foloUserRepo::delete);
+                    break;
+            }
         }
         return user(model);
     }
