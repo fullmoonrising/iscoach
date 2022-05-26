@@ -43,12 +43,12 @@ public class UserController {
                 }
                 break;
             case update:
-                FoloUser foloUser = foloUserRepo.findById(Long.parseLong(userid)).get();
+                FoloUser foloUser = foloUserRepo.findById(Long.parseLong(userid)).orElseThrow();
                 foloUser.setTag(tag);
                 foloUserRepo.save(foloUser);
                 break;
             case delete:
-                foloUserRepo.delete(foloUserRepo.findById(Long.parseLong(userid)).get());
+                foloUserRepo.delete(foloUserRepo.findById(Long.parseLong(userid)).orElseThrow());
                 break;
         }
         return user(model);
