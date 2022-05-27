@@ -1,6 +1,6 @@
-package com.telegram.folobot.enums;
+package com.telegram.folobot.constants;
 
-public enum BotCommands {
+public enum BotCommandsEnum {
     SILENTSTREAM("/silentstream"),
     FREELANCE("/freelance"),
     NOFAP("/nofap"),
@@ -9,12 +9,12 @@ public enum BotCommands {
 
     public final String label;
 
-    BotCommands(String label) {
+    BotCommandsEnum(String label) {
         this.label = label;
     }
 
-    public static BotCommands valueOfLabel(String label) {
-        for (BotCommands command : values()) {
+    public static BotCommandsEnum valueOfLabel(String label) {
+        for (BotCommandsEnum command : values()) {
             if (command.label.equals(label)) {
                 return command;
             }

@@ -1,26 +1,22 @@
 package com.telegram.folobot.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.Optional;
-
+//TODO Убрать логику в сервисы
 @Entity
-@IdClass(FoloPidorId.class)
-@Component
 @Getter
 @Setter
 public class FoloPidor {
-    @Id
-    private Long chatid;
-    @Id
-    @Column(name = "userid")
-    private Long userid;
+    @EmbeddedId
+    private FoloPidorId id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "userid", insertable = false, updatable = false)
+    @JoinColumn(name = "userId", insertable = false, updatable = false)
     private FoloUser foloUser;
 
     private Integer score;
@@ -28,29 +24,31 @@ public class FoloPidor {
     @Transient
     private boolean isNew;
 
-    public FoloPidor() {
+    public FoloPidor() {};
+
+    public FoloPidor(FoloPidorId id) {
+        this(id, 0);
     }
 
-    public FoloPidor(Long chatid, Long userid) {
-        this(chatid, userid, 0);
-    }
-
-    public FoloPidor(Long chatid, Long userid, Integer score) {
-        this.chatid = chatid;
-        this.userid = userid;
+    public FoloPidor(FoloPidorId id, Integer score) {
+        this.id = id;
         this.score = score;
+    }
+
+    public FoloPidorId getId() {
+        return id;
     }
 
     public String getName() { return Optional.ofNullable(foloUser).orElse(new FoloUser()).getName(); }
 
     public String getTag() { return Optional.ofNullable(foloUser).orElse(new FoloUser()).getTag(); }
 
-    public static FoloPidor createNew(Long chatid, Long userid) {
-        return createNew(chatid, userid, 0);
+    public static FoloPidor createNew(FoloPidorId id) {
+        return createNew(id, 0);
     }
-    public static FoloPidor createNew(Long chatid, Long userid, Integer score) {
-        FoloPidor foloPidor = new FoloPidor(chatid, userid, score);
-        foloPidor.foloUser = new FoloUser(userid);
+    public static FoloPidor createNew(FoloPidorId id, Integer score) {
+        FoloPidor foloPidor = new FoloPidor(id, score);
+        foloPidor.foloUser = new FoloUser(id.getUserId());
         foloPidor.setNew(true);
         return foloPidor;
     }

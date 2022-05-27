@@ -3,7 +3,7 @@ package com.telegram.folobot;
 import java.util.SplittableRandom;
 
 public class Text {
-    public static final String[] foloPidorSetup = {
+    public static final String[] foloPidorSetup = { //TODO убрать в ресурсы
             "Разогреваю сало в микроволновке\nЭкстра порция майонеза\nЗамечательно, всё готово",
             "Быть подобным малюсенькому зелёненькому росточку, пробиващемуся через асфальт - это значит Долбёж",
             "Когда вы слушаете мою музыку, все ваши проблемы рассасываются. Происходит Рассос",

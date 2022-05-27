@@ -1,35 +1,35 @@
 package com.telegram.folobot.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-
+//TODO Убрать логику в сервисы
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 public class FoloUser {
     @Id
-    @Column(name = "userid")
-    private Long userid;
+    @Column(name = "userId")
+    private Long userId;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "userid", orphanRemoval = true)
-    private Set<FoloPidor> foloPidors = new HashSet<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.userId", orphanRemoval = true)
+    private Set<FoloPidor> foloPidorEntities = new HashSet<>();
     private String name;
     private String tag;
 
-    public FoloUser() {
+    public FoloUser() {};
+
+    public FoloUser(Long userId) {
+        this(userId, "");
     }
 
-    public FoloUser(Long userid) { this(userid, null, null); }
-
-    public FoloUser(Long userid, String tag) { this(userid, null, tag); }
-
-    public FoloUser(Long userid, String name, String tag) {
-        this.userid = userid;
-        this.name = name;
+    public FoloUser(Long userId, String tag) {
+        this.userId = userId;
         this.tag = tag;
     }
 

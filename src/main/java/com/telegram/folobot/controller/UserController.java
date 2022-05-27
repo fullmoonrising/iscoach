@@ -1,7 +1,7 @@
 package com.telegram.folobot.controller;
 
 import com.telegram.folobot.domain.FoloUser;
-import com.telegram.folobot.enums.ControllerCommands;
+import com.telegram.folobot.constants.ControllerCommandsEnum;
 import com.telegram.folobot.repos.FoloUserRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -41,7 +41,7 @@ public class UserController {
     ) {
         if (!userid.isEmpty()) {
             Optional<FoloUser> foloUser = foloUserRepo.findById(Long.parseLong(userid));
-            switch (ControllerCommands.valueOf(action)) {
+            switch (ControllerCommandsEnum.valueOf(action)) {
                 case add:
                     if (foloUser.isEmpty()) {
                         foloUserRepo.save(new FoloUser(Long.parseLong(userid), tag));

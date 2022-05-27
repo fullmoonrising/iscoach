@@ -1,22 +1,22 @@
 package com.telegram.folobot.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+@Embeddable
 @Setter
 @Getter
 @EqualsAndHashCode
 public class FoloPidorId implements Serializable {
-    private long chatid;
-    private long userid;
+    private long chatId;
+    private long userId;
 
-    public FoloPidorId() {}
+    public FoloPidorId() {};
 
-    public FoloPidorId(long chatid, long userid) {
-        this.chatid = chatid;
-        this.userid = userid;
+    public FoloPidorId(Long chatId, Long userId) {
+        this.chatId = chatId;
+        this.userId = userId;
     }
 }

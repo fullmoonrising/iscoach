@@ -1,7 +1,8 @@
 package com.telegram.folobot.controller;
 
 import com.telegram.folobot.domain.FoloPidor;
-import com.telegram.folobot.enums.ControllerCommands;
+import com.telegram.folobot.domain.FoloPidorId;
+import com.telegram.folobot.constants.ControllerCommandsEnum;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
 import lombok.AllArgsConstructor;
@@ -11,9 +12,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
+import java.util.Optional;
 
 import static com.telegram.folobot.domain.FoloPidor.createNew;
-
+//TODO логику из контроллеров вынести в сервисы
 @Controller
 @AllArgsConstructor
 public class FolopidorController {
@@ -27,7 +29,7 @@ public class FolopidorController {
      */
     @GetMapping("/folopidor")
     public String main(Map<String, Object> model) {
-        model.put("folopidors", foloPidorRepo.findAllSorted());
+        model.put("folopidors", foloPidorRepo.findAll()); //TODO
         return "folopidor";
     }
 
@@ -48,30 +50,28 @@ public class FolopidorController {
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        switch (ControllerCommands.valueOf(action)) {
+        Optional<FoloPidor> foloPidor = foloPidorRepo
+                .findById(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)));
+        switch (ControllerCommandsEnum.valueOf(action)) {
             case add:
-                if (!chatid.isEmpty() && !userid.isEmpty() &&
-                        !foloPidorRepo.existsByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid)) &&
-                        foloUserRepo.existsById(Long.parseLong(userid))) {
-                    foloPidorRepo.save(createNew(Long.parseLong(chatid),
-                            Long.parseLong(userid),
+                if (foloPidor.isEmpty() && foloUserRepo.existsById(Long.parseLong(userid))) {
+                    foloPidorRepo.save(createNew(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)),
                             Integer.parseInt(score)));
                 }
                 break;
             case update:
-                FoloPidor foloPidor = foloPidorRepo
-                        .findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid));
-                foloPidor.setScore(Integer.parseInt(score));
-                foloPidorRepo.save(foloPidor);
+                if (foloPidor.isPresent()) {
+                    foloPidor.get().setScore(Integer.parseInt(score));
+                    foloPidorRepo.save(foloPidor.get());
+                }
                 break;
             case delete:
-                foloPidorRepo.delete(foloPidorRepo
-                        .findByChatidAndUserid(Long.parseLong(chatid), Long.parseLong(userid)));
+                foloPidor.ifPresent(foloPidorRepo::delete);
                 break;
             case filter:
-                model.put("folopidors", chatid != null && !chatid.isEmpty()
-                        ? foloPidorRepo.findByChatidSorted(Long.parseLong(chatid))
-                        : foloPidorRepo.findAllSorted());
+                model.put("folopidors", !chatid.isEmpty()
+                        ? foloPidorRepo.findByIdChatId(Long.parseLong(chatid)) //TODO
+                        : foloPidorRepo.findAll());
                 return "folopidor";
         }
         return main(model);

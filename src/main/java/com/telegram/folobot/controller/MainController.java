@@ -4,6 +4,7 @@ import com.telegram.folobot.Bot;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 public class MainController {
     private final Bot bot;
 
-    @GetMapping("/main")
+    @GetMapping("/main") //TODO если везде одинаковый меппинг то вынести наверх
     public String main() {
         return "main";
     }

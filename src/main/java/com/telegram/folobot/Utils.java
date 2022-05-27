@@ -1,6 +1,6 @@
 package com.telegram.folobot;
 
-import com.telegram.folobot.enums.NumType;
+import com.telegram.folobot.constants.NumTypeEnum;
 
 import java.text.ChoiceFormat;
 import java.time.Period;
@@ -10,12 +10,13 @@ public class Utils {
      * Текстовое представление части даты (1901 -> 1901 год)
      *
      * @param part     часть даты
-     * @param numType {@link NumType}
+     * @param numTypeEnum {@link NumTypeEnum}
      * @return Текст
      */
-    public static String getNumText(int part, NumType numType) {
+    public static String getNumText(int part, NumTypeEnum numTypeEnum) {
+        //TODO перенести в MAP
         double[] limits = {0, 1, 2, 5};
-        String[] strings = switch (numType) {
+        String[] strings = switch (numTypeEnum) {
             case YEAR -> new String[]{"лет", "год", "года", "лет"};
             case MONTH -> new String[]{"месяцев", "месяц", "месяца", "месяцев"};
             case DAY -> new String[]{"дней", "день", "дня", "дней"};
@@ -27,10 +28,11 @@ public class Utils {
         return String.valueOf(part) + ' ' + format.format(rule);
     }
 
+    //TODO java format date by template
     public static String getDateText(Period period) {
-        return getNumText(Math.abs(period.getYears()), NumType.YEAR) + ", " +
-                getNumText(Math.abs(period.getMonths()), NumType.MONTH) + " и " +
-                getNumText(Math.abs(period.getDays()), NumType.DAY);
+        return getNumText(Math.abs(period.getYears()), NumTypeEnum.YEAR) + ", " +
+                getNumText(Math.abs(period.getMonths()), NumTypeEnum.MONTH) + " и " +
+                getNumText(Math.abs(period.getDays()), NumTypeEnum.DAY);
     }
 
     public static void printExeptionMessage(Throwable throwable) {

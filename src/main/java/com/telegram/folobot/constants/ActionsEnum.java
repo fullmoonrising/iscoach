@@ -1,6 +1,6 @@
-package com.telegram.folobot.enums;
+package com.telegram.folobot.constants;
 
-public enum Actions {
+public enum ActionsEnum {
     COMMAND,
     USERMESSAGE,
     REPLY,
