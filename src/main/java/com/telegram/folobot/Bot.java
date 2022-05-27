@@ -23,7 +23,10 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMem
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
@@ -37,7 +40,7 @@ import static com.telegram.folobot.Utils.printExeptionMessage;
 
 @Component
 @RequiredArgsConstructor
-public class Bot extends TelegramWebhookBot { //TODO сделать bat? вносящий значения в системные переменные Windows
+public class Bot extends TelegramWebhookBot {
     @Value("${bot.username}")
     @Getter
     private String botUsername;
@@ -354,22 +357,14 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
                             .sorted(Comparator.comparingInt(FoloPidor::getScore).reversed())
                             .filter(FoloPidor::hasScore)
                             .limit(10)
-                            .collect(Collectors.toList());
+                            .toList();
             for (int i = 0; i < foloPidors.size(); i++) {
-                String place;
-                switch (i) {
-                    case 0:
-                        place = "\uD83E\uDD47";
-                        break;
-                    case 1:
-                        place = "\uD83E\uDD48";
-                        break;
-                    case 2:
-                        place = "\uD83E\uDD49";
-                        break;
-                    default:
-                        place = "\u2004*" + (i + 1) + "*.\u2004";
-                }
+                String place = switch (i) {
+                    case 0 -> "\uD83E\uDD47";
+                    case 1 -> "\uD83E\uDD48";
+                    case 2 -> "\uD83E\uDD49";
+                    default -> "\u2004*" + (i + 1) + "*.\u2004";
+                };
                 FoloPidor foloPidor = foloPidors.get(i);
                 top.add(place + getFoloUserName(foloPidor) + " — _" +
                         Utils.getNumText(foloPidor.getScore(), NumType.COUNT) + "_");
@@ -601,11 +596,10 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
      *
      * @param text   текст сообщения
      * @param chatid ID чата(пользователя)
-     * @return {@link Message}
      */
-    public Message sendMessage(String text, Long chatid) {
+    public void sendMessage(String text, Long chatid) {
         try {
-            return execute(SendMessage
+            execute(SendMessage
                     .builder()
                     .parseMode(ParseMode.MARKDOWN)
                     .chatId(Long.toString(chatid))
@@ -614,7 +608,6 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
         } catch (TelegramApiException e) {
             printExeptionMessage(e);
         }
-        return null;
     }
 
     /**

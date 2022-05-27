@@ -15,23 +15,12 @@ public class Utils {
      */
     public static String getNumText(int part, NumType numType) {
         double[] limits = {0, 1, 2, 5};
-        String[] strings;
-        switch (numType) {
-            case YEAR:
-                strings = new String[]{"лет", "год", "года", "лет"};
-                break;
-            case MONTH:
-                strings = new String[]{"месяцев", "месяц", "месяца", "месяцев"};
-                break;
-            case DAY:
-                strings = new String[]{"дней", "день", "дня", "дней"};
-                break;
-            case COUNT:
-                strings = new String[]{"раз", "раз", "раза", "раз"};
-                break;
-            default:
-                strings = new String[]{};
-        }
+        String[] strings = switch (numType) {
+            case YEAR -> new String[]{"лет", "год", "года", "лет"};
+            case MONTH -> new String[]{"месяцев", "месяц", "месяца", "месяцев"};
+            case DAY -> new String[]{"дней", "день", "дня", "дней"};
+            case COUNT -> new String[]{"раз", "раз", "раза", "раз"};
+        };
 
         ChoiceFormat format = new ChoiceFormat(limits, strings);
         int rule = 11 <= (part % 100) && (part % 100) <= 14 ? part : part % 10;

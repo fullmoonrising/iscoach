@@ -43,7 +43,7 @@ public class UserController {
             Optional<FoloUser> foloUser = foloUserRepo.findById(Long.parseLong(userid));
             switch (ControllerCommands.valueOf(action)) {
                 case add:
-                    if (!foloUser.isPresent()) {
+                    if (foloUser.isEmpty()) {
                         foloUserRepo.save(new FoloUser(Long.parseLong(userid), tag));
                     }
                     break;

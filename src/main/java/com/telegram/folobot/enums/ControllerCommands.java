@@ -4,5 +4,5 @@ public enum ControllerCommands {
     add,
     update,
     delete,
-    filter;
+    filter
 }

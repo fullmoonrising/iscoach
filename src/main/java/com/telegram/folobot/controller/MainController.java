@@ -15,7 +15,7 @@ public class MainController {
     private final Bot bot;
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model) {
+    public String main() {
         return "main";
     }
     @PostMapping("/main")

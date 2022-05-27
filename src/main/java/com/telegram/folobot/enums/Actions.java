@@ -6,5 +6,5 @@ public enum Actions {
     REPLY,
     USERNEW,
     USERLEFT,
-    UNDEFINED;
+    UNDEFINED
 }

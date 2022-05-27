@@ -13,7 +13,7 @@ public class WebhookController {
     private final Bot bot;
 
     @GetMapping
-    public ResponseEntity get() { return ResponseEntity.ok().build(); }
+    public ResponseEntity<?> get() { return ResponseEntity.ok().build(); }
 
     @PostMapping
     public BotApiMethod<?> onUpdateReceived(@RequestBody Update update) {
