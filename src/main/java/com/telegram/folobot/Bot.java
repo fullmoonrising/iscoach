@@ -23,10 +23,7 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMem
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
@@ -197,7 +194,7 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
         BotCommands command = BotCommands.valueOfLabel(update.getMessage().getText().split("@")[0]);
         if (command != null) {
             SendChatTyping(update);
-            switch (command) {
+            switch (command) { // TODO обрабатывать /start
                 case SILENTSTREAM:
                     sendSticker(getRandomSticker(), update); //TODO возвращать BotApiMethod
                     break;
@@ -225,6 +222,7 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
                 Utils.getDateText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now())) +
                 "*!", update);
     }
+
     private BotApiMethod<?> nofapTimer(Update update) {
         return buildMessage("Для особо озабоченных в десятый раз повторяю тут Вам, " +
                 "что я с Нового 2020 Года и до сих пор вот уже *" +
@@ -261,15 +259,16 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
 
                 //Поздравляем
                 sendMessage(Text.getSetup(), update);
-                sendMessage(Text.getPunch(getUserName(folopidor)), update);
+                sendMessage(Text.getPunch(getFoloUserName(folopidor)), update);
             } else {
-                return buildMessage("Фолопидор дня уже выбран, это *" + getUserName(getFoloPidor(chatid, lastWinner)) +
+                return buildMessage("Фолопидор дня уже выбран, это *" +
+                        getFoloUserName(getFoloPidor(chatid, lastWinner)) +
                         "*. Пойду лучше лампово попержу в диван", update);
             }
 
         } else {
             return buildMessage("Для меня вы все фолопидоры, " +
-                    getUserName(update.getMessage().getFrom()), update, true);
+                    getFoloUserName(update.getMessage().getFrom()), update, true);
         }
         return null;
     }
@@ -372,7 +371,7 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
                         place = "\u2004*" + (i + 1) + "*.\u2004";
                 }
                 FoloPidor foloPidor = foloPidors.get(i);
-                top.add(place + getUserName(foloPidor) + " — _" +
+                top.add(place + getFoloUserName(foloPidor) + " — _" +
                         Utils.getNumText(foloPidor.getScore(), NumType.COUNT) + "_");
             }
             return buildMessage(top.toString(), update);
@@ -383,6 +382,7 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
 
     /**
      * Ответ на личное сообщение
+     *
      * @param update {@link Update}
      * @return {@link BotApiMethod}
      */
@@ -394,7 +394,6 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
         return null;
     }
 
-
     /**
      * Ответ на обращение
      *
@@ -405,11 +404,9 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
         // Cообщение в чат
         String text = update.getMessage().getText().toLowerCase();
         if (text.contains("привет") || new SplittableRandom().nextInt(100) < 20) {
-            String userName = getUserName(update.getMessage().getFrom());
+            String userName = getFoloUserName(update.getMessage().getFrom());
             SendChatTyping(update);
-            if (userName == null || userName.isEmpty()) {
-                return buildMessage("Привет, уважаемый фолофил!", update, true);
-            } else if (isAndrew(update.getMessage().getFrom())) {
+            if (isAndrew(update.getMessage().getFrom())) {
                 return buildMessage("Привет, моя сладкая бориспольская булочка!", update, true);
             } else {
                 return buildMessage("Привет, уважаемый фолофил " + userName + "!", update, true);
@@ -439,9 +436,9 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
         } else {
             if (isFolochat(update.getMessage().getChat())) {
                 return buildMessage("Добро пожаловать в замечательный высокоинтеллектуальный фолочат, "
-                        + getUserName(user) + "!", update, true);
+                        + getFoloUserName(user) + "!", update, true);
             } else {
-                sendMessage("Это не настоящий фолочат, " + getUserName(user) + "!", update);
+                sendMessage("Это не настоящий фолочат, " + getFoloUserName(user) + "!", update);
                 sendMessage("настоящий тут: \nt.me/alexfolomkin", update);
             }
         }
@@ -460,7 +457,7 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
         if (isAndrew(user)) {
             return buildMessage("Сладкая бориспольская булочка покинула чат", update);
         } else {
-            return buildMessage("Куда же ты, " + getUserName(user) + "! Не уходи!", update);
+            return buildMessage("Куда же ты, " + getFoloUserName(user) + "! Не уходи!", update);
         }
     }
 
@@ -478,28 +475,35 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
             }
     }
 
+    private String getUserName(User user) {
+        if (user != null) {
+            return Stream.of(Stream.of(user.getFirstName(), user.getLastName())
+                                    .filter(Objects::nonNull)
+                                    .collect(Collectors.joining(" ")),
+                            user.getUserName())
+                    .filter(Objects::nonNull)
+                    .findFirst()
+                    .orElse(null);
+        }
+        return null;
+    }
+
     /**
      * Получение имени пользователя
      *
      * @param user {@link User}
      * @return Имя пользователя
      */
-    private String getUserName(User user) {
-        try {
-            if (isAndrew(user)) {
-                return "Андрей";
-            } else {
-                return Stream.of(Stream.of(user.getFirstName(), user.getLastName())
-                                        .filter(Objects::nonNull)
-                                        .collect(Collectors.joining(" ")),
-                                user.getUserName())
-                        .filter(Objects::nonNull)
-                        .findFirst()
-                        .orElse(null);
-            }
-        } catch (NullPointerException ignored) {
-            return null;
-        }
+    private String getFoloUserName(User user) {
+        FoloUser foloUser = foloUserRepo.findById(user.getId()).orElse(new FoloUser());
+        // По тэгу
+        String userName = foloUser.getTag();
+        if (userName.isEmpty()) userName = getUserName(user);
+        // По сохраненному имени
+        if (userName == null || userName.isEmpty()) userName = foloUser.getName();
+        // Если не удалось определить
+        if (userName.isEmpty()) userName = "Загадочный незнакомец";
+        return userName;
     }
 
     /**
@@ -508,11 +512,21 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
      * @param foloPidor {@link FoloPidor}
      * @return Имя фолопидора
      */
-    private String getUserName(FoloPidor foloPidor) {
+    private String getFoloUserName(FoloPidor foloPidor) {
+        // По тэгу
+        String userName = foloPidor.getTag();
+        // По пользователю
+        if (userName.isEmpty()) userName = getUserName(getUserById(foloPidor.getUserid()));
+        // По сохраненному имени
+        if (userName == null || userName.isEmpty()) userName = foloPidor.getName();
+        // Если не удалось определить
+        if (userName.isEmpty()) userName = "Загадочный незнакомец";
+        return userName;
+    }
+
+    private User getUserById(Long userid) {
         try {
-            return !foloPidor.getTag().isEmpty() ? foloPidor.getTag() :
-                    getUserName(execute(new GetChatMember(Long.toString(foloPidor.getChatid()),
-                            foloPidor.getFoloUser().getUserid())).getUser());
+            return execute(new GetChatMember(Long.toString(userid), userid)).getUser();
         } catch (TelegramApiException ignored) {
             return null;
         }
@@ -525,7 +539,7 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
      * @return Имя пользователя
      */
     private String getUserNameLinked(User user) {
-        return "[" + getUserName(user) + "](tg://user?id=" + user.getId() + ")";
+        return "[" + getFoloUserName(user) + "](tg://user?id=" + user.getId() + ")";
     }
 
     /**
@@ -535,11 +549,12 @@ public class Bot extends TelegramWebhookBot { //TODO сделать bat? вно�
      * @return Имя фолопидора
      */
     private String getUserNameLinked(FoloPidor foloPidor) {
-        return "[" + getUserName(foloPidor) + "](tg://user?id=" + foloPidor.getFoloUser().getUserid() + ")";
+        return "[" + getFoloUserName(foloPidor) + "](tg://user?id=" + foloPidor.getUserid() + ")";
     }
 
     /**
      * Проверка что {@link User} это этот бот
+     *
      * @param user {@link User}
      * @return да/нет
      */

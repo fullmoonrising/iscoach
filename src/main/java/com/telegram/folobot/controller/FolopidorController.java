@@ -30,7 +30,7 @@ public class FolopidorController {
      */
     @GetMapping("/folopidor")
     public String main(Map<String, Object> model) {
-        model.put("folopidors", sort(foloPidorRepo.findAll()));
+        model.put("folopidors", foloPidorRepo.findAllSorted());
         return "folopidor";
     }
 
@@ -73,19 +73,10 @@ public class FolopidorController {
                 break;
             case filter:
                 model.put("folopidors", chatid != null && !chatid.isEmpty()
-                        ? sort(foloPidorRepo.findByChatid(Long.parseLong(chatid)))
-                        : sort(foloPidorRepo.findAll()));
+                        ? foloPidorRepo.findByChatidSorted(Long.parseLong(chatid))
+                        : foloPidorRepo.findAllSorted());
                 return "folopidor";
         }
         return main(model);
-    }
-
-    private Iterable<FoloPidor> sort(Iterable<FoloPidor> foloPidors) {
-        return StreamSupport.stream(foloPidors.spliterator(), false)
-                .sorted(Comparator
-                        .comparingLong(FoloPidor::getChatid)
-                        .thenComparingInt(FoloPidor::getScore)
-                        .reversed())
-                .collect(Collectors.toList());
     }
 }
