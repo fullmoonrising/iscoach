@@ -11,6 +11,7 @@ import com.telegram.folobot.repos.FoloVarRepo;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
@@ -261,7 +262,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
 
                 //Поздравляем
                 sendMessage(Text.getSetup(), update);
-                sendMessage(Text.getPunch(getFoloUserName(folopidor)), update);
+                sendMessage(Text.getPunch(getFoloUserNameLinked(folopidor)), update);
             } else {
                 return buildMessage("Фолопидор дня уже выбран, это *" +
                         getFoloUserName(getFoloPidor(chatid, lastWinner)) +
@@ -345,9 +346,9 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
      */
     public FoloPidor getFoloPidor(Long chatid) {
         //Получаем список фолопидоров для чата
-        List<FoloPidor> foloPidorEntities = foloPidorRepo.findByIdChatId(chatid);
+        List<FoloPidor> foloPidors = foloPidorRepo.findByIdChatId(chatid);
         //Выбираем случайного
-        return foloPidorEntities.get(new SplittableRandom().nextInt(foloPidorEntities.size()));
+        return foloPidors.get(new SplittableRandom().nextInt(foloPidors.size()));
     }
 
     /**
@@ -359,14 +360,10 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     private BotApiMethod<?> foloPidorTop(Update update) {
         if (!update.getMessage().isUserMessage()) {
             StringJoiner top = new StringJoiner("\n").add("Топ 10 *фолопидоров*:\n");
-//            List<FoloPidor> foloPidorEntities =
-//                    foloPidorRepo.findByIdChatId(update.getMessage().getChatId()).stream()
-//                            .sorted(Comparator.comparingInt(FoloPidor::getScore).reversed())
-//                            .filter(FoloPidor::hasScore)
-//                            .limit(10)
-//                            .toList();
-            List<FoloPidor> foloPidors = foloPidorRepo.
-                    findTop10ByIdChatIdOrderByScoreDesc(update.getMessage().getChatId())
+            List<FoloPidor> foloPidors = foloPidorRepo
+                    .findFirst10ByIdChatId(update.getMessage().getChatId(),
+                            Sort.sort(FoloPidor.class)
+                                    .by(FoloPidor::getScore).descending())
                     .stream().filter(FoloPidor::hasScore).toList();
             for (int i = 0; i < foloPidors.size(); i++) {
                 String place = switch (i) {
@@ -393,7 +390,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
      */
     private BotApiMethod<?> onUserMessage(Update update) {
         if (isAndrew(update.getMessage().getFrom()) &&
-                new SplittableRandom().nextInt(100) < 20) {
+                new SplittableRandom().nextInt(100) < 7) {
             forwardMessage(ChatId.getPOC_ID(), sendMessage(Text.getQuoteforAndrew(), update, true));
         }
         return null;
@@ -543,7 +540,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
      * @param user {@link User}
      * @return Имя пользователя
      */
-    private String getUserNameLinked(User user) {
+    private String getFoloUserNameLinked(User user) {
         return "[" + getFoloUserName(user) + "](tg://user?id=" + user.getId() + ")";
     }
 
@@ -553,7 +550,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
      * @param foloPidor {@link FoloPidor}
      * @return Имя фолопидора
      */
-    private String getUserNameLinked(FoloPidor foloPidor) {
+    private String getFoloUserNameLinked(FoloPidor foloPidor) {
         return "[" + getFoloUserName(foloPidor) + "](tg://user?id=" + foloPidor.getId().getUserId() + ")";
     }
 

@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Optional;
 //TODO Убрать логику в сервисы
+//TODO metauser
 @Entity
 @Getter
 @Setter
@@ -35,9 +36,11 @@ public class FoloPidor {
         this.score = score;
     }
 
-    public FoloPidorId getId() {
-        return id;
-    }
+//    public FoloPidorId getId() {
+//        return id;
+//    }
+    public Long getChatId() { return id.getChatId(); }
+
 
     public String getName() { return Optional.ofNullable(foloUser).orElse(new FoloUser()).getName(); }
 

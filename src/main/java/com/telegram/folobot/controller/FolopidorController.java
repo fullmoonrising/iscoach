@@ -6,12 +6,16 @@ import com.telegram.folobot.constants.ControllerCommandsEnum;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
 import lombok.AllArgsConstructor;
+import org.hibernate.dialect.Oracle10gDialect;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import static com.telegram.folobot.domain.FoloPidor.createNew;
@@ -29,7 +33,13 @@ public class FolopidorController {
      */
     @GetMapping("/folopidor")
     public String main(Map<String, Object> model) {
-        model.put("folopidors", foloPidorRepo.findAll()); //TODO
+        model.put("folopidors", foloPidorRepo.findAll(
+                Sort.by("id.chatId").ascending()
+                        .and(Sort.by("Score").descending())));
+//                Sort.sort(FoloPidor.class)
+//                            .by(FoloPidor::getChatId).ascending()
+//                        .and(Sort.sort(FoloPidor.class)
+//                            .by(FoloPidor::getScore).descending())));
         return "folopidor";
     }
 
@@ -50,8 +60,11 @@ public class FolopidorController {
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        Optional<FoloPidor> foloPidor = foloPidorRepo
-                .findById(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)));
+        Optional<FoloPidor> foloPidor = Optional.empty();
+        if (Objects.nonNull(userid) && !userid.isEmpty()) {
+            foloPidor = foloPidorRepo.findById(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)));
+        }
+
         switch (ControllerCommandsEnum.valueOf(action)) {
             case add:
                 if (foloPidor.isEmpty() && foloUserRepo.existsById(Long.parseLong(userid))) {
@@ -69,9 +82,10 @@ public class FolopidorController {
                 foloPidor.ifPresent(foloPidorRepo::delete);
                 break;
             case filter:
+                Sort sort = Sort.by("id.chatId").ascending().and(Sort.by("Score").descending());
                 model.put("folopidors", !chatid.isEmpty()
-                        ? foloPidorRepo.findByIdChatId(Long.parseLong(chatid)) //TODO
-                        : foloPidorRepo.findAll());
+                        ? foloPidorRepo.findByIdChatId(Long.parseLong(chatid), sort)
+                        : foloPidorRepo.findAll(sort));;
                 return "folopidor";
         }
         return main(model);
