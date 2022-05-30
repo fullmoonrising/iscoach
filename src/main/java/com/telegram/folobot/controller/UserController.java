@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -14,10 +15,11 @@ import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
+@RequestMapping("/user")
 public class UserController {
     private final FoloUserRepo foloUserRepo;
 
-    @GetMapping("/user")
+    @GetMapping
     public String user(Map<String, Object> model) {
         model.put("folousers", foloUserRepo.findAll());
         return "user";
@@ -32,7 +34,7 @@ public class UserController {
      * @param model  Map с переменными
      * @return Имя экрана
      */
-    @PostMapping("/user")
+    @PostMapping
     public String onAction(
             @RequestParam String userid,
             @RequestParam(required = false) String tag,

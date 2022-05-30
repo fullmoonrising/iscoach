@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
@@ -20,6 +21,7 @@ import static com.telegram.folobot.domain.FoloPidor.createNew;
 //TODO логику из контроллеров вынести в сервисы
 @Controller
 @AllArgsConstructor
+@RequestMapping("/folopidor")
 public class FolopidorController {
     private final FoloPidorRepo foloPidorRepo;
     private final FoloUserRepo foloUserRepo;
@@ -29,15 +31,11 @@ public class FolopidorController {
      * @param model Map с переменными
      * @return Имя экрана
      */
-    @GetMapping("/folopidor")
+    @GetMapping
     public String main(Map<String, Object> model) {
         model.put("folopidors", foloPidorRepo.findAll(
                 Sort.by("id.chatId").ascending()
                         .and(Sort.by("Score").descending())));
-//                Sort.sort(FoloPidor.class)
-//                            .by(FoloPidor::getChatId).ascending()
-//                        .and(Sort.sort(FoloPidor.class)
-//                            .by(FoloPidor::getScore).descending())));
         return "folopidor";
     }
 
@@ -50,7 +48,7 @@ public class FolopidorController {
      * @param model Map с переменными
      * @return Имя экрана
      */
-    @PostMapping("/folopidor")
+    @PostMapping
     public String onAction(
             @RequestParam String chatid,
             @RequestParam(required = false) String userid,

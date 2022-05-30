@@ -24,10 +24,7 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMem
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
-import org.telegram.telegrambots.meta.api.objects.InputFile;
-import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.User;
+import org.telegram.telegrambots.meta.api.objects.*;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
@@ -89,7 +86,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
      */
     private void addFoloUser(Update update) {
         Message message = update.getMessage();
-        if (!isChatMessage(message)) {
+        if (Objects.isNull(message.getIsAutomaticForward()) || !message.getIsAutomaticForward()) {
             User user = message.getFrom();
             if (user == null && !message.getNewChatMembers().isEmpty()) {
                 user = message.getNewChatMembers().get(0);
@@ -109,31 +106,12 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     }
 
     /**
-     * Определение является ли сообщение постом канала
-     *
-     * @param message {@link  Message}
-     * @return да/нет
-     */
-    private boolean isChatMessage(Message message) {
-        try {
-            return message.getIsAutomaticForward();
-        } catch (NullPointerException e) { //TODO очень плохо убрать
-            return false;
-        }
-    }
-
-    /**
      * Определяет действие на основе приходящего Update
      *
      * @param update {@link Update} пробрасывается из onUpdateReceived
      * @return {@link ActionsEnum}
      */
     private ActionsEnum getAction(Update update) {
-        // Не содержит сообщения
-        if (!update.hasMessage()) {
-            return ActionsEnum.UNDEFINED;
-        }
-
         Message message = update.getMessage();
 
         // Команда
