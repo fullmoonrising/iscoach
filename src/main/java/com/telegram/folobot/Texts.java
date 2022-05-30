@@ -12,7 +12,7 @@ import java.util.SplittableRandom;
 public class Texts {
     public static final List<String> foloPidorPunch = getText("foloPidorPunch");
     public static final List<String> foloPidorSetup = getText("foloPidorSetup");
-    public static final List<String> quotesforAndrew = getText("quotesforAndrew");
+    public static final List<String> quotesforAndrew = getText("quotesForAndrew");
 
     /**
      * Чтение текстов из ресурсов
