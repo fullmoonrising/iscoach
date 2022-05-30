@@ -4,11 +4,11 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.telegram.folobot.constants.ActionsEnum;
 import com.telegram.folobot.constants.BotCommandsEnum;
 import com.telegram.folobot.constants.NumTypeEnum;
-import com.telegram.folobot.constants.VarTypeEnum;
-import com.telegram.folobot.domain.*;
+import com.telegram.folobot.domain.FoloPidor;
+import com.telegram.folobot.domain.FoloPidorId;
+import com.telegram.folobot.domain.FoloUser;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
-import com.telegram.folobot.repos.FoloVarRepo;
 import com.telegram.folobot.service.FoloVarService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +42,7 @@ import static com.telegram.folobot.ChatId.*;
 import static com.telegram.folobot.Utils.printExeptionMessage;
 
 //TODO разбить на сервисы, очень большой
+//TODO переделать application.properties на yaml
 
 @Service
 @RequiredArgsConstructor
@@ -232,7 +233,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
 
     private BotApiMethod<?> nofapTimer(Update update) {
         LocalDate noFapDate;
-        Integer noFapCount = null;
+        Integer noFapCount = 0;
         // Фо устанавливает дату
         if (isFo(update.getMessage().getFrom())) {
             noFapDate = LocalDate.now();
@@ -286,8 +287,8 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
                 foloVarService.setLastFolopidorDate(chatid, LocalDate.now());
 
                 //Поздравляем
-                sendMessage(Text.getSetup(), update);
-                sendMessage(Text.getPunch(getFoloUserNameLinked(folopidor)), update);
+                sendMessage(Texts.getSetup(), update);
+                sendMessage(Texts.getPunch(getFoloUserNameLinked(folopidor)), update);
             } else {
                 return buildMessage("Фолопидор дня уже выбран, это *" +
                         getFoloUserName(getFoloPidor(chatid, lastWinner)) +
@@ -366,7 +367,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     private BotApiMethod<?> onUserMessage(Update update) {
         if (isAndrew(update.getMessage().getFrom()) &&
                 new SplittableRandom().nextInt(100) < 7) {
-            forwardMessage(ChatId.getPOC_ID(), sendMessage(Text.getQuoteforAndrew(), update, true));
+            forwardMessage(ChatId.getPOC_ID(), sendMessage(Texts.getQuoteforAndrew(), update, true));
         }
         return null;
     }

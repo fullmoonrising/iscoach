@@ -4,32 +4,30 @@ import com.telegram.folobot.constants.NumTypeEnum;
 
 import java.text.ChoiceFormat;
 import java.time.Period;
-import java.util.StringJoiner;
+import java.util.Map;
+
+import static java.util.Map.entry;
 
 public class Utils {
+    static Map<NumTypeEnum, String[]> numText = Map.ofEntries(
+            entry(NumTypeEnum.YEAR, new String[]{"лет", "год", "года", "лет"}),
+            entry(NumTypeEnum.MONTH, new String[]{"месяцев", "месяц", "месяца", "месяцев"}),
+            entry(NumTypeEnum.DAY, new String[]{"дней", "день", "дня", "дней"}),
+            entry(NumTypeEnum.COUNT, new String[]{"раз", "раз", "раза", "раз"}));
+
     /**
      * Текстовое представление части даты (1901 -> 1901 год)
      *
-     * @param part     часть даты
+     * @param part часть даты
      * @param numTypeEnum {@link NumTypeEnum}
      * @return Текст
      */
     public static String getNumText(int part, NumTypeEnum numTypeEnum) {
-        //TODO перенести в MAP
-        double[] limits = {0, 1, 2, 5};
-        String[] strings = switch (numTypeEnum) {
-            case YEAR -> new String[]{"лет", "год", "года", "лет"};
-            case MONTH -> new String[]{"месяцев", "месяц", "месяца", "месяцев"};
-            case DAY -> new String[]{"дней", "день", "дня", "дней"};
-            case COUNT -> new String[]{"раз", "раз", "раза", "раз"};
-        };
-
-        ChoiceFormat format = new ChoiceFormat(limits, strings);
+        ChoiceFormat format = new ChoiceFormat(new double[]{0, 1, 2, 5}, numText.get(numTypeEnum));
         int rule = 11 <= (part % 100) && (part % 100) <= 14 ? part : part % 10;
         return String.valueOf(part) + ' ' + format.format(rule);
     }
 
-    //TODO java format date by template
     public static String getPeriodText(Period period) {
         StringBuilder stringBuilder = new StringBuilder();
         if (period.getYears() > 0) {

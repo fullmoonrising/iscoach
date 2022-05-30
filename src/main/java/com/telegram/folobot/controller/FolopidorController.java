@@ -1,19 +1,17 @@
 package com.telegram.folobot.controller;
 
+import com.telegram.folobot.constants.ControllerCommandsEnum;
 import com.telegram.folobot.domain.FoloPidor;
 import com.telegram.folobot.domain.FoloPidorId;
-import com.telegram.folobot.constants.ControllerCommandsEnum;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
 import lombok.AllArgsConstructor;
-import org.hibernate.dialect.Oracle10gDialect;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
