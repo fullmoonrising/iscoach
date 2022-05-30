@@ -4,6 +4,7 @@ import com.telegram.folobot.constants.NumTypeEnum;
 
 import java.text.ChoiceFormat;
 import java.time.Period;
+import java.util.StringJoiner;
 
 public class Utils {
     /**
@@ -29,10 +30,20 @@ public class Utils {
     }
 
     //TODO java format date by template
-    public static String getDateText(Period period) {
-        return getNumText(Math.abs(period.getYears()), NumTypeEnum.YEAR) + ", " +
-                getNumText(Math.abs(period.getMonths()), NumTypeEnum.MONTH) + " и " +
-                getNumText(Math.abs(period.getDays()), NumTypeEnum.DAY);
+    public static String getPeriodText(Period period) {
+        StringBuilder stringBuilder = new StringBuilder();
+        if (period.getYears() > 0) {
+            stringBuilder.append(getNumText(Math.abs(period.getYears()), NumTypeEnum.YEAR));
+        }
+        if (period.getMonths() > 0) {
+            if (!stringBuilder.isEmpty()) { stringBuilder.append(", "); }
+            stringBuilder.append(getNumText(Math.abs(period.getMonths()), NumTypeEnum.MONTH));
+        }
+        if (period.getDays() > 0) {
+            if (!stringBuilder.isEmpty()) { stringBuilder.append(" и "); }
+            stringBuilder.append(getNumText(Math.abs(period.getDays()), NumTypeEnum.DAY));
+        }
+        return stringBuilder.toString();
     }
 
     public static void printExeptionMessage(Throwable throwable) {

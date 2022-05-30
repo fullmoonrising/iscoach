@@ -7,7 +7,10 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
-//TODO Убрать логику в сервисы
+/*TODO Убрать логику в сервисы
+    В сервисе получение разными способами с сортровкам и группировками, сохранение
+    Новое поле mainID
+ */
 @Entity
 @Getter
 @Setter

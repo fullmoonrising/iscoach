@@ -12,6 +12,7 @@ import java.util.Optional;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
 public class FoloPidor {
     @EmbeddedId
     private FoloPidorId id;
@@ -35,12 +36,6 @@ public class FoloPidor {
         this.id = id;
         this.score = score;
     }
-
-//    public FoloPidorId getId() {
-//        return id;
-//    }
-    public Long getChatId() { return id.getChatId(); }
-
 
     public String getName() { return Optional.ofNullable(foloUser).orElse(new FoloUser()).getName(); }
 

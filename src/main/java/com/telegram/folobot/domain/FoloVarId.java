@@ -9,14 +9,11 @@ import java.io.Serializable;
 @Setter
 @Getter
 @EqualsAndHashCode
+@AllArgsConstructor
 public class FoloVarId implements Serializable {
     private long chatId;
     private String type;
 
     public FoloVarId() {};
 
-    public FoloVarId(Long chatId, String type) {
-        this.chatId = chatId;
-        this.type = type;
-    }
 }

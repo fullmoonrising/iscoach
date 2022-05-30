@@ -22,6 +22,6 @@ public class ChatId {
     public static boolean isVitalik(User user) {
         return user != null && user.getId().equals(VITALIK_ID);
     }
-    public static boolean isMoonMoon(User user) { return user != null && user.getId().equals(MOONMOON_ID);
-    }
+    public static boolean isMoonMoon(User user) { return user != null && user.getId().equals(MOONMOON_ID); }
+    public static boolean isFo(User user) { return user != null && user.getId().equals(FOLOMKIN_ID); }
 }

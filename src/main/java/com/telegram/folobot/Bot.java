@@ -1,13 +1,15 @@
 package com.telegram.folobot;
 
-import com.telegram.folobot.domain.*;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.telegram.folobot.constants.ActionsEnum;
 import com.telegram.folobot.constants.BotCommandsEnum;
 import com.telegram.folobot.constants.NumTypeEnum;
 import com.telegram.folobot.constants.VarTypeEnum;
+import com.telegram.folobot.domain.*;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
 import com.telegram.folobot.repos.FoloVarRepo;
+import com.telegram.folobot.service.FoloVarService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,8 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,7 +58,7 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
 
     private final FoloPidorRepo foloPidorRepo;
     private final FoloUserRepo foloUserRepo;
-    private final FoloVarRepo foloVarRepo;
+    private final FoloVarService foloVarService;
 
     /**
      * Пришел update от Telegram
@@ -222,17 +226,38 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     private BotApiMethod<?> frelanceTimer(Update update) {
         return buildMessage("18 ноября 2019 года я уволился с завода по своему желанию.\n" +
                 "С тех пор я стремительно вхожу в IT вот уже\n*" +
-                Utils.getDateText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now())) +
+                Utils.getPeriodText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now())) +
                 "*!", update);
     }
 
     private BotApiMethod<?> nofapTimer(Update update) {
-        return buildMessage("Для особо озабоченных в десятый раз повторяю тут Вам, " +
-                "что я с Нового 2020 Года и до сих пор вот уже *" +
-                Utils.getDateText(Period.between(LocalDate.of(2020, 1, 1), LocalDate.now())) +
-                "* твёрдо и уверенно держу \"Но Фап\".", update);
-    }
+        LocalDate noFapDate;
+        Integer noFapCount = null;
+        // Фо устанавливает дату
+        if (isFo(update.getMessage().getFrom())) {
+            noFapDate = LocalDate.now();
+            foloVarService.setLastFapDate(noFapDate);
+        } else {
+            noFapDate = foloVarService.getLastFapDate();
+            noFapCount = foloVarService.getNoFapCount(update.getMessage().getChatId());
+        }
 
+        if (noFapDate.equals(LocalDate.now())) {
+            return buildMessage("Все эти молоденькие няшные студенточки вокруг..." +
+                    "\nСорвался \"Но Фап\" сегодня...", update);
+        } else {
+            return buildMessage("Для особо озабоченных в *" +
+                    new RuleBasedNumberFormat(Locale.forLanguageTag("ru"), RuleBasedNumberFormat.SPELLOUT)
+                            .format(noFapCount, "%spellout-ordinal-masculine") +
+                    "* раз повторяю тут Вам, что я с *" +
+                    DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+                            .withLocale(new Locale("ru"))
+                            .format(noFapDate) +
+                    "* и до сих пор вот уже *" +
+                    Utils.getPeriodText(Period.between(noFapDate, LocalDate.now())) +
+                    "* твёрдо и уверенно держу \"Но Фап\".", update);
+        }
+    }
 
     /**
      * Определяет фолопидора дня. Если уже определен показывает кто
@@ -244,8 +269,8 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
         Long chatid = update.getMessage().getChatId();
         if (!update.getMessage().isUserMessage()) {
             //Определяем дату и победителя предыдущего запуска
-            LocalDate lastDate = getLastFolopidorDate(chatid);
-            Long lastWinner = getLastFolopidorWinner(chatid);
+            LocalDate lastDate = foloVarService.getLastFolopidorDate(chatid);
+            Long lastWinner = foloVarService.getLastFolopidorWinner(chatid);
 
             //Определяем либо показываем победителя
             if (Objects.isNull(lastWinner) || lastDate.isBefore(LocalDate.now())) {
@@ -257,8 +282,8 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
                 foloPidorRepo.save(folopidor);
 
                 //Обновляем текущего победителя
-                setLastFolopidorWinner(chatid, folopidor.getFoloUser().getUserId());
-                setLastFolopidorDate(chatid, LocalDate.now());
+                foloVarService.setLastFolopidorWinner(chatid, folopidor.getFoloUser().getUserId());
+                foloVarService.setLastFolopidorDate(chatid, LocalDate.now());
 
                 //Поздравляем
                 sendMessage(Text.getSetup(), update);
@@ -274,56 +299,6 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
                     getFoloUserName(update.getMessage().getFrom()), update, true);
         }
         return null;
-    }
-
-    /**
-     * Дата последнего определения фолопидора
-     *
-     * @param chatid ID чата
-     * @return {@link LocalDate}
-     */
-    public LocalDate getLastFolopidorDate(Long chatid) { //TODO подумать как упростить
-        Optional<FoloVar> foloVarEntity = foloVarRepo
-                .findById(new FoloVarId(chatid, VarTypeEnum.LAST_FOLOPIDOR_DATE.name()));
-        return foloVarEntity.isPresent()
-                ? LocalDate.parse(foloVarEntity.get().getValue())
-                : LocalDate.parse("1900-01-01");
-    }
-
-    /**
-     * Сохранить дату последнего определения фолопидора
-     *
-     * @param chatid ID чата
-     * @param value  Дата
-     */
-    public void setLastFolopidorDate(Long chatid, LocalDate value) {
-        foloVarRepo.save(new FoloVar(
-                new FoloVarId(chatid, VarTypeEnum.LAST_FOLOPIDOR_DATE.name()), value.toString()));
-    }
-
-    /**
-     * Последний фолопидор
-     *
-     * @param chatid ID чата
-     * @return {@link Long} userid
-     */
-    public Long getLastFolopidorWinner(Long chatid) {
-        Optional<FoloVar> foloVarEntity = foloVarRepo
-                .findById(new FoloVarId(chatid, VarTypeEnum.LAST_FOLOPIDOR_USERID.name()));
-        return foloVarEntity.isPresent()
-                ? Long.parseLong(foloVarEntity.get().getValue())
-                : null;
-    }
-
-    /**
-     * Сохранить последнего фолопидора
-     *
-     * @param chatid ID чата
-     * @param value  {@link Long} userid
-     */
-    public void setLastFolopidorWinner(Long chatid, Long value) {
-        foloVarRepo.save(new FoloVar(
-                new FoloVarId(chatid, VarTypeEnum.LAST_FOLOPIDOR_USERID.name()), Long.toString(value)));
     }
 
     /**
