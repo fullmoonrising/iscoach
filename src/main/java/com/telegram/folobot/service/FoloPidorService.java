@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.SplittableRandom;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Component
@@ -92,12 +94,11 @@ public class FoloPidorService {
                 .map(foloPidorMapper::mapToFoloPidorDto)
                 .filter(FoloPidorDto::hasScore)
                 .collect(
-                        Collectors.groupingBy(
-                                FoloPidorDto::getMainUserId,
+                        Collectors.groupingBy(Function.identity(),
                                 Collectors.summingInt(FoloPidorDto::getScore)))
                 .entrySet().stream()
-                .map(e -> new FoloPidorDto(chatId, e.getKey(), e.getValue()))
                 .limit(10)
+                .map(e -> e.getKey().setScore(e.getValue()))
                 .sorted(Comparator.comparing(FoloPidorDto::getScore).reversed())
                 .toList();
     }
