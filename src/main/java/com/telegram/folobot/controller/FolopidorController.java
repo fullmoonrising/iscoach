@@ -1,7 +1,7 @@
 package com.telegram.folobot.controller;
 
 import com.telegram.folobot.constants.ControllerCommandsEnum;
-import com.telegram.folobot.domain.FoloPidor;
+import com.telegram.folobot.domain.FoloPidorEntity;
 import com.telegram.folobot.domain.FoloPidorId;
 import com.telegram.folobot.repos.FoloPidorRepo;
 import com.telegram.folobot.repos.FoloUserRepo;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.telegram.folobot.domain.FoloPidor.createNew;
+import static com.telegram.folobot.domain.FoloPidorEntity.createNew;
 //TODO логику из контроллеров вынести в сервисы
 @Controller
 @AllArgsConstructor
@@ -56,7 +56,7 @@ public class FolopidorController {
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        Optional<FoloPidor> foloPidor = Optional.empty();
+        Optional<FoloPidorEntity> foloPidor = Optional.empty();
         if (Objects.nonNull(userid) && !userid.isEmpty()) {
             foloPidor = foloPidorRepo.findById(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)));
         }

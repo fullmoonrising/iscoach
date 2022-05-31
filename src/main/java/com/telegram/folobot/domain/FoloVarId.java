@@ -6,14 +6,10 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-@Setter
-@Getter
-@EqualsAndHashCode
+@Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class FoloVarId implements Serializable {
     private long chatId;
     private String type;
-
-    public FoloVarId() {};
-
 }

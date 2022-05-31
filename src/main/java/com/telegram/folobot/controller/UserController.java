@@ -1,6 +1,6 @@
 package com.telegram.folobot.controller;
 
-import com.telegram.folobot.domain.FoloUser;
+import com.telegram.folobot.domain.FoloUserEntity;
 import com.telegram.folobot.constants.ControllerCommandsEnum;
 import com.telegram.folobot.repos.FoloUserRepo;
 import lombok.AllArgsConstructor;
@@ -42,11 +42,11 @@ public class UserController {
             Map<String, Object> model
     ) {
         if (!userid.isEmpty()) {
-            Optional<FoloUser> foloUser = foloUserRepo.findById(Long.parseLong(userid));
+            Optional<FoloUserEntity> foloUser = foloUserRepo.findById(Long.parseLong(userid));
             switch (ControllerCommandsEnum.valueOf(action)) {
                 case add:
                     if (foloUser.isEmpty()) {
-                        foloUserRepo.save(new FoloUser(Long.parseLong(userid), tag));
+                        foloUserRepo.save(new FoloUserEntity(Long.parseLong(userid), tag));
                     }
                     break;
                 case update:
