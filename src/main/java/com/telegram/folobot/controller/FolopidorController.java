@@ -1,12 +1,10 @@
 package com.telegram.folobot.controller;
 
 import com.telegram.folobot.constants.ControllerCommandsEnum;
-import com.telegram.folobot.domain.FoloPidorEntity;
-import com.telegram.folobot.domain.FoloPidorId;
-import com.telegram.folobot.repos.FoloPidorRepo;
-import com.telegram.folobot.repos.FoloUserRepo;
+import com.telegram.folobot.dto.FoloPidorDto;
+import com.telegram.folobot.service.FoloPidorService;
+import com.telegram.folobot.service.FoloUserService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,16 +13,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
-import static com.telegram.folobot.domain.FoloPidorEntity.createNew;
 //TODO логику из контроллеров вынести в сервисы
+//TODO проверки ввода
+//TODO CamelCase
+
 @Controller
 @AllArgsConstructor
 @RequestMapping("/folopidor")
 public class FolopidorController {
-    private final FoloPidorRepo foloPidorRepo;
-    private final FoloUserRepo foloUserRepo;
+    private final FoloPidorService foloPidorService;
+    private final FoloUserService foloUserService;
 
     /**
      * Заполнение основного экрана
@@ -33,9 +32,7 @@ public class FolopidorController {
      */
     @GetMapping
     public String main(Map<String, Object> model) {
-        model.put("folopidors", foloPidorRepo.findAll(
-                Sort.by("id.chatId").ascending()
-                        .and(Sort.by("Score").descending())));
+        model.put("folopidors", foloPidorService.findAll());
         return "folopidor";
     }
 
@@ -50,38 +47,32 @@ public class FolopidorController {
      */
     @PostMapping
     public String onAction(
-            @RequestParam String chatid,
-            @RequestParam(required = false) String userid,
-            @RequestParam(required = false) String score,
+            @RequestParam Long chatid,
+            @RequestParam(required = false) Long userid,
+            @RequestParam(defaultValue = "0", required = false ) Integer score,
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        Optional<FoloPidorEntity> foloPidor = Optional.empty();
-        if (Objects.nonNull(userid) && !userid.isEmpty()) {
-            foloPidor = foloPidorRepo.findById(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)));
-        }
-
-        switch (ControllerCommandsEnum.valueOf(action)) {
-            case add:
-                if (foloPidor.isEmpty() && foloUserRepo.existsById(Long.parseLong(userid))) {
-                    foloPidorRepo.save(createNew(new FoloPidorId(Long.parseLong(chatid), Long.parseLong(userid)),
-                            Integer.parseInt(score)));
+        switch (ControllerCommandsEnum.valueOf(action.toUpperCase())) {
+            case ADD:
+                if (foloUserService.existsById(userid) &&
+                        !foloPidorService.existsById(chatid, userid)) {
+                    foloPidorService.save(new FoloPidorDto(chatid, userid, score));
                 }
                 break;
-            case update:
-                if (foloPidor.isPresent()) {
-                    foloPidor.get().setScore(Integer.parseInt(score));
-                    foloPidorRepo.save(foloPidor.get());
+            case UPDATE:
+                if (foloPidorService.existsById(chatid, userid)) {
+                    foloPidorService.save(foloPidorService.findById(chatid, userid)
+                            .setScore(score));
                 }
                 break;
-            case delete:
-                foloPidor.ifPresent(foloPidorRepo::delete);
+            case DELETE:
+                foloPidorService.delete(new FoloPidorDto(chatid, userid));
                 break;
-            case filter:
-                Sort sort = Sort.by("id.chatId").ascending().and(Sort.by("Score").descending());
-                model.put("folopidors", !chatid.isEmpty()
-                        ? foloPidorRepo.findByIdChatId(Long.parseLong(chatid), sort)
-                        : foloPidorRepo.findAll(sort));;
+            case FILTER:
+                model.put("folopidors", !Objects.isNull(chatid)
+                        ? foloPidorService.findByIdChatId(chatid)
+                        : foloPidorService.findAll());
                 return "folopidor";
         }
         return main(model);

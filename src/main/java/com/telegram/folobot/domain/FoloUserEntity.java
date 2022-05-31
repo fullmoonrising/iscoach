@@ -1,6 +1,7 @@
 package com.telegram.folobot.domain;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -8,44 +9,24 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
-/*TODO Убрать логику в сервисы и DTO
-    В сервисе получение разными способами с сортровкам и группировками, сохранение
-    Новое поле mainID
- */
-//TODO тут только пустой конструктор и полный конструктор, кастомные все в DTO
-//TODO переименовать таблицы в БД
-
 @Entity
 @Getter
 @Setter
-@ToString
+@Accessors(chain = true)
+@NoArgsConstructor
 @RequiredArgsConstructor
 @Table(name = "folo_user")
 public class FoloUserEntity {
     @Id
     @Column(name = "userId")
+    @NonNull
     private Long userId;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.userId", orphanRemoval = true)
-    @ToString.Exclude //TODO проверить мэппинг
-    private Set<FoloPidorEntity> foloPidorEntityEntities = new HashSet<>();
+    //TODO проверить мэппинг
+    private Set<FoloPidorEntity> foloPidorEntities = new HashSet<>();
+    private Long mainId;
     private String name;
     private String tag;
-
-    public FoloUserEntity(Long userId) {
-        this(userId, "");
-    }
-
-    public FoloUserEntity(Long userId, String tag) {
-        this.userId = userId;
-        this.tag = tag;
-    }
-
-    public String getName() { return tag != null && !tag.isEmpty() ? tag : name != null ? name : ""; }
-
-    public String getRealName() { return name != null ? name : ""; }
-
-    public String getTag() { return tag != null ? tag : ""; }
 
     @Override
     public boolean equals(Object o) {

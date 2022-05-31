@@ -8,7 +8,8 @@
     <body>
         <div>
             <form method="post">
-                <input id="userid" type="text" name="userid" placeholder="UserId"/>
+                <input id="userid" type="number" name="userid" placeholder="UserId"/>
+                <input type="number" name="mainid" placeholder="MainId"/>
                 <input type="text" name="tag" placeholder="Tag"/>
                 <button type="submit" name="action" value="add">Добавить</button>
             </form>
@@ -17,6 +18,7 @@
             <thead>
             <tr>
                 <th>UserId</th>
+                <th>MainId</th>
                 <th>Имя</th>
                 <th>Тэг</th>
                 <th colspan="2">Действие</th>
@@ -26,9 +28,10 @@
             {{#folousers}}
                 <tr>
                     <form method="post">
-                        <td width=10% align="center"><input type="text" name="userid" value={{userId}} readonly/></td>
+                        <td width=10% align="center"><input type="number" name="userid" value="{{userId}}" readonly/></td>
+                        <td width=10% align="center"><input type="number" name="mainid" value="{{mainId}}" /></td>
                         <td width="20%"><i>{{RealName}}</i></td>
-                        <td width=50%><i><input type="text" name="tag" value="{{tag}}"/></i></td>
+                        <td width=40%><i><input type="text" name="tag" value="{{tag}}"/></i></td>
                         <td width="10%" align="center">
                             <button type="submit" name="action" value="update">Обновить</button>
                         </td>

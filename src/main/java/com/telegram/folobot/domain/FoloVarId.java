@@ -8,8 +8,8 @@ import java.io.Serializable;
 @Embeddable
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FoloVarId implements Serializable {
-    private long chatId;
-    private String type;
+    @NonNull private Long chatId;
+    @NonNull private String type;
 }

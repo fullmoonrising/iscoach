@@ -1,6 +1,7 @@
 package com.telegram.folobot.domain;
 
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.hibernate.Hibernate;
 
 import javax.persistence.EmbeddedId;
@@ -8,20 +9,18 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Objects;
 
-//TODO Убрать логику в сервисы и DTO
-//TODO тут только пустой конструктор и полный конструктор, кастомные все в DTO
-//TODO переименовать таблицы в БД
-
 @Entity
 @Getter
 @Setter
-@ToString
+@Accessors(chain = true)
+@NoArgsConstructor
 @RequiredArgsConstructor
-@AllArgsConstructor
 @Table(name = "folo_var")
 public class FoloVarEntity {
     @EmbeddedId
+    @NonNull
     private FoloVarId id;
+    @NonNull
     private String value;
 
     @Override

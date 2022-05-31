@@ -54,11 +54,11 @@ public class FoloVarService {
      * Сохранить последнего фолопидора
      *
      * @param chatId ID чата
-     * @param value  {@link Long} userid
+     * @param userId  {@link Long} Id пользователя
      */
-    public void setLastFolopidorWinner(Long chatId, Long value) {
+    public void setLastFolopidorWinner(Long chatId, Long userId) {
         foloVarRepo.save(new FoloVarEntity(
-                new FoloVarId(chatId, VarTypeEnum.LAST_FOLOPIDOR_USERID.name()), Long.toString(value)));
+                new FoloVarId(chatId, VarTypeEnum.LAST_FOLOPIDOR_USERID.name()), Long.toString(userId)));
     }
 
     /**
@@ -74,11 +74,11 @@ public class FoloVarService {
     /**
      * Сохранить дату последнего фапа
      *
-     * @param value {@link LocalDate} Дата
+     * @param fapDate {@link LocalDate} Дата
      */
-    public void setLastFapDate(LocalDate value) {
+    public void setLastFapDate(LocalDate fapDate) {
         foloVarRepo.save(new FoloVarEntity(
-                new FoloVarId(COMMON_CHATID, VarTypeEnum.LAST_FAP_DATE.name()), value.toString()));
+                new FoloVarId(COMMON_CHATID, VarTypeEnum.LAST_FAP_DATE.name()), fapDate.toString()));
     }
 
     /**

@@ -4,16 +4,14 @@ import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.telegram.folobot.constants.ActionsEnum;
 import com.telegram.folobot.constants.BotCommandsEnum;
 import com.telegram.folobot.constants.NumTypeEnum;
-import com.telegram.folobot.domain.FoloPidorEntity;
-import com.telegram.folobot.domain.FoloPidorId;
-import com.telegram.folobot.domain.FoloUserEntity;
-import com.telegram.folobot.repos.FoloPidorRepo;
-import com.telegram.folobot.repos.FoloUserRepo;
+import com.telegram.folobot.dto.FoloPidorDto;
+import com.telegram.folobot.dto.FoloUserDto;
+import com.telegram.folobot.service.FoloPidorService;
+import com.telegram.folobot.service.FoloUserService;
 import com.telegram.folobot.service.FoloVarService;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.bots.TelegramWebhookBot;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
@@ -24,7 +22,10 @@ import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMem
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker;
-import org.telegram.telegrambots.meta.api.objects.*;
+import org.telegram.telegrambots.meta.api.objects.InputFile;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
@@ -38,8 +39,8 @@ import java.util.stream.Stream;
 import static com.telegram.folobot.ChatId.*;
 import static com.telegram.folobot.Utils.printExeptionMessage;
 
-//TODO разбить на сервисы, очень большой
-//TODO переделать application.properties на yaml
+// TODO разбить на сервисы, очень большой
+// TODO переделать application.properties на yaml
 
 @Service
 @RequiredArgsConstructor
@@ -54,8 +55,8 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     @Getter
     private String botPath;
 
-    private final FoloPidorRepo foloPidorRepo;
-    private final FoloUserRepo foloUserRepo;
+    private final FoloPidorService foloPidorService;
+    private final FoloUserService foloUserService;
     private final FoloVarService foloVarService;
 
     /**
@@ -93,13 +94,12 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
             }
             if (!Objects.isNull(user)) {
                 // Фолопользователь
-                FoloUserEntity foloUserEntity = foloUserRepo.findById(user.getId())
-                        .orElse(new FoloUserEntity(user.getId()));
-                foloUserEntity.setName(getUserName(user));
-                foloUserRepo.save(foloUserEntity);
+                foloUserService.save(
+                        foloUserService.findById(user.getId())
+                        .setName(getUserName(user)));
                 // И фолопидор
-                if (!message.isUserMessage() && getFoloPidor(message.getChatId(), user.getId()).isNew()) {
-                    foloPidorRepo.save(new FoloPidorEntity(new FoloPidorId(message.getChatId(), user.getId())));
+                if (!message.isUserMessage() && !foloPidorService.existsById(message.getChatId(), user.getId())) {
+                    foloPidorService.save(new FoloPidorDto(message.getChatId(), user.getId()));
                 }
             }
         }
@@ -254,22 +254,21 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
             //Определяем либо показываем победителя
             if (Objects.isNull(lastWinner) || lastDate.isBefore(LocalDate.now())) {
                 //Выбираем случайного
-                FoloPidorEntity folopidor = getFoloPidor(chatid);
+                FoloPidorDto foloPidor = foloPidorService.getRandom(chatid);
 
                 //Обновляем счетчик
-                folopidor.setScore(folopidor.getScore() + 1);
-                foloPidorRepo.save(folopidor);
+                foloPidorService.save(foloPidor.setScore(foloPidor.getScore() + 1));
 
                 //Обновляем текущего победителя
-                foloVarService.setLastFolopidorWinner(chatid, folopidor.getFoloUserEntity().getUserId()); //TODO Бага при пустой бд
+                foloVarService.setLastFolopidorWinner(chatid, foloPidor.getId().getUserId()); //TODO Бага при пустой бд
                 foloVarService.setLastFolopidorDate(chatid, LocalDate.now());
 
                 //Поздравляем
                 sendMessage(Texts.getSetup(), update);
-                sendMessage(Texts.getPunch(getFoloUserNameLinked(folopidor)), update);
+                sendMessage(Texts.getPunch(getFoloUserNameLinked(foloPidor)), update);
             } else {
                 return buildMessage("Фолопидор дня уже выбран, это *" +
-                        getFoloUserName(getFoloPidor(chatid, lastWinner)) +
+                        getFoloUserName(foloPidorService.findById(chatid, lastWinner)) +
                         "*. Пойду лучше лампово попержу в диван", update);
             }
 
@@ -281,31 +280,6 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     }
 
     /**
-     * Получение объекта фолопидора. Если не найден - возвращает пустого фолопидора
-     *
-     * @param chatid ID чата
-     * @param userid ID фолопидора
-     * @return {@link FoloPidorEntity}
-     */
-    public FoloPidorEntity getFoloPidor(Long chatid, Long userid) {
-        return foloPidorRepo.findById(new FoloPidorId(chatid, userid))
-                .orElse(FoloPidorEntity.createNew(new FoloPidorId(chatid, userid)));
-    }
-
-    /**
-     * Выбор случайного фолопидора
-     *
-     * @param chatid ID чата
-     * @return {@link FoloPidorEntity}
-     */
-    public FoloPidorEntity getFoloPidor(Long chatid) {
-        //Получаем список фолопидоров для чата
-        List<FoloPidorEntity> foloPidorEntities = foloPidorRepo.findByIdChatId(chatid);
-        //Выбираем случайного
-        return foloPidorEntities.get(new SplittableRandom().nextInt(foloPidorEntities.size()));
-    }
-
-    /**
      * Показывает топ фолопидоров
      *
      * @param update {@link Update}
@@ -314,21 +288,17 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     private BotApiMethod<?> foloPidorTop(Update update) {
         if (!update.getMessage().isUserMessage()) {
             StringJoiner top = new StringJoiner("\n").add("Топ 10 *фолопидоров*:\n");
-            List<FoloPidorEntity> foloPidorEntities = foloPidorRepo
-                    .findFirst10ByIdChatId(update.getMessage().getChatId(),
-                            Sort.sort(FoloPidorEntity.class)
-                                    .by(FoloPidorEntity::getScore).descending())
-                    .stream().filter(FoloPidorEntity::hasScore).toList();
-            for (int i = 0; i < foloPidorEntities.size(); i++) {
+            List<FoloPidorDto> foloPidors = foloPidorService.getTop(update.getMessage().getChatId());
+            for (int i = 0; i < foloPidors.size(); i++) {
                 String place = switch (i) {
                     case 0 -> "\uD83E\uDD47";
                     case 1 -> "\uD83E\uDD48";
                     case 2 -> "\uD83E\uDD49";
                     default -> "\u2004*" + (i + 1) + "*.\u2004";
                 };
-                FoloPidorEntity foloPidorEntity = foloPidorEntities.get(i);
-                top.add(place + getFoloUserName(foloPidorEntity) + " — _" +
-                        Utils.getNumText(foloPidorEntity.getScore(), NumTypeEnum.COUNT) + "_");
+                FoloPidorDto foloPidor = foloPidors.get(i);
+                top.add(place + getFoloUserName(foloPidor) + " — _" +
+                        Utils.getNumText(foloPidor.getScore(), NumTypeEnum.COUNT) + "_");
             }
             return buildMessage(top.toString(), update);
         } else {
@@ -451,12 +421,12 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
      * @return Имя пользователя
      */
     private String getFoloUserName(User user) {
-        FoloUserEntity foloUserEntity = foloUserRepo.findById(user.getId()).orElse(new FoloUserEntity());
+        FoloUserDto foloUser = foloUserService.findById(user.getId());
         // По тэгу
-        String userName = foloUserEntity.getTag();
+        String userName = foloUser.getTag();
         if (userName.isEmpty()) userName = getUserName(user);
         // По сохраненному имени
-        if (userName == null || userName.isEmpty()) userName = foloUserEntity.getName();
+        if (userName == null || userName.isEmpty()) userName = foloUser.getName();
         // Если не удалось определить
         if (userName.isEmpty()) userName = "Загадочный незнакомец";
         return userName;
@@ -465,16 +435,16 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     /**
      * Получение имени фолопидора
      *
-     * @param foloPidorEntity {@link FoloPidorEntity}
+     * @param foloPidorDto {@link FoloPidorDto}
      * @return Имя фолопидора
      */
-    private String getFoloUserName(FoloPidorEntity foloPidorEntity) {
+    private String getFoloUserName(FoloPidorDto foloPidorDto) {
         // По тэгу
-        String userName = foloPidorEntity.getTag();
+        String userName = foloPidorDto.getTag();
         // По пользователю
-        if (userName.isEmpty()) userName = getUserName(getUserById(foloPidorEntity.getId().getUserId()));
+        if (userName.isEmpty()) userName = getUserName(getUserById(foloPidorDto.getId().getUserId()));
         // По сохраненному имени
-        if (userName == null || userName.isEmpty()) userName = foloPidorEntity.getName();
+        if (userName == null || userName.isEmpty()) userName = foloPidorDto.getName();
         // Если не удалось определить
         if (userName.isEmpty()) userName = "Загадочный незнакомец";
         return userName;
@@ -501,11 +471,11 @@ public class Bot extends TelegramWebhookBot { //TODO библиотека sl4j �
     /**
      * Получение кликабельного имени фолопидора
      *
-     * @param foloPidorEntity {@link FoloPidorEntity}
+     * @param foloPidorDto {@link FoloPidorDto}
      * @return Имя фолопидора
      */
-    private String getFoloUserNameLinked(FoloPidorEntity foloPidorEntity) {
-        return "[" + getFoloUserName(foloPidorEntity) + "](tg://user?id=" + foloPidorEntity.getId().getUserId() + ")";
+    private String getFoloUserNameLinked(FoloPidorDto foloPidorDto) {
+        return "[" + getFoloUserName(foloPidorDto) + "](tg://user?id=" + foloPidorDto.getId().getUserId() + ")";
     }
 
     /**

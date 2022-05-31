@@ -15,6 +15,4 @@ public interface FoloPidorRepo extends CrudRepository<FoloPidorEntity, FoloPidor
     List<FoloPidorEntity> findByIdChatId(Long chatId);
 
     List<FoloPidorEntity> findByIdChatId(Long chatId, Sort sort);
-
-    List<FoloPidorEntity> findFirst10ByIdChatId(Long chatId, Sort sort);
 }

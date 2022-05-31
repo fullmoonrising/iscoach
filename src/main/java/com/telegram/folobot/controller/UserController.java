@@ -1,8 +1,8 @@
 package com.telegram.folobot.controller;
 
-import com.telegram.folobot.domain.FoloUserEntity;
 import com.telegram.folobot.constants.ControllerCommandsEnum;
-import com.telegram.folobot.repos.FoloUserRepo;
+import com.telegram.folobot.dto.FoloUserDto;
+import com.telegram.folobot.service.FoloUserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,17 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
+
+//TODO логику из контроллеров вынести в сервисы
+//TODO проверки ввода
+//TODO CamelCase
 
 @Controller
 @AllArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    private final FoloUserRepo foloUserRepo;
+    private final FoloUserService foloUserService;
 
     @GetMapping
     public String user(Map<String, Object> model) {
-        model.put("folousers", foloUserRepo.findAll());
+        model.put("folousers", foloUserService.findAll());
         return "user";
     }
 
@@ -36,27 +40,26 @@ public class UserController {
      */
     @PostMapping
     public String onAction(
-            @RequestParam String userid,
+            @RequestParam Long userid,
+            @RequestParam(required = false) Long mainid,
             @RequestParam(required = false) String tag,
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        if (!userid.isEmpty()) {
-            Optional<FoloUserEntity> foloUser = foloUserRepo.findById(Long.parseLong(userid));
-            switch (ControllerCommandsEnum.valueOf(action)) {
-                case add:
-                    if (foloUser.isEmpty()) {
-                        foloUserRepo.save(new FoloUserEntity(Long.parseLong(userid), tag));
+        if (!Objects.isNull(userid)) {
+            switch (ControllerCommandsEnum.valueOf(action.toUpperCase())) {
+                case ADD:
+                    if (!foloUserService.existsById(userid)) {
+                        foloUserService.save(new FoloUserDto(userid, mainid, tag));
                     }
                     break;
-                case update:
-                    if (foloUser.isPresent()) {
-                        foloUser.get().setTag(tag);
-                        foloUserRepo.save(foloUser.get());
+                case UPDATE:
+                    if (foloUserService.existsById(userid)) {
+                        foloUserService.save(foloUserService.findById(userid).setMainId(mainid).setTag(tag));
                     }
                     break;
-                case delete:
-                    foloUser.ifPresent(foloUserRepo::delete);
+                case DELETE:
+                    foloUserService.delete(new FoloUserDto(userid));
                     break;
             }
         }
