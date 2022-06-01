@@ -15,7 +15,6 @@ import java.util.Objects;
 
 //TODO логику из контроллеров вынести в сервисы
 //TODO проверки ввода
-//TODO CamelCase
 
 @Controller
 @AllArgsConstructor
@@ -32,7 +31,7 @@ public class UserController {
     /**
      * Post-запрос на выполнение команды с основного экрана
      *
-     * @param userid ID пользователя
+     * @param userId ID пользователя
      * @param tag    Переопределеннои имя
      * @param action Команда
      * @param model  Map с переменными
@@ -40,26 +39,26 @@ public class UserController {
      */
     @PostMapping
     public String onAction(
-            @RequestParam Long userid,
-            @RequestParam(required = false) Long mainid,
+            @RequestParam Long userId,
+            @RequestParam(required = false) Long mainId,
             @RequestParam(required = false) String tag,
             @RequestParam String action,
             Map<String, Object> model
     ) {
-        if (!Objects.isNull(userid)) {
+        if (!Objects.isNull(userId)) {
             switch (ControllerCommandsEnum.valueOf(action.toUpperCase())) {
                 case ADD:
-                    if (!foloUserService.existsById(userid)) {
-                        foloUserService.save(new FoloUserDto(userid, mainid, tag));
+                    if (!foloUserService.existsById(userId)) {
+                        foloUserService.save(new FoloUserDto(userId, mainId, tag));
                     }
                     break;
                 case UPDATE:
-                    if (foloUserService.existsById(userid)) {
-                        foloUserService.save(foloUserService.findById(userid).setMainId(mainid).setTag(tag));
+                    if (foloUserService.existsById(userId)) {
+                        foloUserService.save(foloUserService.findById(userId).setMainId(mainId).setTag(tag));
                     }
                     break;
                 case DELETE:
-                    foloUserService.delete(new FoloUserDto(userid));
+                    foloUserService.delete(new FoloUserDto(userId));
                     break;
             }
         }

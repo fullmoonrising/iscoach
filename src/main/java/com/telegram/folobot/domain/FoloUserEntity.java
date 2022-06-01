@@ -21,8 +21,7 @@ public class FoloUserEntity {
     @Column(name = "userId")
     @NonNull
     private Long userId;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "id.userId", orphanRemoval = true)
-    //TODO проверить мэппинг
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "foloUserEntity", orphanRemoval = true)
     private Set<FoloPidorEntity> foloPidorEntities = new HashSet<>();
     private Long mainId;
     private String name;
@@ -33,7 +32,7 @@ public class FoloUserEntity {
         if (this == o) return true;
         if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
         FoloUserEntity that = (FoloUserEntity) o;
-        return userId != null && Objects.equals(userId, that.userId);
+        return Objects.equals(userId, that.userId);
     }
 
     @Override

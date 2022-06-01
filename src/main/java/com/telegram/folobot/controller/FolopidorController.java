@@ -16,7 +16,6 @@ import java.util.Objects;
 
 //TODO логику из контроллеров вынести в сервисы
 //TODO проверки ввода
-//TODO CamelCase
 
 @Controller
 @AllArgsConstructor
@@ -38,8 +37,8 @@ public class FolopidorController {
 
     /**
      * Post-запрос на выполнение команды с основного экрана
-     * @param chatid ID чата
-     * @param userid ID пользователя
+     * @param chatId ID чата
+     * @param userId ID пользователя
      * @param score Счет
      * @param action Команда
      * @param model Map с переменными
@@ -47,31 +46,31 @@ public class FolopidorController {
      */
     @PostMapping
     public String onAction(
-            @RequestParam Long chatid,
-            @RequestParam(required = false) Long userid,
+            @RequestParam Long chatId,
+            @RequestParam(required = false) Long userId,
             @RequestParam(defaultValue = "0", required = false ) Integer score,
             @RequestParam String action,
             Map<String, Object> model
     ) {
         switch (ControllerCommandsEnum.valueOf(action.toUpperCase())) {
             case ADD:
-                if (foloUserService.existsById(userid) &&
-                        !foloPidorService.existsById(chatid, userid)) {
-                    foloPidorService.save(new FoloPidorDto(chatid, userid, score));
+                if (foloUserService.existsById(userId) &&
+                        !foloPidorService.existsById(chatId, userId)) {
+                    foloPidorService.save(new FoloPidorDto(chatId, userId, score));
                 }
                 break;
             case UPDATE:
-                if (foloPidorService.existsById(chatid, userid)) {
-                    foloPidorService.save(foloPidorService.findById(chatid, userid)
+                if (foloPidorService.existsById(chatId, userId)) {
+                    foloPidorService.save(foloPidorService.findById(chatId, userId)
                             .setScore(score));
                 }
                 break;
             case DELETE:
-                foloPidorService.delete(new FoloPidorDto(chatid, userid));
+                foloPidorService.delete(new FoloPidorDto(chatId, userId));
                 break;
             case FILTER:
-                model.put("folopidors", !Objects.isNull(chatid)
-                        ? foloPidorService.findByIdChatId(chatid)
+                model.put("folopidors", !Objects.isNull(chatId)
+                        ? foloPidorService.findByIdChatId(chatId)
                         : foloPidorService.findAll());
                 return "folopidor";
         }

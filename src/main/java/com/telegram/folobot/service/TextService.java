@@ -1,6 +1,7 @@
-package com.telegram.folobot;
+package com.telegram.folobot.service;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,17 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.SplittableRandom;
 
-public class Texts {
-    public static final List<String> foloPidorPunch = getText("foloPidorPunch");
-    public static final List<String> foloPidorSetup = getText("foloPidorSetup");
-    public static final List<String> quotesforAndrew = getText("quotesForAndrew");
+@Component
+public class TextService {
+    public final List<String> foloPidorPunch = getText("foloPidorPunch");
+    public final List<String> foloPidorSetup = getText("foloPidorSetup");
+    public final List<String> quotesforAndrew = getText("quotesForAndrew");
 
     /**
      * Чтение текстов из ресурсов
      * @param textName Имя файла без расширения
      * @return {@link List<String>} Тексты
      */
-    public static List<String> getText(String textName) {
+    public List<String> getText(String textName) {
         try(BufferedReader reader = new BufferedReader(
                 new InputStreamReader(
                         new ClassPathResource("texts\\" + textName + ".txt")
@@ -30,15 +32,15 @@ public class Texts {
         }
     }
 
-    public static String getSetup() {
+    public String getSetup() {
         return foloPidorSetup.get(new SplittableRandom().nextInt(foloPidorSetup.size()));
     }
 
-    public static String getPunch(String userName) {
+    public String getPunch(String userName) {
         return String.format(foloPidorPunch.get(new SplittableRandom().nextInt(foloPidorPunch.size())), userName);
     }
 
-    public static String getQuoteforAndrew() {
+    public String getQuoteforAndrew() {
         return quotesforAndrew.get(new SplittableRandom().nextInt(quotesforAndrew.size()));
     }
 
