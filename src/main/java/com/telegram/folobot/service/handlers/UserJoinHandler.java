@@ -1,6 +1,5 @@
 package com.telegram.folobot.service.handlers;
 
-import com.telegram.folobot.FoloBot;
 import com.telegram.folobot.service.MessageService;
 import com.telegram.folobot.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +9,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 
 import static com.telegram.folobot.ChatId.*;
-import static com.telegram.folobot.ChatId.isAndrew;
 
 @Component
 @RequiredArgsConstructor

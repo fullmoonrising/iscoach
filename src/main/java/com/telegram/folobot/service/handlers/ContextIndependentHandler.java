@@ -1,12 +1,11 @@
 package com.telegram.folobot.service.handlers;
 
 import com.telegram.folobot.ChatId;
-import com.telegram.folobot.FoloBot;
 import com.telegram.folobot.dto.FoloPidorDto;
-import com.telegram.folobot.service.MessageService;
-import com.telegram.folobot.service.UserService;
 import com.telegram.folobot.service.FoloPidorService;
 import com.telegram.folobot.service.FoloUserService;
+import com.telegram.folobot.service.MessageService;
+import com.telegram.folobot.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.Message;

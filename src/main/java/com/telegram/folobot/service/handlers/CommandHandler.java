@@ -1,7 +1,6 @@
 package com.telegram.folobot.service.handlers;
 
 import com.ibm.icu.text.RuleBasedNumberFormat;
-import com.telegram.folobot.FoloBot;
 import com.telegram.folobot.Utils;
 import com.telegram.folobot.constants.BotCommandsEnum;
 import com.telegram.folobot.constants.NumTypeEnum;
