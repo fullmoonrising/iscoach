@@ -26,7 +26,9 @@ public class TextService {
                 new InputStreamReader(
                         new ClassPathResource("texts\\" + textName + ".txt")
                                 .getInputStream()))) {
-            return reader.lines().toList();
+            return reader.lines()
+                    .map(line -> line.replace("\\n", System.lineSeparator()))
+                    .toList();
         } catch (IOException e) {
             return new ArrayList<>();
         }
