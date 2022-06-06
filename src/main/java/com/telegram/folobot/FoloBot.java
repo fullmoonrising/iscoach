@@ -14,8 +14,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.util.Objects;
 
-// TODO переделать application.properties на yaml
-
 @Service
 public class FoloBot extends TelegramWebhookBot { //TODO библиотека sl4j для логгирования, sonar lint plugin для проверки
     @Value("${bot.username}")

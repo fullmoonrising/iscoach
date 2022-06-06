@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/folodb
+    username: folo
+    password: folo
+  jpa:
+    generate-ddl: true

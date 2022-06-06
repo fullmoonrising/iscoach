@@ -20,7 +20,7 @@ public class FoloPidorDto implements Serializable {
 
     public FoloPidorDto(Long chatId, Long userId) { this(new FoloPidorId(chatId, userId)); }
     public FoloPidorDto(FoloPidorId id) { this(id, 0); }
-    public FoloPidorDto(Long chatId, Long userId, Integer score) { this( new FoloPidorId(chatId, userId), score);}
+    public FoloPidorDto(Long chatId, Long userId, Integer score) { this(new FoloPidorId(chatId, userId), score);}
     public FoloPidorDto(FoloPidorId id, Integer score) {
         this.id = id;
         this.foloUser = new FoloUserDto(id.getUserId());
