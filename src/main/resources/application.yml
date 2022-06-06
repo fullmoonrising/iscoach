@@ -1,7 +1,3 @@
 spring:
   jpa:
     generate-ddl: true
-bot:
-  username: FoloNewsBot
-  token: 1355996036:AAGnc3B93ALckw6W5WGsZ1DN29y1bYat1cw
-  path: https://folobot.herokuapp.com
