@@ -1,4 +1,5 @@
 /.idea/
+/.gradle/
 /Folobot.iml
-/gradle/
 /build/
+/gradle/

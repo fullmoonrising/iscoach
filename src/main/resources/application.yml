@@ -1,8 +1,4 @@
 spring:
-  datasource:
-    url: ${datasource.url}
-    username: ${datasource.username}
-    password: ${datasource.password}
   jpa:
     generate-ddl: true
 bot:
