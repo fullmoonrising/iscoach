@@ -1,5 +1,16 @@
-/.idea/
-/.gradle/
-/Folobot.iml
-/build/
-/gradle/
+target/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+.gradle
+build
+out
+target
+Thumbs.db
+.DS_Store
+/classes
+out/
