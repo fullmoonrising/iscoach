@@ -3,14 +3,13 @@ package com.telegram.folobot
 import com.telegram.folobot.constants.NumTypeEnum
 import java.text.ChoiceFormat
 import java.time.Period
-import java.util.Map
 
 object Utils {
-    var numText = Map.ofEntries(
-        Map.entry(NumTypeEnum.YEAR, arrayOf("лет", "год", "года", "лет")),
-        Map.entry(NumTypeEnum.MONTH, arrayOf("месяцев", "месяц", "месяца", "месяцев")),
-        Map.entry(NumTypeEnum.DAY, arrayOf("дней", "день", "дня", "дней")),
-        Map.entry(NumTypeEnum.COUNT, arrayOf("раз", "раз", "раза", "раз"))
+    var numText = mutableMapOf(
+        NumTypeEnum.YEAR to arrayOf("лет", "год", "года", "лет"),
+        NumTypeEnum.MONTH to arrayOf("месяцев", "месяц", "месяца", "месяцев"),
+        NumTypeEnum.DAY to arrayOf("дней", "день", "дня", "дней"),
+        NumTypeEnum.COUNT to arrayOf("раз", "раз", "раза", "раз")
     )
 
     /**

@@ -47,6 +47,7 @@ class UserController(private val foloUserService: FoloUserService) {
                     foloUserService.save(foloUserService.findById(userId).setMainId(mainId).setTag(tag))
                 }
                 ControllerCommandsEnum.DELETE -> foloUserService.delete(FoloUserDto(userId))
+                else -> {}
             }
         }
         return user(model)
