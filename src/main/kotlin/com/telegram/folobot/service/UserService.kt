@@ -44,10 +44,10 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
     fun getFoloUserName(user: User): String {
         val foloUser: FoloUserDto = foloUserService.findById(user.id)
         // По тэгу
-        var userName: String? = foloUser.getTag()
+        var userName: String? = foloUser.tag
         if (userName!!.isEmpty()) userName = getUserName(user)
         // По сохраненному имени
-        if (userName == null || userName.isEmpty()) userName = foloUser.getName()
+        if (userName == null || userName.isEmpty()) userName = foloUser.tag
         // Если не удалось определить
         if (userName.isEmpty()) userName = "Загадочный незнакомец"
         return userName

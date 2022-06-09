@@ -11,6 +11,7 @@ class FoloVarEntity(
     @EmbeddedId
     @Column(nullable = false)
     var id: FoloVarId,
+    @Column(nullable = false)
     var value: String
 ) {
 }

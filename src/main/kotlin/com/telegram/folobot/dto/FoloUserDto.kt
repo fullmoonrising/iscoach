@@ -4,30 +4,16 @@ import java.io.Serializable
 
 class FoloUserDto(
     val userId: Long,
-    private var mainId: Long? = null,
-    private var name: String = "",
-    private var tag: String = ""
+    var mainId: Long = 0L,
+    var name: String = "",
+    var tag: String = ""
 ) : Serializable {
 
     fun getMainUserId() : Long {
-        return mainId ?: userId
+        return if (mainId != 0L) mainId else userId
     }
 
-    fun getMainId(): Long {
-        return mainId ?: 0L
-    }
-
-    fun getName(): String {
-        return tag ?: name ?: ""
-    }
-
-    fun getRealName(): String {
-        return name ?: ""
-    }
-
-    fun getTag(): String {
-        return tag ?: ""
-    }
+    fun getTagName(): String { return if (tag.isNotEmpty()) tag else name }
 
     fun setMainId(mainId: Long): FoloUserDto {
         this.mainId = mainId

@@ -13,6 +13,7 @@ class FoloPidorEntity(
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     var foloUserEntity: FoloUserEntity,
 
+    @Column(nullable = false)
     var score: Int
 ) {
 }

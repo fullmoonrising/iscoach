@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component
 @Component
 class FoloUserMapper {
     fun mapToFoloUserDto(entity: FoloUserEntity): FoloUserDto {
-        return FoloUserDto(entity.userId, entity.mainId, entity.name ?: "" , entity.tag ?: "")
+        return FoloUserDto(entity.userId, entity.mainId, entity.name , entity.tag)
     }
 
     fun mapToFoloUserEntity(dto: FoloUserDto): FoloUserEntity {
-        return FoloUserEntity(dto.userId, dto.getMainId(), dto.getRealName(), dto.getTag())
+        return FoloUserEntity(dto.userId, dto.mainId, dto.name, dto.tag)
     }
 }

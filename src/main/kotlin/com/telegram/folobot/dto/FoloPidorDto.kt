@@ -17,17 +17,19 @@ class FoloPidorDto(
     /**
      * Получить основоного пользователя
      */
-    fun getMainUserId(): Long { return foloUser.getMainId() }
+    fun getMainUserId(): Long { return foloUser.getMainUserId() }
+
+    fun getTagName(): String { return foloUser.getTagName() }
 
     /**
      * Получить имя пользователя
      */
-    fun getName(): String { return foloUser.getName() }
+    fun getName(): String { return foloUser.name }
 
     /**
      * Получить тэг
      */
-    fun getTag(): String { return foloUser.getTag() }
+    fun getTag(): String { return foloUser.tag }
 
     /**
      * Проверка наличичия побед
@@ -46,6 +48,6 @@ class FoloPidorDto(
         }
 
     override fun hashCode(): Int {
-        return Objects.hash(getMainUserId());
+        return Objects.hash(getMainUserId())
     }
 }
