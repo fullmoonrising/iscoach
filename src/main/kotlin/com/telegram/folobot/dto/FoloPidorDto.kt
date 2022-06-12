@@ -2,15 +2,15 @@ package com.telegram.folobot.dto
 
 import com.telegram.folobot.domain.FoloPidorId
 import java.io.Serializable
+import java.time.LocalDate
 import java.util.*
 
 class FoloPidorDto(
     val id: FoloPidorId,
     var foloUser: FoloUserDto = FoloUserDto(id.userId),
-    var score: Int = 0
-) : Serializable {
-
-
+    var score: Int = 0,
+    var lastWinDate: LocalDate = LocalDate.of(1900,1,1)
+) : Serializable { //TODO javadoc
     constructor(chatId: Long, userId: Long) : this(FoloPidorId(chatId, userId))
     constructor(chatId: Long, userId: Long, score: Int) : this(FoloPidorId(chatId, userId), FoloUserDto(userId), score)
 
@@ -35,6 +35,10 @@ class FoloPidorDto(
      * Проверка наличичия побед
      */
     fun hasScore(): Boolean { return score > 0 }
+
+    fun isTwink(): Boolean { return foloUser.userId != foloUser.getMainUserId() }
+
+    fun isValid(): Boolean { return hasScore() && !isTwink() }
 
     fun updateScore(score: Int): FoloPidorDto {
         this.score = score

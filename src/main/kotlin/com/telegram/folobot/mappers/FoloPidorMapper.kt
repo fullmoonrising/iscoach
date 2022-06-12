@@ -11,7 +11,8 @@ class FoloPidorMapper(private val foloUserMapper: FoloUserMapper) {
         return FoloPidorDto(
             entity.id,
             foloUserMapper.mapToFoloUserDto(entity.foloUserEntity),
-            entity.score
+            entity.score,
+            entity.lastWinDate
         )
     }
 
@@ -19,7 +20,8 @@ class FoloPidorMapper(private val foloUserMapper: FoloUserMapper) {
         return FoloPidorEntity(
             dto.id,
             foloUserMapper.mapToFoloUserEntity(dto.foloUser),
-            dto.score
+            dto.score,
+            dto.lastWinDate,
         )
     }
 }

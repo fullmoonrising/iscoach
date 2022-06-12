@@ -1,6 +1,7 @@
 package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
+import com.telegram.folobot.ChatId.Companion.FOLOCHAT_ID
 import com.telegram.folobot.ChatId.Companion.isFo
 import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
@@ -120,6 +121,7 @@ class CommandHandler(
 
                 //Обновляем счетчик
                 foloPidor.score++
+                foloPidor.lastWinDate = LocalDate.now()
                 foloPidorService.save(foloPidor)
 
                 //Обновляем текущего победителя
@@ -130,8 +132,7 @@ class CommandHandler(
                 messageService.sendMessage(textService.setup, update)
                 messageService.sendMessage(
                     textService.getPunch(
-                        userService
-                            .getFoloUserNameLinked(foloPidor)
+                        userService.getFoloUserNameLinked(foloPidor)
                     ), update
                 )
             } else {

@@ -9,7 +9,9 @@ import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import java.util.*
 import java.util.function.Function
+import java.util.function.Predicate
 import java.util.stream.Collectors
+import kotlin.streams.toList
 
 @Component
 class FoloPidorService(
@@ -75,9 +77,13 @@ class FoloPidorService(
      */
     fun getRandom(chatid: Long): FoloPidorDto {
         //Получаем список фолопидоров для чата
-        val foloPidorEntities = foloPidorRepo.findByIdChatId(chatid)
+        val foloPidors = foloPidorRepo.findByIdChatId(chatid)
+            .stream()
+            .map(foloPidorMapper::mapToFoloPidorDto)
+            .filter(Predicate.not(FoloPidorDto::isTwink))
+            .toList()
         //Выбираем случайного
-        return foloPidorMapper.mapToFoloPidorDto(foloPidorEntities[SplittableRandom().nextInt(foloPidorEntities.size)])
+        return foloPidors[SplittableRandom().nextInt(foloPidors.size)]
     }
 
     /**
@@ -89,14 +95,15 @@ class FoloPidorService(
         return foloPidorRepo.findByIdChatId(chatId)
             .stream()
             .map(foloPidorMapper::mapToFoloPidorDto)
-            .filter(FoloPidorDto::hasScore)
-            .collect(
-                Collectors.groupingBy(Function.identity(),
-                    Collectors.summingInt(FoloPidorDto::score)))
-            .entries.stream()
+            .filter(FoloPidorDto::isValid)
+//            .collect(
+//                Collectors.groupingBy(Function.identity(),
+//                    Collectors.summingInt(FoloPidorDto::score)))
+//            .entries.stream()
+//            .map { entry -> entry.key.updateScore(entry.value) }
+            .sorted(Comparator.comparing(FoloPidorDto::score)
+                .thenComparing(FoloPidorDto::lastWinDate).reversed())
             .limit(10)
-            .map { entry -> entry.key.updateScore(entry.value) }
-            .sorted(Comparator.comparing(FoloPidorDto::score).reversed())
             .toList()
     }
 

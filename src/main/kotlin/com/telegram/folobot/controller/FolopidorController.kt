@@ -26,7 +26,7 @@ class FolopidorController(
      * @return Имя экрана
      */
     @GetMapping
-    fun main(model: MutableMap<String, Any>): String {
+    fun main(model: MutableMap<String, Any>): String { //TODO add lastDate
         model["folopidors"] = foloPidorService.findAll()
         return "folopidor"
     }

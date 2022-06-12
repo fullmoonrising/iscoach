@@ -1,5 +1,6 @@
 package com.telegram.folobot.domain
 
+import java.time.LocalDate
 import javax.persistence.*
 
 @Entity
@@ -14,6 +15,9 @@ class FoloPidorEntity(
     var foloUserEntity: FoloUserEntity,
 
     @Column(nullable = false)
-    var score: Int
+    var score: Int,
+
+    @Column(nullable = false)
+    var lastWinDate: LocalDate
 ) {
 }
