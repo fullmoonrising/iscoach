@@ -11,9 +11,12 @@
 
 #maintab input {
     border: none;
+    background: transparent;
+}
+
+#maintab input:not([type='checkbox']) {
     width: 100%;
     height: 100%;
-    background: transparent;
 }
 
 #maintab tr:nth-child(even){background-color: #f2f2f2;}

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
+import java.time.LocalDate
 import java.util.*
 
 //TODO логику из контроллеров вынести в сервисы
@@ -45,6 +46,7 @@ class FolopidorController(
         @RequestParam chatId: Long,
         @RequestParam(required = false) userId: Long,
         @RequestParam(defaultValue = "0", required = false) score: Int,
+        @RequestParam(defaultValue = "1900-01-01", required = false) lastWinDate: String,
         @RequestParam action: String,
         model: MutableMap<String, Any>
     ): String {
@@ -57,6 +59,7 @@ class FolopidorController(
             ControllerCommandsEnum.UPDATE -> if (foloPidorService.existsById(chatId, userId)) {
                 val foloPidor = foloPidorService.findById(chatId, userId) //TODO прокачать
                 foloPidor.score = score
+                foloPidor.lastWinDate = LocalDate.parse(lastWinDate)
                 foloPidorService.save(foloPidor)
             }
             ControllerCommandsEnum.DELETE -> foloPidorService.delete(FoloPidorDto(chatId, userId))

@@ -5,6 +5,7 @@ import java.io.Serializable
 class FoloUserDto(
     val userId: Long,
     var mainId: Long = 0L,
+    var anchor: Boolean = false,
     var name: String = "",
     var tag: String = ""
 ) : Serializable {
@@ -17,6 +18,11 @@ class FoloUserDto(
 
     fun setMainId(mainId: Long): FoloUserDto {
         this.mainId = mainId
+        return this
+    }
+
+    fun setAnchor(anchor: Boolean): FoloUserDto {
+        this.anchor = anchor
         return this
     }
 

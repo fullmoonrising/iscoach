@@ -7,6 +7,7 @@ import com.telegram.folobot.dto.FoloUserDto
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember
 import org.telegram.telegrambots.meta.api.objects.User
+import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import java.util.*
 import java.util.stream.Collectors
@@ -23,7 +24,7 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
      * @param user [User]
      * @return Имя пользователя
      */
-    fun getUserName(user: User?): String? {
+    fun getUserName(user: User?): String {
         return if (!Objects.isNull(user)) {
             Stream.of(Stream.of(user!!.firstName, user.lastName)
                 .filter(Objects::nonNull)
@@ -32,7 +33,7 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null)
-        } else null
+        } else ""
     }
 
     /**
@@ -44,10 +45,11 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
     fun getFoloUserName(user: User): String {
         val foloUser: FoloUserDto = foloUserService.findById(user.id)
         // По тэгу
-        var userName: String? = foloUser.tag
-        if (userName!!.isEmpty()) userName = getUserName(user)
+        var userName: String = foloUser.tag
+        // Получение динамически
+        if (userName.isEmpty()) userName = getUserName(user)
         // По сохраненному имени
-        if (userName == null || userName.isEmpty()) userName = foloUser.tag
+        if (userName.isEmpty()) userName = foloUser.name
         // Если не удалось определить
         if (userName.isEmpty()) userName = "Загадочный незнакомец"
         return userName
@@ -59,21 +61,26 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
      * @param foloPidorDto [FoloPidorDto]
      * @return Имя фолопидора
      */
-    fun getFoloUserName(foloPidorDto: FoloPidorDto): String {
+    fun getFoloUserName(foloPidorDto: FoloPidorDto, chatId: Long): String {
         // По тэгу
-        var userName: String? = foloPidorDto.getTag()
+        var userName: String = foloPidorDto.getTag()
         // По пользователю
-        if (userName!!.isEmpty()) userName = getUserName(getUserById(foloPidorDto.id.userId))
+        if (userName.isEmpty()) userName = getUserName(
+            getChatMember(
+                foloPidorDto.id.userId,
+                chatId
+            )?.user
+        )
         // По сохраненному имени
-        if (userName == null || userName.isEmpty()) userName = foloPidorDto.getName()
+        if (userName.isEmpty()) userName = foloPidorDto.getName()
         // Если не удалось определить
         if (userName.isEmpty()) userName = "Загадочный незнакомец"
         return userName
     }
 
-    private fun getUserById(userid: Long): User? {
+    fun getChatMember(userId: Long, chatId: Long = userId): ChatMember? {
         return try {
-            foloBot.execute(GetChatMember(userid.toString(), userid)).user
+            foloBot.execute(GetChatMember(chatId.toString(), userId))
         } catch (ignored: TelegramApiException) {
             null
         }
@@ -95,8 +102,8 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
      * @param foloPidor [FoloPidorDto]
      * @return Имя фолопидора
      */
-    fun getFoloUserNameLinked(foloPidor: FoloPidorDto): String {
-        return "[" + getFoloUserName(foloPidor) + "](tg://user?id=" + foloPidor.id.userId + ")"
+    fun getFoloUserNameLinked(foloPidor: FoloPidorDto, chatId: Long): String {
+        return "[" + getFoloUserName(foloPidor, chatId) + "](tg://user?id=" + foloPidor.id.userId + ")"
     }
 
     /**
@@ -112,5 +119,17 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
             printExeptionMessage(e)
             false
         }
+    }
+
+    /**
+     * Проверка что пользователь состоит в чате
+     * @param foloPidorDto [FoloPidorDto]
+     * @param chatId [Long]
+     * @return [Boolean]
+     */
+    fun isInChat(foloPidorDto: FoloPidorDto, chatId: Long): Boolean {
+        val chatMember = getChatMember(foloPidorDto.id.userId, chatId)
+        return foloPidorDto.isAnchored() ||
+                !(chatMember?.status.equals("left") || chatMember?.status.equals("kicked"))
     }
 }

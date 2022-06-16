@@ -1,7 +1,6 @@
 package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
-import com.telegram.folobot.ChatId.Companion.FOLOCHAT_ID
 import com.telegram.folobot.ChatId.Companion.isFo
 import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
@@ -108,16 +107,16 @@ class CommandHandler(
      * @return [BotApiMethod]
      */
     private fun foloPidor(update: Update): BotApiMethod<*>? {
-        val chatid = update.message.chatId
+        val chatId = update.message.chatId
         if (!update.message.isUserMessage) {
             //Определяем дату и победителя предыдущего запуска
-            val lastDate = foloVarService.getLastFolopidorDate(chatid)
-            val lastWinner = foloVarService.getLastFolopidorWinner(chatid)
+            val lastDate = foloVarService.getLastFolopidorDate(chatId)
+            val lastWinner = foloVarService.getLastFolopidorWinner(chatId)
 
             //Определяем либо показываем победителя
             if (lastWinner == 0L || lastDate.isBefore(LocalDate.now())) { //TODO поменять на null
                 //Выбираем случайного
-                val foloPidor = foloPidorService.getRandom(chatid)
+                val foloPidor = foloPidorService.getRandom(chatId)
 
                 //Обновляем счетчик
                 foloPidor.score++
@@ -125,20 +124,23 @@ class CommandHandler(
                 foloPidorService.save(foloPidor)
 
                 //Обновляем текущего победителя
-                foloVarService.setLastFolopidorWinner(chatid, foloPidor.id.userId)
-                foloVarService.setLastFolopidorDate(chatid, LocalDate.now())
+                foloVarService.setLastFolopidorWinner(chatId, foloPidor.id.userId)
+                foloVarService.setLastFolopidorDate(chatId, LocalDate.now())
 
                 //Поздравляем
                 messageService.sendMessage(textService.setup, update)
                 messageService.sendMessage(
                     textService.getPunch(
-                        userService.getFoloUserNameLinked(foloPidor)
+                        userService.getFoloUserNameLinked(foloPidor, chatId)
                     ), update
                 )
             } else {
                 return messageService.buildMessage(
                     "Фолопидор дня уже выбран, это *" +
-                            userService.getFoloUserName(foloPidorService.findById(chatid, lastWinner)) +
+                            userService.getFoloUserName(
+                                foloPidorService.findById(chatId, lastWinner),
+                                chatId
+                            ) +
                             "*. Пойду лучше лампово попержу в диван", update
                 )
             }
@@ -170,7 +172,7 @@ class CommandHandler(
                 }
                 val foloPidor = foloPidors[i]
                 top.add(
-                    place + userService.getFoloUserName(foloPidor) + " — _" +
+                    place + userService.getFoloUserName(foloPidor, update.message.chatId) + " — _" +
                             getNumText(foloPidor.score, NumTypeEnum.COUNT) + "_"
                 )
             }

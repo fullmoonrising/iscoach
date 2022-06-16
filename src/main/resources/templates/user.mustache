@@ -3,13 +3,15 @@
     <title>Пользователи</title>
     <meta http-equiv="Content-Type" content="text/html" charset=UTF-8" />
     <link rel="stylesheet" type="text/css" href="css/user.css">
+    <script src="js/user.js"></script>
 </head>
 <html>
-    <body>
+    <body onload="setCheckboxes();">
         <div>
             <form method="post">
                 <input id="userId" type="number" name="userId" placeholder="UserId"/>
                 <input type="number" name="mainId" placeholder="MainId"/>
+                <input type="checkbox" name="anchor"/>
                 <input type="text" name="tag" placeholder="Tag"/>
                 <button type="submit" name="action" value="add">Добавить</button>
             </form>
@@ -19,6 +21,7 @@
             <tr>
                 <th>UserId</th>
                 <th>MainId</th>
+                <th>Якорь</th>
                 <th>Имя</th>
                 <th>Тэг</th>
                 <th colspan="2">Действие</th>
@@ -30,8 +33,11 @@
                     <form method="post">
                         <td width=10% align="center"><input type="number" name="userId" value="{{userId}}" readonly/></td>
                         <td width=10% align="center"><input type="number" name="mainId" value="{{mainId}}" /></td>
+                        <td width=10% align="center"><input id = "anchor" type="checkbox" name="anchor"
+                                                            onclick="onCheckboxClick(this)" value={{anchor}} /></td>
+<!--                        <input type="hidden" value="1" name="_anchor"/>-->
                         <td width=20%><i>{{name}}</i></td>
-                        <td width=40%><i><input type="text" name="tag" value="{{tag}}"/></i></td>
+                        <td width=30%><i><input type="text" name="tag" value="{{tag}}"/></i></td>
                         <td width=10% align="center">
                             <button type="submit" name="action" value="update">Обновить</button>
                         </td>

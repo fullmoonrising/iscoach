@@ -40,6 +40,8 @@ class FoloPidorDto(
 
     fun isValid(): Boolean { return hasScore() && !isTwink() }
 
+    fun isAnchored(): Boolean { return  foloUser.anchor }
+
     fun updateScore(score: Int): FoloPidorDto {
         this.score = score
         return this

@@ -12,6 +12,8 @@ class FoloUserEntity(
     @Column(nullable = false)
     var mainId: Long = 0L,
     @Column(nullable = false)
+    var anchor: Boolean = false,
+    @Column(nullable = false)
     var name: String = "",
     @Column(nullable = false)
     var tag: String = ""
