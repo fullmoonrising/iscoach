@@ -65,7 +65,8 @@ class FolopidorController(
             ControllerCommandsEnum.DELETE -> foloPidorService.delete(FoloPidorDto(chatId, userId))
             ControllerCommandsEnum.FILTER -> {
                 model["folopidors"] =
-                    if (!Objects.isNull(chatId)) foloPidorService.findByIdChatId(chatId) else foloPidorService.findAll()
+                    if (!Objects.isNull(chatId)) foloPidorService.findByIdChatId(chatId)
+                    else foloPidorService.findAll()
                 return "folopidor"
             }
         }

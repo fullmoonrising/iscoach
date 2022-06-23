@@ -94,6 +94,6 @@ class FoloVarService(private val foloVarRepo: FoloVarRepo) {
      * @param value  [Integer] Счетчик
      */
     fun setNoFapCount(chatId: Long, value: Int) {
-        foloVarRepo.save(FoloVarEntity(FoloVarId(chatId, VarTypeEnum.LAST_FAP_COUNT.name), Integer.toString(value)))
+        foloVarRepo.save(FoloVarEntity(FoloVarId(chatId, VarTypeEnum.LAST_FAP_COUNT.name), value.toString()))
     }
 }

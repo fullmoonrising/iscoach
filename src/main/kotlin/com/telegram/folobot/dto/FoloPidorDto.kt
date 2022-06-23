@@ -19,6 +19,9 @@ class FoloPidorDto(
      */
     fun getMainUserId(): Long { return foloUser.getMainUserId() }
 
+    /**
+     * Получить тег, если он пуст то имя
+     */
     fun getTagName(): String { return foloUser.getTagName() }
 
     /**
@@ -36,12 +39,25 @@ class FoloPidorDto(
      */
     fun hasScore(): Boolean { return score > 0 }
 
+    /**
+     * Проверка что на твинка
+     */
     fun isTwink(): Boolean { return foloUser.userId != foloUser.getMainUserId() }
 
+    /**
+     * Проверка валидности топа
+     */
     fun isValid(): Boolean { return hasScore() && !isTwink() }
 
+    /**
+     * Проверка наличия якоря
+     */
     fun isAnchored(): Boolean { return  foloUser.anchor }
 
+    /**
+     * Обновить счет и вернуть себя
+     * @return [FoloPidorDto]
+     */
     fun updateScore(score: Int): FoloPidorDto {
         this.score = score
         return this

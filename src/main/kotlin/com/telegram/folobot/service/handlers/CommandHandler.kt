@@ -32,18 +32,15 @@ class CommandHandler(
      * @return [BotApiMethod]
      */
     fun handle(update: Update): BotApiMethod<*>? {
-        val command =
-            BotCommandsEnum.valueOfLabel(update.message.text.split("@".toRegex()).dropLastWhile { it.isEmpty() }
-                .toTypedArray()[0]) //TODO упростить
-        if (command != null) {
-            messageService.sendChatTyping(update)
-            when (command) {
-                BotCommandsEnum.SILENTSTREAM -> messageService.sendSticker(messageService.randomSticker, update)
-                BotCommandsEnum.FREELANCE -> return frelanceTimer(update)
-                BotCommandsEnum.NOFAP -> return nofapTimer(update)
-                BotCommandsEnum.FOLOPIDOR -> return foloPidor(update)
-                BotCommandsEnum.FOLOPIDORTOP -> return foloPidorTop(update)
-            }
+        val command = BotCommandsEnum.fromCommand(update.message.text.substringBefore("@"))
+        messageService.sendChatTyping(update)
+        when (command) {
+            BotCommandsEnum.SILENTSTREAM -> messageService.sendSticker(messageService.randomSticker, update)
+            BotCommandsEnum.FREELANCE -> return frelanceTimer(update)
+            BotCommandsEnum.NOFAP -> return nofapTimer(update)
+            BotCommandsEnum.FOLOPIDOR -> return foloPidor(update)
+            BotCommandsEnum.FOLOPIDORTOP -> return foloPidorTop(update)
+            else -> return null
         }
         return null
     }
@@ -56,10 +53,11 @@ class CommandHandler(
     private fun frelanceTimer(update: Update): BotApiMethod<*> {
         return messageService.buildMessage(
             """
-    18 ноября 2019 года я уволился с завода по своему желанию.
-    С тех пор я стремительно вхожу в IT вот уже
-    *${getPeriodText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now()))}*!
-    """.trimIndent(), update
+                18 ноября 2019 года я уволился с завода по своему желанию.
+                С тех пор я стремительно вхожу в IT вот уже
+                *${getPeriodText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now()))}*!
+            """.trimIndent(),
+            update
         )
     }
 
@@ -76,8 +74,11 @@ class CommandHandler(
         }
         return if (noFapDate == LocalDate.now()) {
             messageService.buildMessage(
-                """Все эти молоденькие няшные студенточки вокруг...
-Сорвался "Но Фап" сегодня...""", update
+                """
+                    Все эти молоденькие няшные студенточки вокруг...
+                    Сорвался "Но Фап" сегодня...
+                """.trimIndent(),
+                update
             )
         } else {
             messageService.buildMessage(
@@ -95,7 +96,8 @@ class CommandHandler(
                                 LocalDate.now()
                             )
                         ) +
-                        "* твёрдо и уверенно держу \"Но Фап\".", update
+                        "* твёрдо и уверенно держу \"Но Фап\".",
+                update
             )
         }
     }
@@ -141,13 +143,16 @@ class CommandHandler(
                                 foloPidorService.findById(chatId, lastWinner),
                                 chatId
                             ) +
-                            "*. Пойду лучше лампово попержу в диван", update
+                            "*. Пойду лучше лампово попержу в диван",
+                    update
                 )
             }
         } else {
             return messageService.buildMessage(
                 "Для меня вы все фолопидоры, " +
-                        userService.getFoloUserName(update.message.from), update, true
+                        userService.getFoloUserName(update.message.from),
+                update,
+                true
             )
         }
         return null

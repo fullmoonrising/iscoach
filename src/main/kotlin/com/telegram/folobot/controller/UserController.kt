@@ -12,7 +12,6 @@ import java.util.*
 
 //TODO логику из контроллеров вынести в сервисы
 //TODO проверки ввода
-//TODO kotlinize
 @Controller
 @RequestMapping("/user")
 class UserController(private val foloUserService: FoloUserService) {
@@ -41,18 +40,20 @@ class UserController(private val foloUserService: FoloUserService) {
         model: MutableMap<String, Any>
     ): String {
         if (!Objects.isNull(userId)) {
-            when (ControllerCommandsEnum.valueOf(action.uppercase(Locale.getDefault()))) {
-                ControllerCommandsEnum.ADD -> if (!foloUserService.existsById(userId)) {
-                    foloUserService.save(FoloUserDto(userId, mainId, anchor, tag))
-                }
-                ControllerCommandsEnum.UPDATE -> if (foloUserService.existsById(userId)) {
-                    foloUserService.save(
-                        foloUserService.findById(userId)
-                        .setMainId(mainId)
-                        .setAnchor(anchor)
-                        .setTag(tag)
-                    )
-                }
+            when (ControllerCommandsEnum.valueOf(action.uppercase())) {
+                ControllerCommandsEnum.ADD ->
+                    if (!foloUserService.existsById(userId)) {
+                        foloUserService.save(FoloUserDto(userId, mainId, anchor, tag))
+                    }
+                ControllerCommandsEnum.UPDATE ->
+                    if (foloUserService.existsById(userId)) {
+                        foloUserService.save(
+                            foloUserService.findById(userId)
+                            .setMainId(mainId)
+                            .setAnchor(anchor)
+                            .setTag(tag)
+                        )
+                    }
                 ControllerCommandsEnum.DELETE -> foloUserService.delete(FoloUserDto(userId))
                 else -> {}
             }
