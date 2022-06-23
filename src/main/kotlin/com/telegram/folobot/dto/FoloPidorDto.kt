@@ -10,7 +10,7 @@ class FoloPidorDto(
     var foloUser: FoloUserDto = FoloUserDto(id.userId),
     var score: Int = 0,
     var lastWinDate: LocalDate = LocalDate.of(1900,1,1)
-) : Serializable { //TODO javadoc
+) : Serializable {
     constructor(chatId: Long, userId: Long) : this(FoloPidorId(chatId, userId))
     constructor(chatId: Long, userId: Long, score: Int) : this(FoloPidorId(chatId, userId), FoloUserDto(userId), score)
 

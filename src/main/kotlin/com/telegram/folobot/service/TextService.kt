@@ -38,7 +38,7 @@ class TextService {
     val setup: String
         get() = foloPidorSetup[SplittableRandom().nextInt(foloPidorSetup.size)]
 
-    fun getPunch(userName: String?): String {
+    fun getPunch(userName: String): String {
         return String.format(foloPidorPunch[SplittableRandom().nextInt(foloPidorPunch.size)], userName)
     }
 

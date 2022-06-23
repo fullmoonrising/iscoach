@@ -22,11 +22,13 @@ class FoloBot(
     private val userService: UserService
 ) : TelegramWebhookBot() {
     @Value("\${bot.username}")
-    private val botUsername: String? = null
+    private val botUsername: String = ""
+
     @Value("\${bot.token}")
-    private val botToken: String? = null
+    private val botToken: String = ""
+
     @Value("\${bot.path}")
-    private val botPath: String? = null
+    private val botPath: String = ""
 
     /**
      * Инициализация бота в обработчиках
@@ -73,38 +75,24 @@ class FoloBot(
      */
     private fun getAction(update: Update): ActionsEnum {
         val message = update.message
-
-        // Команда
-        if (message.hasText()) {
-            if (message.chat.isUserChat && message.text.startsWith("/") || !message.chat.isUserChat && message.text.startsWith(
-                    "/"
-                ) && message.text.endsWith(
-                    "@$botUsername"
-                )
-            ) {
-                return ActionsEnum.COMMAND
-            }
+        return when {
+            // Команда
+            message.hasText() &&
+                    ((message.chat.isUserChat && message.text.startsWith("/")) ||
+                            (!message.chat.isUserChat && message.text.startsWith("/") &&
+                                    message.text.endsWith("@$botUsername"))) -> ActionsEnum.COMMAND
+            // Личное сообщение
+            message.isUserMessage -> ActionsEnum.USERMESSAGE
+            // Ответ на обращение
+            message.hasText() && (message.text.lowercase().contains("гурманыч") ||
+                    message.text.lowercase().contains(botUsername.lowercase())) -> ActionsEnum.REPLY
+            // Пользователь зашел в чат
+            message.newChatMembers.isNotEmpty() -> ActionsEnum.USERNEW
+            // Пользователь покинул чат
+            Objects.nonNull(message.leftChatMember) -> ActionsEnum.USERLEFT
+            // Неопределено
+            else -> ActionsEnum.UNDEFINED
         }
-        // Личное сообщение
-        if (message.isUserMessage) {
-            return ActionsEnum.USERMESSAGE
-        }
-        // Ответ на обращение
-        if (message.hasText()) {
-            if (message.text.lowercase(Locale.getDefault()).contains("гурманыч") ||
-                message.text.lowercase(Locale.getDefault()).contains(botUsername!!.lowercase(Locale.getDefault()))
-            ) {
-                return ActionsEnum.REPLY
-            }
-        }
-        // Пользователь зашел в чат
-        if (!message.newChatMembers.isEmpty()) {
-            return ActionsEnum.USERNEW
-        }
-        // Пользователь покинул чат
-        return if (Objects.nonNull(message.leftChatMember)) {
-            ActionsEnum.USERLEFT
-        } else ActionsEnum.UNDEFINED
     }
 
     /**
@@ -115,14 +103,14 @@ class FoloBot(
      * @return [BotApiMethod]
      */
     private fun onAction(action: ActionsEnum?, update: Update): BotApiMethod<*>? {
-        if (action != null && action !== ActionsEnum.UNDEFINED) {
-            when (action) {
-                ActionsEnum.COMMAND -> return commandHandler.handle(update)
-                ActionsEnum.USERMESSAGE -> return userMessageHandler.handle(update)
-                ActionsEnum.REPLY -> return replyHandler.handle(update) //TODO обрабатывать фолопидор, алые паруса и восточная любовь
-                ActionsEnum.USERNEW -> return userJoinHandler.handleJoin(update)
-                ActionsEnum.USERLEFT -> return userJoinHandler.handleLeft(update)
-                else -> return null
+        if (action?.let { it !== ActionsEnum.UNDEFINED } == true) {
+            return when (action) {
+                ActionsEnum.COMMAND -> commandHandler.handle(update)
+                ActionsEnum.USERMESSAGE -> userMessageHandler.handle(update)
+                ActionsEnum.REPLY -> replyHandler.handle(update) //TODO обрабатывать фолопидор, алые паруса и восточная любовь
+                ActionsEnum.USERNEW -> userJoinHandler.handleJoin(update)
+                ActionsEnum.USERLEFT -> userJoinHandler.handleLeft(update)
+                else -> null
             }
         }
         return null

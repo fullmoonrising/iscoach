@@ -116,7 +116,7 @@ class CommandHandler(
             val lastWinner = foloVarService.getLastFolopidorWinner(chatId)
 
             //Определяем либо показываем победителя
-            if (lastWinner == 0L || lastDate.isBefore(LocalDate.now())) { //TODO поменять на null
+            if (lastWinner == FoloVarService.INITIAL_USERID || lastDate.isBefore(LocalDate.now())) {
                 //Выбираем случайного
                 val foloPidor = foloPidorService.getRandom(chatId)
 
@@ -176,10 +176,8 @@ class CommandHandler(
                     else -> "\u2004*" + (i + 1) + "*.\u2004"
                 }
                 val foloPidor = foloPidors[i]
-                top.add(
-                    place + userService.getFoloUserName(foloPidor, update.message.chatId) + " — _" +
-                            getNumText(foloPidor.score, NumTypeEnum.COUNT) + "_"
-                )
+                top.add(place + userService.getFoloUserName(foloPidor, update.message.chatId) + " — _" +
+                            getNumText(foloPidor.score, NumTypeEnum.COUNT) + "_")
             }
             messageService.buildMessage(top.toString(), update)
         } else {
