@@ -14,7 +14,7 @@ import java.util.stream.Collectors
 import java.util.stream.Stream
 
 @Component
-class UserService(private val foloUserService: FoloUserService) { //TODO kotlinise
+class UserService(private val foloUserService: FoloUserService) {
 
     lateinit var foloBot: FoloBot
 
@@ -24,16 +24,18 @@ class UserService(private val foloUserService: FoloUserService) { //TODO kotlini
      * @param user [User]
      * @return Имя пользователя
      */
-    fun getUserName(user: User?): String {
-        return if (!Objects.isNull(user)) {
-            Stream.of(Stream.of(user!!.firstName, user.lastName)
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining(" ")),
-                user.userName)
+    fun getUserName(user: User?): String { //FIXME(упросить)
+        return user?.let {
+            Stream.of(
+                Stream.of(it.firstName, it.lastName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining(" ")),
+                it.userName
+            )
                 .filter(Objects::nonNull)
                 .findFirst()
                 .orElse(null)
-        } else ""
+        } ?: ""
     }
 
     /**

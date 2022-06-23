@@ -9,7 +9,10 @@ import java.time.LocalDate
 
 @Component
 class FoloVarService(private val foloVarRepo: FoloVarRepo) {
-    private val COMMON_CHATID = 0L
+    companion object {
+        private val COMMON_CHATID = 0L
+        val INITIAL_USERID = 0L
+    }
 
     /**
      * Дата последнего определения фолопидора
@@ -42,7 +45,7 @@ class FoloVarService(private val foloVarRepo: FoloVarRepo) {
     fun getLastFolopidorWinner(chatId: Long): Long {
         return foloVarRepo.findById(FoloVarId(chatId, VarTypeEnum.LAST_FOLOPIDOR_USERID.name))
             .map { foloVarEntity -> foloVarEntity.value.toLong() }
-            .orElse(0L) //TODO поменять на null
+            .orElse(INITIAL_USERID)
     }
 
     /**

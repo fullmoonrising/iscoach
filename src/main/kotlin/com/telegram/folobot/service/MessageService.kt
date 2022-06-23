@@ -16,7 +16,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import java.util.*
 
 @Component
-class MessageService { //TODO kotlinise
+class MessageService {
     lateinit var foloBot: FoloBot
 
     /**
@@ -107,15 +107,13 @@ class MessageService { //TODO kotlinise
         return null
     }
 
-    private fun buildSticker(stickerFile: InputFile?, update: Update): SendSticker? {
-        return if (stickerFile != null) {
-            SendSticker
+    private fun buildSticker(stickerFile: InputFile, update: Update): SendSticker? {
+        return SendSticker
                 .builder()
                 .chatId(update.message.chatId.toString())
                 .sticker(stickerFile)
                 .replyToMessageId(update.message.messageId)
                 .build()
-        } else null
     }
 
     /**
@@ -125,9 +123,9 @@ class MessageService { //TODO kotlinise
      * @param update      [Update]
      */
     fun sendSticker(stickerFile: InputFile?, update: Update) {
-        if (stickerFile != null) {
+        stickerFile?.let {
             try {
-                foloBot.execute(buildSticker(stickerFile, update))
+                foloBot.execute(buildSticker(it, update))
             } catch (e: TelegramApiException) {
                 printExeptionMessage(e)
             }
@@ -156,14 +154,14 @@ class MessageService { //TODO kotlinise
     }
 
     fun forwardMessage(chatid: Long, message: Message?) {
-        if (message != null) {
+        message?.let {
             try {
                 foloBot.execute(
                     ForwardMessage
                         .builder()
                         .chatId(chatid.toString())
-                        .messageId(message.messageId)
-                        .fromChatId(message.chatId.toString())
+                        .messageId(it.messageId)
+                        .fromChatId(it.chatId.toString())
                         .build()
                 )
             } catch (e: TelegramApiException) {

@@ -36,7 +36,7 @@ class ContextIndependentHandler(
         val message = update.message
         if (message.isAutomaticForward == null || !message.isAutomaticForward) {
             var user = message.from
-            if (Objects.isNull(user) && !message.newChatMembers.isEmpty()) {
+            if (Objects.isNull(user) && message.newChatMembers.isNotEmpty()) {
                 user = message.newChatMembers[0]
             }
             if (!Objects.isNull(user)) {
