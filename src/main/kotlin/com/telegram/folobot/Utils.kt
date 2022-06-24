@@ -3,13 +3,15 @@ package com.telegram.folobot
 import com.telegram.folobot.constants.NumTypeEnum
 import java.text.ChoiceFormat
 import java.time.Period
+import kotlin.math.abs
 
 object Utils {
     var numText = mutableMapOf(
         NumTypeEnum.YEAR to arrayOf("лет", "год", "года", "лет"),
         NumTypeEnum.MONTH to arrayOf("месяцев", "месяц", "месяца", "месяцев"),
         NumTypeEnum.DAY to arrayOf("дней", "день", "дня", "дней"),
-        NumTypeEnum.COUNT to arrayOf("раз", "раз", "раза", "раз")
+        NumTypeEnum.COUNT to arrayOf("раз", "раз", "раза", "раз"),
+        NumTypeEnum.YEARISH to arrayOf("годиков", "годик", "годика", "годиков")
     )
 
     /**
@@ -22,7 +24,7 @@ object Utils {
     @JvmStatic
     fun getNumText(part: Int, numTypeEnum: NumTypeEnum): String {
         val format = ChoiceFormat(doubleArrayOf(0.0, 1.0, 2.0, 5.0), numText[numTypeEnum])
-        val rule = if (11 <= part % 100 && part % 100 <= 14) part else part % 10
+        val rule = if (part % 100 in 11..14) part else part % 10
         return part.toString() + ' ' + format.format(rule.toLong())
     }
 
@@ -30,19 +32,19 @@ object Utils {
     fun getPeriodText(period: Period): String {
         val stringBuilder = StringBuilder()
         if (period.years > 0) {
-            stringBuilder.append(getNumText(Math.abs(period.years), NumTypeEnum.YEAR))
+            stringBuilder.append(getNumText(abs(period.years), NumTypeEnum.YEAR))
         }
         if (period.months > 0) {
-            if (!stringBuilder.isEmpty()) {
+            if (stringBuilder.isNotEmpty()) {
                 stringBuilder.append(", ")
             }
-            stringBuilder.append(getNumText(Math.abs(period.months), NumTypeEnum.MONTH))
+            stringBuilder.append(getNumText(abs(period.months), NumTypeEnum.MONTH))
         }
         if (period.days > 0) {
-            if (!stringBuilder.isEmpty()) {
+            if (stringBuilder.isNotEmpty()) {
                 stringBuilder.append(" и ")
             }
-            stringBuilder.append(getNumText(Math.abs(period.days), NumTypeEnum.DAY))
+            stringBuilder.append(getNumText(abs(period.days), NumTypeEnum.DAY))
         }
         return stringBuilder.toString()
     }

@@ -1,6 +1,7 @@
 package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
+import com.telegram.folobot.ChatId.Companion.ANDREW_ID
 import com.telegram.folobot.ChatId.Companion.isFo
 import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
@@ -40,6 +41,7 @@ class CommandHandler(
             BotCommandsEnum.NOFAP -> return nofapTimer(update)
             BotCommandsEnum.FOLOPIDOR -> return foloPidor(update)
             BotCommandsEnum.FOLOPIDORTOP -> return foloPidorTop(update)
+            BotCommandsEnum.ALPHAFOLOPIDOR -> return alphaTimer(update)
             else -> return null
         }
         return null
@@ -176,12 +178,52 @@ class CommandHandler(
                     else -> "\u2004*" + (i + 1) + "*.\u2004"
                 }
                 val foloPidor = foloPidors[i]
-                top.add(place + userService.getFoloUserName(foloPidor, update.message.chatId) + " — _" +
-                            getNumText(foloPidor.score, NumTypeEnum.COUNT) + "_")
+                top.add(
+                    place + userService.getFoloUserName(foloPidor, update.message.chatId) + " — _" +
+                            getNumText(foloPidor.score, NumTypeEnum.COUNT) + "_"
+                )
             }
             messageService.buildMessage(top.toString(), update)
         } else {
             messageService.buildMessage("Андрей - почетный фолопидор на все времена!", update)
+        }
+    }
+
+    /**
+     * Подсчет времени до лня рождения альфы
+     *
+     * @param update [Update]
+     */
+    private fun alphaTimer(update: Update): BotApiMethod<*> {
+        val alfaBirthday = LocalDate.of(1983, 8, 9)
+        val alphaBirthdayThisYear = alfaBirthday.withYear(LocalDate.now().year)
+        val nextAlphaBirthday =
+            if (alphaBirthdayThisYear.isBefore(LocalDate.now()))
+                alphaBirthdayThisYear.plusYears(1)
+            else alphaBirthdayThisYear
+
+        return if (nextAlphaBirthday == LocalDate.now()) {
+            messageService.buildMessage(
+                "Поздравляю моего хорошего друга и главного фолопидора " +
+                        "[Андрея](tg://user?id=$ANDREW_ID) с днем рождения!\nСегодня ему исполнилось " +
+                        "*${
+                            getNumText(
+                                Period.between(alfaBirthday, nextAlphaBirthday).years,
+                                NumTypeEnum.YEARISH
+                            )
+                        }*!",
+                update
+            )
+        } else {
+            messageService.buildMessage(
+                "День рождения моего хорошего друга и главного фолопидора " +
+                        "[Андрея](tg://user?id=$ANDREW_ID) *" +
+                        DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+                            .withLocale(Locale("ru"))
+                            .format(alfaBirthday) +
+                        "* через *${getPeriodText(Period.between(LocalDate.now(), nextAlphaBirthday))}*",
+                update
+            )
         }
     }
 }

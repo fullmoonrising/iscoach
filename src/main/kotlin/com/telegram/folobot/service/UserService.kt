@@ -94,7 +94,7 @@ class UserService(private val foloUserService: FoloUserService) {
      * @param user [User]
      * @return Имя пользователя
      */
-    private fun getFoloUserNameLinked(user: User): String {
+    fun getFoloUserNameLinked(user: User): String {
         return "[" + getFoloUserName(user) + "](tg://user?id=" + user.id + ")"
     }
 

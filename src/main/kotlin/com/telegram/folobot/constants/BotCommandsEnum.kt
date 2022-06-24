@@ -5,7 +5,8 @@ enum class BotCommandsEnum(val command: String) {
     FREELANCE("/freelance"),
     NOFAP("/nofap"),
     FOLOPIDOR("/folopidor"),
-    FOLOPIDORTOP("/folopidortop");
+    FOLOPIDORTOP("/folopidortop"),
+    ALPHAFOLOPIDOR("/alphafolopidor");
 
     companion object {
         private val map = BotCommandsEnum.values().associateBy(BotCommandsEnum::command)
