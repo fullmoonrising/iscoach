@@ -2,7 +2,6 @@ package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
 import com.telegram.folobot.ChatId.Companion.ANDREW_ID
-import com.telegram.folobot.ChatId.Companion.FOLOCHAT_ID
 import com.telegram.folobot.ChatId.Companion.isFo
 import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
@@ -196,18 +195,26 @@ class CommandHandler(
 
     private fun foloUnderdog(update: Update): BotApiMethod<*> {
         return if (!update.message.isUserMessage) {
-            messageService.buildMessage(
-                "Когда-нибудь и вы станете *фолопидорами* дня, уважаемые фанаты " +
-                        "и милые фанаточки, просто берите пример с Андрея!\n\n" +
-                        foloPidorService.getUnderdog(FOLOCHAT_ID)
-                            .joinToString(
+            val foloUnderdogs = foloPidorService.getUnderdog(update.message.chatId)
+            if (foloUnderdogs.isNotEmpty()) {
+                messageService.buildMessage(
+                    text = "Когда-нибудь и вы станете *фолопидорами дня*, уважаемые фанаты " +
+                            "и милые фанаточки, просто берите пример с Андрея!\n\n" +
+                            foloUnderdogs.joinToString(
                                 separator = "\n• ",
                                 prefix = "• ",
                                 transform = { foloPidor ->
-                                    userService.getFoloUserName(foloPidor, FOLOCHAT_ID)
+                                    userService.getFoloUserName(foloPidor, update.message.chatId)
                                 }
-                            ), update
-            )
+                            ),
+                    update = update
+                )
+            } else {
+                return messageService.buildMessage(
+                    text = "Все *фолопидоры* хотя бы раз побывали *фолопидорами дня*, это потрясающе!",
+                    update = update
+                )
+            }
         } else {
             messageService.buildMessage(
                 "Для меня вы все фолопидоры, " +
