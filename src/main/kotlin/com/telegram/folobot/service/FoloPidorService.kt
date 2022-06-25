@@ -7,7 +7,7 @@ import com.telegram.folobot.mappers.FoloPidorMapper
 import com.telegram.folobot.repos.FoloPidorRepo
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
-import java.util.*
+import kotlin.random.Random
 
 @Component
 class FoloPidorService(
@@ -77,7 +77,7 @@ class FoloPidorService(
             .filterNot(FoloPidorDto::isTwink)
             .filter { userService.isInChat(it, chatId) }
         //Выбираем случайного
-        return foloPidors[SplittableRandom().nextInt(foloPidors.size)]
+        return foloPidors[Random(System.nanoTime()).nextInt(foloPidors.size)]
     }
 
     /**
@@ -88,10 +88,22 @@ class FoloPidorService(
     fun getTop(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(chatId)
             .map(foloPidorMapper::mapToFoloPidorDto)
-            .filter(FoloPidorDto::isValid)
+            .filter(FoloPidorDto::isValidTop)
             .sortedWith(Comparator.comparing(FoloPidorDto::score)
                 .thenComparing(FoloPidorDto::lastWinDate).reversed())
             .take(10)
+    }
+
+    /**
+     * Получение списка андердогов
+     * @param chatId Id чата
+     * @return list of [FoloPidorDto]
+     */
+    fun getUnderdog(chatId: Long): List<FoloPidorDto> {
+        return foloPidorRepo.findByIdChatId(chatId)
+            .map(foloPidorMapper::mapToFoloPidorDto)
+            .filter { userService.isInChat(it, chatId) }
+            .filter(FoloPidorDto::isValidUnderdog)
     }
 
     /**

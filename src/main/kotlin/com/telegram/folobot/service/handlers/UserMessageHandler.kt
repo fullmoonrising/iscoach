@@ -7,7 +7,7 @@ import com.telegram.folobot.service.TextService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.*
+import kotlin.random.Random
 
 @Component
 class UserMessageHandler(
@@ -23,7 +23,7 @@ class UserMessageHandler(
      */
     fun handle(update: Update): BotApiMethod<*>? {
         if (isAndrew(update.message.from) &&
-            SplittableRandom().nextInt(100) < 7
+            Random(System.nanoTime()).nextInt(100) < 7
         ) {
             messageService.forwardMessage(
                 ChatId.POC_ID,

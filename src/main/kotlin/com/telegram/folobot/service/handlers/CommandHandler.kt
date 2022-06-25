@@ -2,6 +2,7 @@ package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
 import com.telegram.folobot.ChatId.Companion.ANDREW_ID
+import com.telegram.folobot.ChatId.Companion.FOLOCHAT_ID
 import com.telegram.folobot.ChatId.Companion.isFo
 import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
@@ -41,7 +42,8 @@ class CommandHandler(
             BotCommandsEnum.NOFAP -> return nofapTimer(update)
             BotCommandsEnum.FOLOPIDOR -> return foloPidor(update)
             BotCommandsEnum.FOLOPIDORTOP -> return foloPidorTop(update)
-            BotCommandsEnum.ALPHAFOLOPIDOR -> return alphaTimer(update)
+            BotCommandsEnum.FOLOUNDERDOG -> return foloUnderdog(update)
+            BotCommandsEnum.FOLOPIDORALPHA -> return alphaTimer(update)
             else -> return null
         }
         return null
@@ -63,6 +65,9 @@ class CommandHandler(
         )
     }
 
+    /**
+     * Подсчет времени прошедшего с последнего фапа. Фо обновляет таймер
+     */
     private fun nofapTimer(update: Update): BotApiMethod<*> {
         val noFapDate: LocalDate
         var noFapCount = 0
@@ -189,8 +194,32 @@ class CommandHandler(
         }
     }
 
+    private fun foloUnderdog(update: Update): BotApiMethod<*> {
+        return if (!update.message.isUserMessage) {
+            messageService.buildMessage(
+                "Когда-нибудь и вы станете *фолопидорами* дня, уважаемые фанаты " +
+                        "и милые фанаточки, просто берите пример с Андрея!\n\n" +
+                        foloPidorService.getUnderdog(FOLOCHAT_ID)
+                            .joinToString(
+                                separator = "\n• ",
+                                prefix = "• ",
+                                transform = { foloPidor ->
+                                    userService.getFoloUserName(foloPidor, FOLOCHAT_ID)
+                                }
+                            ), update
+            )
+        } else {
+            messageService.buildMessage(
+                "Для меня вы все фолопидоры, " +
+                        userService.getFoloUserName(update.message.from),
+                update,
+                true
+            )
+        }
+    }
+
     /**
-     * Подсчет времени до лня рождения альфы
+     * Подсчет времени до дня рождения альфы
      *
      * @param update [Update]
      */

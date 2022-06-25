@@ -47,7 +47,12 @@ class FoloPidorDto(
     /**
      * Проверка валидности топа
      */
-    fun isValid(): Boolean { return hasScore() && !isTwink() }
+    fun isValidTop(): Boolean { return hasScore() && !isTwink() }
+
+    /**
+     * Проверка валидности топа
+     */
+    fun isValidUnderdog(): Boolean { return !hasScore() && !isTwink() }
 
     /**
      * Проверка наличия якоря
