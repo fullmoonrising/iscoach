@@ -36,6 +36,7 @@ class CommandHandler(
         val command = BotCommandsEnum.fromCommand(update.message.text.substringBefore("@"))
         messageService.sendChatTyping(update)
         when (command) {
+            BotCommandsEnum.START -> messageService.sendSticker(messageService.randomSticker, update)
             BotCommandsEnum.SILENTSTREAM -> messageService.sendSticker(messageService.randomSticker, update)
             BotCommandsEnum.FREELANCE -> return frelanceTimer(update)
             BotCommandsEnum.NOFAP -> return nofapTimer(update)

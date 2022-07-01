@@ -1,6 +1,7 @@
 package com.telegram.folobot.constants
 
 enum class BotCommandsEnum(val command: String) {
+    START("/start"),
     SILENTSTREAM("/silentstream"),
     FREELANCE("/freelance"),
     NOFAP("/nofap"),
