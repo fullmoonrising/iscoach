@@ -26,6 +26,7 @@ dependencies {
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.telegram:telegrambots:6.0.1")
     implementation("com.ibm.icu:icu4j:71.1")
+    implementation("org.junit.jupiter:junit-jupiter:5.8.2")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("org.postgresql:postgresql")
 }
