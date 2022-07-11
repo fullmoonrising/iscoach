@@ -18,6 +18,8 @@ class FoloPidorEntity(
     var score: Int,
 
     @Column(nullable = false)
-    var lastWinDate: LocalDate
-) {
-}
+    var lastWinDate: LocalDate,
+
+    @Column(nullable = false)
+    var lastActiveDate: LocalDate
+)

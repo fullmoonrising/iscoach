@@ -2,7 +2,6 @@ package com.telegram.folobot.service.handlers
 
 import com.telegram.folobot.ChatId
 import com.telegram.folobot.ChatId.Companion.isAndrew
-import com.telegram.folobot.dto.FoloPidorDto
 import com.telegram.folobot.service.FoloPidorService
 import com.telegram.folobot.service.FoloUserService
 import com.telegram.folobot.service.MessageService
@@ -45,8 +44,10 @@ class ContextIndependentHandler(
                     foloUserService.findById(user.id).setName(userService.getUserName(user))
                 )
                 // И фолопидор
-                if (!message.isUserMessage && !foloPidorService.existsById(message.chatId, user.id)) {
-                    foloPidorService.save(FoloPidorDto(message.chatId, user.id))
+                if (!message.isUserMessage) {
+                    foloPidorService.save(
+                        foloPidorService.findById(message.chatId, user.id).updateLastActiveDate()
+                    )
                 }
             }
         }

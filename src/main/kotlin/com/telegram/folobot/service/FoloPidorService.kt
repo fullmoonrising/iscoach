@@ -22,9 +22,9 @@ class FoloPidorService(
      */
     fun findAll(): List<FoloPidorDto> {
         return foloPidorRepo.findAll(
-                Sort.by("id.chatId").ascending()
-                   .and(Sort.by("score").descending())
-            )
+            Sort.by("id.chatId").ascending()
+                .and(Sort.by("score").descending())
+        )
             .map(foloPidorMapper::mapToFoloPidorDto)
     }
 
@@ -57,10 +57,10 @@ class FoloPidorService(
      */
     fun findByIdChatId(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(
-                chatId,
-                Sort.by("id.chatId").ascending()
-                    .and(Sort.by("score").descending())
-            )
+            chatId,
+            Sort.by("id.chatId").ascending()
+                .and(Sort.by("score").descending())
+        )
             .map(foloPidorMapper::mapToFoloPidorDto)
     }
 
@@ -74,8 +74,7 @@ class FoloPidorService(
         //Получаем список фолопидоров для чата
         val foloPidors = foloPidorRepo.findByIdChatId(chatId)
             .map(foloPidorMapper::mapToFoloPidorDto)
-            .filterNot(FoloPidorDto::isTwink)
-            .filter { userService.isInChat(it, chatId) }
+            .filter { it.isAnchored() || (it.isValid() && userService.isInChat(it, chatId)) }
         //Выбираем случайного
         return foloPidors[Random(System.nanoTime()).nextInt(foloPidors.size)]
     }
@@ -89,8 +88,10 @@ class FoloPidorService(
         return foloPidorRepo.findByIdChatId(chatId)
             .map(foloPidorMapper::mapToFoloPidorDto)
             .filter(FoloPidorDto::isValidTop)
-            .sortedWith(Comparator.comparing(FoloPidorDto::score)
-                .thenComparing(FoloPidorDto::lastWinDate).reversed())
+            .sortedWith(
+                Comparator.comparing(FoloPidorDto::score)
+                    .thenComparing(FoloPidorDto::lastWinDate).reversed()
+            )
             .take(10)
     }
 

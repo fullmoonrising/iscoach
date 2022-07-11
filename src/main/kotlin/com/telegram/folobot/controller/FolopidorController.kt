@@ -45,8 +45,9 @@ class FolopidorController(
     fun onAction(
         @RequestParam chatId: Long,
         @RequestParam(required = false) userId: Long,
-        @RequestParam(defaultValue = "0", required = false) score: Int,
-        @RequestParam(defaultValue = "1900-01-01", required = false) lastWinDate: String,
+        @RequestParam(required = false) score: Int = 0,
+        @RequestParam(required = false) lastWinDate: String = LocalDate.of(1900,1,1).toString(),
+        @RequestParam(required = false) lastActiveDate: String = LocalDate.now().toString(),
         @RequestParam action: String,
         model: MutableMap<String, Any>
     ): String {
@@ -54,12 +55,13 @@ class FolopidorController(
             ControllerCommandsEnum.ADD -> if (foloUserService.existsById(userId) &&
                 !foloPidorService.existsById(chatId, userId)
             ) {
-                foloPidorService.save(FoloPidorDto(chatId, userId, score))
+                foloPidorService.save(FoloPidorDto(chatId, userId))
             }
             ControllerCommandsEnum.UPDATE -> if (foloPidorService.existsById(chatId, userId)) {
                 val foloPidor = foloPidorService.findById(chatId, userId) //TODO прокачать
                 foloPidor.score = score
                 foloPidor.lastWinDate = LocalDate.parse(lastWinDate)
+                foloPidor.lastActiveDate = LocalDate.parse(lastActiveDate)
                 foloPidorService.save(foloPidor)
             }
             ControllerCommandsEnum.DELETE -> foloPidorService.delete(FoloPidorDto(chatId, userId))

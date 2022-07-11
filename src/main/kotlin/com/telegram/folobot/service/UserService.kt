@@ -130,8 +130,7 @@ class UserService(private val foloUserService: FoloUserService) {
      * @return [Boolean]
      */
     fun isInChat(foloPidorDto: FoloPidorDto, chatId: Long): Boolean {
-        return foloPidorDto.isAnchored() ||
-                getChatMember(foloPidorDto.id.userId, chatId)
-                    ?.let { !(it.status == "left" || it.status == "kicked") } ?: false
+        return getChatMember(foloPidorDto.id.userId, chatId)
+            ?.let { !(it.status == "left" || it.status == "kicked") } ?: false
     }
 }

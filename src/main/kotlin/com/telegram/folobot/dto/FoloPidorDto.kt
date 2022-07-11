@@ -3,16 +3,18 @@ package com.telegram.folobot.dto
 import com.telegram.folobot.domain.FoloPidorId
 import java.io.Serializable
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.absoluteValue
 
 class FoloPidorDto(
     val id: FoloPidorId,
     var foloUser: FoloUserDto = FoloUserDto(id.userId),
     var score: Int = 0,
-    var lastWinDate: LocalDate = LocalDate.of(1900,1,1)
+    var lastWinDate: LocalDate = LocalDate.of(1900,1,1),
+    var lastActiveDate: LocalDate = LocalDate.now()
 ) : Serializable {
     constructor(chatId: Long, userId: Long) : this(FoloPidorId(chatId, userId))
-    constructor(chatId: Long, userId: Long, score: Int) : this(FoloPidorId(chatId, userId), FoloUserDto(userId), score)
 
     /**
      * Получить основоного пользователя
@@ -40,6 +42,11 @@ class FoloPidorDto(
     fun hasScore(): Boolean { return score > 0 }
 
     /**
+     * Проверка активности
+     */
+    fun isActive(): Boolean { return ChronoUnit.DAYS.between(lastActiveDate, LocalDate.now()).absoluteValue <= 30 }
+
+    /**
      * Проверка что на твинка
      */
     fun isTwink(): Boolean { return foloUser.userId != foloUser.getMainUserId() }
@@ -47,12 +54,17 @@ class FoloPidorDto(
     /**
      * Проверка валидности топа
      */
-    fun isValidTop(): Boolean { return hasScore() && !isTwink() }
+    fun isValid(): Boolean { return isActive() && !isTwink() }
 
     /**
      * Проверка валидности топа
      */
-    fun isValidUnderdog(): Boolean { return !hasScore() && !isTwink() }
+    fun isValidTop(): Boolean { return hasScore() && !isTwink() }
+
+    /**
+     * Проверка валидности аутсайдера
+     */
+    fun isValidUnderdog(): Boolean { return isValid() && !hasScore() }
 
     /**
      * Проверка наличия якоря
@@ -65,6 +77,15 @@ class FoloPidorDto(
      */
     fun updateScore(score: Int): FoloPidorDto {
         this.score = score
+        return this
+    }
+
+    /**
+     * Обновить дату активности и вернуть себя
+     * @return [FoloPidorDto]
+     */
+    fun updateLastActiveDate(): FoloPidorDto {
+        this.lastActiveDate = LocalDate.now()
         return this
     }
 
