@@ -1,9 +1,9 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.constants.VarTypeEnum
-import com.telegram.folobot.domain.FoloVarEntity
-import com.telegram.folobot.domain.FoloVarId
-import com.telegram.folobot.repos.FoloVarRepo
+import com.telegram.folobot.persistence.entity.FoloVarEntity
+import com.telegram.folobot.persistence.entity.FoloVarId
+import com.telegram.folobot.persistence.repos.FoloVarRepo
 import org.springframework.stereotype.Component
 import java.time.LocalDate
 

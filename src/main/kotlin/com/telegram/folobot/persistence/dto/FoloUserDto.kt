@@ -1,4 +1,4 @@
-package com.telegram.folobot.dto
+package com.telegram.folobot.persistence.dto
 
 import java.io.Serializable
 

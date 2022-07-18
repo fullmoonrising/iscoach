@@ -1,7 +1,7 @@
-package com.telegram.folobot.mappers
+package com.telegram.folobot.persistence.mappers
 
-import com.telegram.folobot.domain.FoloUserEntity
-import com.telegram.folobot.dto.FoloUserDto
+import com.telegram.folobot.persistence.dto.FoloUserDto
+import com.telegram.folobot.persistence.entity.FoloUserEntity
 import org.springframework.stereotype.Component
 
 @Component

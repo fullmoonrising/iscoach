@@ -1,6 +1,11 @@
-package com.telegram.folobot.domain
+package com.telegram.folobot.persistence.entity
 
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.FetchType
+import javax.persistence.Id
+import javax.persistence.OneToMany
+import javax.persistence.Table
 
 @Entity
 @Table(name = "folo_user")

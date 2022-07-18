@@ -1,7 +1,7 @@
-package com.telegram.folobot.repos
+package com.telegram.folobot.persistence.repos
 
-import com.telegram.folobot.domain.FoloPidorEntity
-import com.telegram.folobot.domain.FoloPidorId
+import com.telegram.folobot.persistence.entity.FoloPidorEntity
+import com.telegram.folobot.persistence.entity.FoloPidorId
 import org.springframework.data.domain.Sort
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

@@ -7,7 +7,11 @@ import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
 import com.telegram.folobot.constants.BotCommandsEnum
 import com.telegram.folobot.constants.NumTypeEnum
-import com.telegram.folobot.service.*
+import com.telegram.folobot.service.FoloPidorService
+import com.telegram.folobot.service.FoloVarService
+import com.telegram.folobot.service.MessageService
+import com.telegram.folobot.service.TextService
+import com.telegram.folobot.service.UserService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -15,7 +19,8 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.*
+import java.util.Locale
+import java.util.StringJoiner
 
 @Component
 class CommandHandler(

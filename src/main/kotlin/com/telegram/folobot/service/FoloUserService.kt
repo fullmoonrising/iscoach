@@ -1,9 +1,9 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.domain.FoloUserEntity
-import com.telegram.folobot.dto.FoloUserDto
-import com.telegram.folobot.mappers.FoloUserMapper
-import com.telegram.folobot.repos.FoloUserRepo
+import com.telegram.folobot.persistence.dto.FoloUserDto
+import com.telegram.folobot.persistence.entity.FoloUserEntity
+import com.telegram.folobot.persistence.mappers.FoloUserMapper
+import com.telegram.folobot.persistence.repos.FoloUserRepo
 import org.springframework.data.util.Streamable
 import org.springframework.stereotype.Component
 

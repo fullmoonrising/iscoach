@@ -1,8 +1,7 @@
-package com.telegram.folobot.repos
+package com.telegram.folobot.persistence.repos
 
-import com.telegram.folobot.constants.VarTypeEnum
-import com.telegram.folobot.domain.FoloVarEntity
-import com.telegram.folobot.domain.FoloVarId
+import com.telegram.folobot.persistence.entity.FoloVarEntity
+import com.telegram.folobot.persistence.entity.FoloVarId
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

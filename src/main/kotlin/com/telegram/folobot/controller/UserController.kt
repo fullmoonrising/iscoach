@@ -1,14 +1,14 @@
 package com.telegram.folobot.controller
 
 import com.telegram.folobot.constants.ControllerCommandsEnum
-import com.telegram.folobot.dto.FoloUserDto
+import com.telegram.folobot.persistence.dto.FoloUserDto
 import com.telegram.folobot.service.FoloUserService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import java.util.*
+import java.util.Objects
 
 //TODO логику из контроллеров вынести в сервисы
 //TODO проверки ввода
