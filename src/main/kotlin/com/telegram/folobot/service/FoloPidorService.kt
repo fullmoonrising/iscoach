@@ -65,6 +65,16 @@ class FoloPidorService(
     }
 
     /**
+     * Получение фолопидора с максимальным количеством сообщений за день по Id чата
+     * @param chatId Id чата
+     * @return [<]
+     */
+    fun findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId: Long): FoloPidorDto? {
+        return foloPidorRepo.findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId)
+            ?.let { foloPidorMapper.mapToFoloPidorDto(it) }
+    }
+
+    /**
      * Выбор случайного фолопидора
      *
      * @param chatId ID чата

@@ -1,15 +1,20 @@
 package com.telegram.folobot
 
 import com.telegram.folobot.constants.ActionsEnum
+import com.telegram.folobot.constants.BotCommandsEnum
 import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.UserService
-import com.telegram.folobot.service.handlers.*
+import com.telegram.folobot.service.handlers.CommandHandler
+import com.telegram.folobot.service.handlers.ContextIndependentHandler
+import com.telegram.folobot.service.handlers.ReplyHandler
+import com.telegram.folobot.service.handlers.UserJoinHandler
+import com.telegram.folobot.service.handlers.UserMessageHandler
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.*
+import java.util.Objects
 
 @Service
 class FoloBot(
@@ -114,5 +119,12 @@ class FoloBot(
             }
         }
         return null
+    }
+
+    /**
+     * Обработка команды с внешнего хука
+     */
+    fun onExternalWebhookReceived(command: BotCommandsEnum) {
+        commandHandler.handleExternal(command)
     }
 }

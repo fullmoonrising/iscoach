@@ -11,4 +11,6 @@ interface FoloPidorRepo : CrudRepository<FoloPidorEntity, FoloPidorId> {
     fun findAll(sort: Sort): List<FoloPidorEntity>
     fun findByIdChatId(chatId: Long): List<FoloPidorEntity>
     fun findByIdChatId(chatId: Long, sort: Sort): List<FoloPidorEntity>
+
+    fun findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId: Long): FoloPidorEntity?
 }
