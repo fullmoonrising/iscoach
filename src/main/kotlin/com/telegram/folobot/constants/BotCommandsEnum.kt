@@ -7,7 +7,8 @@ enum class BotCommandsEnum(val command: String) {
     NOFAP("/nofap"),
     FOLOPIDOR("/folopidor"),
     FOLOPIDORTOP("/folopidortop"),
-    FOLOUNDERDOG("/folounderdog"),
+    FOLOSLACKERS("/foloslackers"),
+    FOLOUNDERDOGS("/folounderdogs"),
     FOLOPIDORALPHA("/folopidoralpha");
 
     companion object {

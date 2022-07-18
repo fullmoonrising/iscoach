@@ -42,7 +42,8 @@ class CommandHandler(
             BotCommandsEnum.NOFAP -> return nofapTimer(update)
             BotCommandsEnum.FOLOPIDOR -> return foloPidor(update)
             BotCommandsEnum.FOLOPIDORTOP -> return foloPidorTop(update)
-            BotCommandsEnum.FOLOUNDERDOG -> return foloUnderdog(update)
+            BotCommandsEnum.FOLOSLACKERS -> return foloSlackers(update)
+            BotCommandsEnum.FOLOUNDERDOGS -> return foloUnderdogs(update)
             BotCommandsEnum.FOLOPIDORALPHA -> return alphaTimer(update)
             else -> return null
         }
@@ -194,9 +195,34 @@ class CommandHandler(
         }
     }
 
-    private fun foloUnderdog(update: Update): BotApiMethod<*> {
+    /**
+     * Показывает топ фолослакеров
+     *
+     * @param update [Update]
+     * @return [BotApiMethod]
+     */
+    private fun foloSlackers(update: Update): BotApiMethod<*> {
         return if (!update.message.isUserMessage) {
-            val foloUnderdogs = foloPidorService.getUnderdog(update.message.chatId)
+            messageService.buildMessage(
+                foloPidorService.getSlackers(update.message.chatId).withIndex().joinToString(
+                    separator = "\n",
+                    prefix = "*Фолопидоры не уделяющих фоломании достаточно времени*:\n\n",
+                    transform = {
+                        "\u2004*${it.index + 1}*.\u2004${
+                            userService.getFoloUserName(it.value, update.message.chatId)
+                        } — бездельничает _${getNumText(it.value.getPassiveDays(), NumTypeEnum.DAY)}_"
+                    }
+                ),
+                update
+            )
+        } else {
+            messageService.buildMessage("Предавайтесь фоломании хотя бы 10 минут в день!", update)
+        }
+    }
+
+    private fun foloUnderdogs(update: Update): BotApiMethod<*> {
+        return if (!update.message.isUserMessage) {
+            val foloUnderdogs = foloPidorService.getUnderdogs(update.message.chatId)
             if (foloUnderdogs.isNotEmpty()) {
                 messageService.buildMessage(
                     text = "Когда-нибудь и вы станете *фолопидорами дня*, уважаемые фанаты " +

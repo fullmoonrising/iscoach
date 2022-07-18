@@ -39,12 +39,14 @@ class FoloPidorDto(
     /**
      * Проверка наличичия побед
      */
-    fun hasScore(): Boolean { return score > 0 }
+    private fun hasScore(): Boolean { return score > 0 }
+
+    fun getPassiveDays(): Int { return ChronoUnit.DAYS.between(lastActiveDate, LocalDate.now()).absoluteValue.toInt() }
 
     /**
      * Проверка активности
      */
-    fun isActive(): Boolean { return ChronoUnit.DAYS.between(lastActiveDate, LocalDate.now()).absoluteValue <= 30 }
+    private fun isActive(): Boolean { return getPassiveDays() <= 30 }
 
     /**
      * Проверка что на твинка
@@ -60,6 +62,11 @@ class FoloPidorDto(
      * Проверка валидности топа
      */
     fun isValidTop(): Boolean { return hasScore() && !isTwink() }
+
+    /**
+     * Проверка валидности топа
+     */
+    fun isValidSlacker(): Boolean { return getPassiveDays() > 0 && !isTwink() }
 
     /**
      * Проверка валидности аутсайдера

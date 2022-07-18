@@ -25,7 +25,7 @@ class FoloPidorService(
             Sort.by("id.chatId").ascending()
                 .and(Sort.by("score").descending())
         )
-            .map(foloPidorMapper::mapToFoloPidorDto)
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
     }
 
     /**
@@ -36,7 +36,7 @@ class FoloPidorService(
      */
     fun findById(chatId: Long, userId: Long): FoloPidorDto {
         return foloPidorRepo.findById(FoloPidorId(chatId, userId))
-            .map(foloPidorMapper::mapToFoloPidorDto)
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
             .orElse(FoloPidorDto(chatId, userId))
     }
 
@@ -61,7 +61,7 @@ class FoloPidorService(
             Sort.by("id.chatId").ascending()
                 .and(Sort.by("score").descending())
         )
-            .map(foloPidorMapper::mapToFoloPidorDto)
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
     }
 
     /**
@@ -73,8 +73,10 @@ class FoloPidorService(
     fun getRandom(chatId: Long): FoloPidorDto {
         //Получаем список фолопидоров для чата
         val foloPidors = foloPidorRepo.findByIdChatId(chatId)
-            .map(foloPidorMapper::mapToFoloPidorDto)
-            .filter { it.isAnchored() || (it.isValid() && userService.isInChat(it, chatId)) }
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+            .filter { foloPidorDto ->
+                foloPidorDto.isAnchored() || (foloPidorDto.isValid() && userService.isInChat(foloPidorDto, chatId))
+            }
         //Выбираем случайного
         return foloPidors[Random(System.nanoTime()).nextInt(foloPidors.size)]
     }
@@ -86,8 +88,8 @@ class FoloPidorService(
      */
     fun getTop(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(chatId)
-            .map(foloPidorMapper::mapToFoloPidorDto)
-            .filter(FoloPidorDto::isValidTop)
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+            .filter { foloPidorDto -> foloPidorDto.isValidTop() }
             .sortedWith(
                 Comparator.comparing(FoloPidorDto::score)
                     .thenComparing(FoloPidorDto::lastWinDate).reversed()
@@ -96,15 +98,27 @@ class FoloPidorService(
     }
 
     /**
+     * Паассивные фолопидоры чата
+     * @param chatId Id чата
+     * @return [<]
+     */
+    fun getSlackers(chatId: Long): List<FoloPidorDto> {
+        return foloPidorRepo.findByIdChatId(chatId)
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+            .filter { foloPidorDto -> userService.isInChat(foloPidorDto, chatId) && foloPidorDto.isValidSlacker() }
+            .sortedBy { foloPidorDto -> foloPidorDto.lastActiveDate }
+            .take(10)
+    }
+
+    /**
      * Получение списка андердогов
      * @param chatId Id чата
      * @return list of [FoloPidorDto]
      */
-    fun getUnderdog(chatId: Long): List<FoloPidorDto> {
+    fun getUnderdogs(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(chatId)
-            .map(foloPidorMapper::mapToFoloPidorDto)
-            .filter { userService.isInChat(it, chatId) }
-            .filter(FoloPidorDto::isValidUnderdog)
+            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+            .filter { foloPidorDto -> userService.isInChat(foloPidorDto, chatId) && foloPidorDto.isValidUnderdog() }
     }
 
     /**
