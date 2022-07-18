@@ -1,7 +1,6 @@
 package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
-import com.telegram.folobot.ChatId
 import com.telegram.folobot.ChatId.Companion.ANDREW_ID
 import com.telegram.folobot.ChatId.Companion.FOLOCHAT_ID
 import com.telegram.folobot.ChatId.Companion.isFo
@@ -62,7 +61,7 @@ class CommandHandler(
      */
     fun handleExternal(command: BotCommandsEnum) {
         when (command) {
-            BotCommandsEnum.FOLOPIDORDAILY -> folopidorDaily(ChatId.FOLO_TEST_CHAT_ID)
+            BotCommandsEnum.FOLOPIDORDAILY -> folopidorDaily(FOLOCHAT_ID) //TODO move to hook
             else -> {}
         }
     }
@@ -308,7 +307,7 @@ class CommandHandler(
     }
 
     fun folopidorDaily(chatId: Long) {
-        foloPidorService.findFirstByIdChatIdOrderByMessagesPerDayDesc(FOLOCHAT_ID)?.let { foloPidorDto ->
+        foloPidorService.findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId)?.let { foloPidorDto ->
             messageService.sendMessage(
                 "Фолопидор ${userService.getFoloUserNameLinked(foloPidorDto, chatId)} " +
                         "сегодня трогал свою фоломанию *${foloPidorDto.messagesPerDay} раз*!" +
