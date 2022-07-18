@@ -1,7 +1,7 @@
 package com.telegram.folobot.controller
 
 import com.telegram.folobot.constants.ControllerCommandsEnum
-import com.telegram.folobot.dto.FoloPidorDto
+import com.telegram.folobot.persistence.dto.FoloPidorDto
 import com.telegram.folobot.service.FoloPidorService
 import com.telegram.folobot.service.FoloUserService
 import org.springframework.stereotype.Controller
@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.time.LocalDate
-import java.util.*
+import java.util.Locale
+import java.util.Objects
 
 //TODO логику из контроллеров вынести в сервисы
 //TODO проверки ввода
@@ -48,6 +49,7 @@ class FolopidorController(
         @RequestParam(required = false) score: Int = 0,
         @RequestParam(required = false) lastWinDate: String = LocalDate.of(1900,1,1).toString(),
         @RequestParam(required = false) lastActiveDate: String = LocalDate.now().toString(),
+        @RequestParam(required = false) messagesPerDay: Int = 0,
         @RequestParam action: String,
         model: MutableMap<String, Any>
     ): String {
@@ -58,10 +60,11 @@ class FolopidorController(
                 foloPidorService.save(FoloPidorDto(chatId, userId))
             }
             ControllerCommandsEnum.UPDATE -> if (foloPidorService.existsById(chatId, userId)) {
-                val foloPidor = foloPidorService.findById(chatId, userId) //TODO прокачать
+                val foloPidor = foloPidorService.findById(chatId, userId)
                 foloPidor.score = score
                 foloPidor.lastWinDate = LocalDate.parse(lastWinDate)
                 foloPidor.lastActiveDate = LocalDate.parse(lastActiveDate)
+                foloPidor.messagesPerDay = messagesPerDay
                 foloPidorService.save(foloPidor)
             }
             ControllerCommandsEnum.DELETE -> foloPidorService.delete(FoloPidorDto(chatId, userId))

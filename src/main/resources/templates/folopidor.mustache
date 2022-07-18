@@ -28,6 +28,7 @@
         <th>Счет</th>
         <th>Дата последней победы</th>
         <th>Дата последней активности</th>
+        <th>Количество сообщений в день</th>
         <th>Имя</th>
         <th colspan="2">Действие</th>
     </tr>
@@ -36,14 +37,15 @@
     {{#folopidors}}
         <tr>
             <form method="post">
-                <td width=10% align="center"><input onclick="onClickChatid({{id.chatId}})"
+                <td width=15% align="center"><input onclick="onClickChatid({{id.chatId}})"
                                                     type="number" name="chatId" value={{id.chatId}} readonly/></td>
-                <td width=10% align="center"><input onclick="onClickUserid({{id.userId}})"
+                <td width=15% align="center"><input onclick="onClickUserid({{id.userId}})"
                                                     type="number" name="userId" value={{id.userId}} readonly/></td>
-                <td width=10% align="center"><input type="number" name="score" value="{{score}}"/></td>
+                <td width=5% align="center"><input type="number" name="score" value="{{score}}"/></td>
                 <td width=10% align="center"><input type="date" name="lastWinDate" value="{{lastWinDate}}"/></td>
                 <td width=10% align="center"><input type="date" name="lastActiveDate" value="{{lastActiveDate}}"/></td>
-                <td width="40%"><i>{{TagName}}</i></td>
+                <td width=5 align="center"><input type="number" name="messagesPerDay" value="{{messagesPerDay}}"/></td>
+                <td width="30%"><i>{{TagName}}</i></td>
                 <td width="5%" align="center">
                     <button type="submit" name="action" value="update">Обновить</button>
                 </td>

@@ -8,7 +8,7 @@ import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.UserService
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.*
+import java.util.Objects
 
 @Component
 class ContextIndependentHandler(
@@ -46,7 +46,7 @@ class ContextIndependentHandler(
                 // И фолопидор
                 if (!message.isUserMessage) {
                     foloPidorService.save(
-                        foloPidorService.findById(message.chatId, user.id).updateLastActiveDate()
+                        foloPidorService.findById(message.chatId, user.id).updateMessagesPerDay()
                     )
                 }
             }

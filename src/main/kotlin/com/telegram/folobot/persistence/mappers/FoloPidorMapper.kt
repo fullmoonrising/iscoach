@@ -1,7 +1,7 @@
-package com.telegram.folobot.mappers
+package com.telegram.folobot.persistence.mappers
 
-import com.telegram.folobot.domain.FoloPidorEntity
-import com.telegram.folobot.dto.FoloPidorDto
+import com.telegram.folobot.persistence.dto.FoloPidorDto
+import com.telegram.folobot.persistence.entity.FoloPidorEntity
 import org.springframework.stereotype.Component
 
 @Component
@@ -13,7 +13,8 @@ class FoloPidorMapper(private val foloUserMapper: FoloUserMapper) {
             foloUserMapper.mapToFoloUserDto(entity.foloUserEntity),
             entity.score,
             entity.lastWinDate,
-            entity.lastActiveDate
+            entity.lastActiveDate,
+            entity.messagesPerDay
         )
     }
 
@@ -23,7 +24,8 @@ class FoloPidorMapper(private val foloUserMapper: FoloUserMapper) {
             foloUserMapper.mapToFoloUserEntity(dto.foloUser),
             dto.score,
             dto.lastWinDate,
-            dto.lastActiveDate
+            dto.lastActiveDate,
+            dto.messagesPerDay
         )
     }
 }

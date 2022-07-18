@@ -1,10 +1,10 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.domain.FoloPidorEntity
-import com.telegram.folobot.domain.FoloPidorId
-import com.telegram.folobot.dto.FoloPidorDto
-import com.telegram.folobot.mappers.FoloPidorMapper
-import com.telegram.folobot.repos.FoloPidorRepo
+import com.telegram.folobot.persistence.dto.FoloPidorDto
+import com.telegram.folobot.persistence.entity.FoloPidorEntity
+import com.telegram.folobot.persistence.entity.FoloPidorId
+import com.telegram.folobot.persistence.mappers.FoloPidorMapper
+import com.telegram.folobot.persistence.repos.FoloPidorRepo
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 import kotlin.random.Random

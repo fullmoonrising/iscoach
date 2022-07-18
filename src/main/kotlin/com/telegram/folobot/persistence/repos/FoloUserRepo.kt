@@ -1,6 +1,6 @@
-package com.telegram.folobot.repos
+package com.telegram.folobot.persistence.repos
 
-import com.telegram.folobot.domain.FoloUserEntity
+import com.telegram.folobot.persistence.entity.FoloUserEntity
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

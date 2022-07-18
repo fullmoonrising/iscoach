@@ -2,14 +2,14 @@ package com.telegram.folobot.service
 
 import com.telegram.folobot.FoloBot
 import com.telegram.folobot.Utils.printExeptionMessage
-import com.telegram.folobot.dto.FoloPidorDto
-import com.telegram.folobot.dto.FoloUserDto
+import com.telegram.folobot.persistence.dto.FoloPidorDto
+import com.telegram.folobot.persistence.dto.FoloUserDto
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
-import java.util.*
+import java.util.Objects
 import java.util.stream.Collectors
 import java.util.stream.Stream
 

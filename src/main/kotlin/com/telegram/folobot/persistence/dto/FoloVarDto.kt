@@ -1,6 +1,6 @@
-package com.telegram.folobot.dto
+package com.telegram.folobot.persistence.dto
 
-import com.telegram.folobot.domain.FoloVarId
+import com.telegram.folobot.persistence.entity.FoloVarId
 import java.io.Serializable
 
 class FoloVarDto(

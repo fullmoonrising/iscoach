@@ -1,4 +1,4 @@
-package com.telegram.folobot.domain
+package com.telegram.folobot.persistence.entity
 
 import javax.persistence.Column
 import javax.persistence.EmbeddedId
@@ -13,5 +13,4 @@ class FoloVarEntity(
     var id: FoloVarId,
     @Column(nullable = false)
     var value: String
-) {
-}
+)
