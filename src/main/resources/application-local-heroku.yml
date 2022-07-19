@@ -4,6 +4,10 @@ spring:
     username: bpxdfiaehgztyj
     password: ece0ae4d5d56c070572094f681635d44a85864a8d4dd566403bbc5a1959cbc96
   jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Europe/Moscow
     generate-ddl: true
 bot:
   username: ShurkaGurmanychBot

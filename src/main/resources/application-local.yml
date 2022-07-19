@@ -4,6 +4,10 @@ spring:
     username: folo
     password: folo
   jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Europe/Moscow
     generate-ddl: true
 bot:
   username: ShurkaGurmanychBot
