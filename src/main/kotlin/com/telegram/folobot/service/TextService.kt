@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
-import kotlin.random.Random
 
 @Component
 class TextService {
@@ -36,12 +35,12 @@ class TextService {
     }
 
     val setup: String
-        get() = foloPidorSetup[Random(System.nanoTime()).nextInt(foloPidorSetup.size)]
+        get() = foloPidorSetup.random()
 
     fun getPunch(userName: String): String {
-        return String.format(foloPidorPunch[Random(System.nanoTime()).nextInt(foloPidorPunch.size)], userName)
+        return String.format(foloPidorPunch.random(), userName)
     }
 
     val quoteforAndrew: String
-        get() = quotesforAndrew[Random(System.nanoTime()).nextInt(quotesforAndrew.size)]
+        get() = quotesforAndrew.random()
 }

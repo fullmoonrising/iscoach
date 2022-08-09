@@ -1,13 +1,11 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.persistence.dto.FoloPidorDto
-import com.telegram.folobot.persistence.entity.FoloPidorEntity
 import com.telegram.folobot.persistence.entity.FoloPidorId
 import com.telegram.folobot.persistence.mappers.FoloPidorMapper
 import com.telegram.folobot.persistence.repos.FoloPidorRepo
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
-import kotlin.random.Random
 
 @Component
 class FoloPidorService(
@@ -78,17 +76,13 @@ class FoloPidorService(
      * Выбор случайного фолопидора
      *
      * @param chatId ID чата
-     * @return [FoloPidorEntity]
+     * @return [FoloPidorDto]
      */
     fun getRandom(chatId: Long): FoloPidorDto {
-        //Получаем список фолопидоров для чата
-        val foloPidors = foloPidorRepo.findByIdChatId(chatId)
+        return foloPidorRepo.findByIdChatId(chatId)
             .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
-            .filter { foloPidorDto ->
-                foloPidorDto.isAnchored() || (foloPidorDto.isValid() && userService.isInChat(foloPidorDto, chatId))
-            }
-        //Выбираем случайного
-        return foloPidors[Random(System.nanoTime()).nextInt(foloPidors.size)]
+            .filter { it.isAnchored() || (it.isValid() && userService.isInChat(it, chatId)) }
+            .random()
     }
 
     /**

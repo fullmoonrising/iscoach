@@ -13,7 +13,6 @@ import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
-import kotlin.random.Random
 
 @Component
 class MessageService {
@@ -202,6 +201,6 @@ class MessageService {
                 "CAACAgIAAxkBAAICCWKCCLoO6Itf6HSKKGedTPzbyeioAAJQFAACey0pSznSfTz0daK-JAQ",
                 "CAACAgIAAxkBAAICCmKCCN_lePGRwqFYK4cPGBD4k_lpAAJcGQACmGshS9K8iR0VSuDVJAQ"
             )
-            return InputFile(stickers[Random(System.nanoTime()).nextInt(stickers.size)])
+            return InputFile(stickers.random())
         }
 }
