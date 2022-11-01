@@ -1,22 +1,20 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.persistence.dto.FoloUserDto
+import com.telegram.folobot.persistence.dto.toEntity
 import com.telegram.folobot.persistence.entity.FoloUserEntity
-import com.telegram.folobot.persistence.mappers.FoloUserMapper
+import com.telegram.folobot.persistence.entity.toDto
 import com.telegram.folobot.persistence.repos.FoloUserRepo
-import org.springframework.data.util.Streamable
 import org.springframework.stereotype.Component
 
 @Component
-class FoloUserService(private val foloUserRepo: FoloUserRepo,
-                      private val foloUserMapper: FoloUserMapper) {
+class FoloUserService(private val foloUserRepo: FoloUserRepo) {
     /**
      * Прочитать все
      * @return [<]
      */
     fun findAll(): List<FoloUserDto> {
-        return Streamable.of(foloUserRepo.findAll()).toList()
-            .map(foloUserMapper::mapToFoloUserDto)
+        return foloUserRepo.findAll().map { it.toDto() }
     }
 
     /**
@@ -25,10 +23,7 @@ class FoloUserService(private val foloUserRepo: FoloUserRepo,
      * @return [FoloUserDto]
      */
     fun findById(userId: Long): FoloUserDto {
-        return foloUserMapper.mapToFoloUserDto(
-            foloUserRepo.findById(userId)
-                .orElse(FoloUserEntity(userId))
-        )
+        return foloUserRepo.findUserByUserId(userId)?.toDto() ?: FoloUserEntity(userId).toDto()
     }
 
     /**
@@ -45,7 +40,7 @@ class FoloUserService(private val foloUserRepo: FoloUserRepo,
      * @param dto [FoloUserDto]
      */
     fun save(dto: FoloUserDto) {
-        foloUserRepo.save(foloUserMapper.mapToFoloUserEntity(dto))
+        foloUserRepo.save(dto.toEntity())
     }
 
     /**
@@ -53,6 +48,6 @@ class FoloUserService(private val foloUserRepo: FoloUserRepo,
      * @param dto [FoloUserDto]
      */
     fun delete(dto: FoloUserDto) {
-        foloUserRepo.delete(foloUserMapper.mapToFoloUserEntity(dto))
+        foloUserRepo.delete(dto.toEntity())
     }
 }

@@ -1,6 +1,6 @@
 package com.telegram.folobot.controller
 
-import com.telegram.folobot.FoloBot
+import com.telegram.folobot.service.FoloBot
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

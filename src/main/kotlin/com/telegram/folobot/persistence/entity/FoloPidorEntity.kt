@@ -1,5 +1,6 @@
 package com.telegram.folobot.persistence.entity
 
+import com.telegram.folobot.persistence.dto.FoloPidorDto
 import java.time.LocalDate
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -32,4 +33,13 @@ class FoloPidorEntity(
 
     @Column(nullable = false)
     var messagesPerDay: Int
+)
+
+fun FoloPidorEntity.toDto(): FoloPidorDto = FoloPidorDto(
+    id = this.id,
+    foloUser = this.foloUserEntity.toDto(),
+    score = this.score,
+    lastWinDate = this.lastWinDate,
+    lastActiveDate = this.lastActiveDate,
+    messagesPerDay = this.messagesPerDay
 )

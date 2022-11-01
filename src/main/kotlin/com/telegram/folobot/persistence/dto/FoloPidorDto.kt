@@ -1,5 +1,6 @@
 package com.telegram.folobot.persistence.dto
 
+import com.telegram.folobot.persistence.entity.FoloPidorEntity
 import com.telegram.folobot.persistence.entity.FoloPidorId
 import java.io.Serializable
 import java.time.LocalDate
@@ -137,3 +138,12 @@ class FoloPidorDto(
         return Objects.hash(getMainUserId())
     }
 }
+
+fun FoloPidorDto.toEntity(): FoloPidorEntity = FoloPidorEntity(
+    id = this.id,
+    foloUserEntity = this.foloUser.toEntity(),
+    score = this.score,
+    lastWinDate = this.lastWinDate,
+    lastActiveDate = this.lastActiveDate,
+    messagesPerDay = this.messagesPerDay
+)

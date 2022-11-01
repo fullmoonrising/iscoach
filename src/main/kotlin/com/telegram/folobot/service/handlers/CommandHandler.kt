@@ -140,7 +140,7 @@ class CommandHandler(
             val lastWinner = foloVarService.getLastFolopidorWinner(chatId)
 
             //Определяем либо показываем победителя
-            if (lastWinner == FoloVarService.INITIAL_USERID || lastDate.isBefore(LocalDate.now())) {
+            if (lastWinner == FoloVarService.INITIAL_USERID || lastDate < LocalDate.now()) {
                 //Выбираем случайного
                 val foloPidor = foloPidorService.getRandom(chatId)
 
@@ -311,8 +311,8 @@ class CommandHandler(
             messageService.sendMessage(
                 "Фолопидор ${userService.getFoloUserNameLinked(foloPidorDto, chatId)} " +
                         "сегодня трогал свою фоломанию *${foloPidorDto.messagesPerDay} раз*!" +
-                        "\nЯ ценю такое общение и внимание к своей персоне."
-                , chatId)
+                        "\nЯ ценю такое общение и внимание к своей персоне.", chatId
+            )
         }
     }
 }

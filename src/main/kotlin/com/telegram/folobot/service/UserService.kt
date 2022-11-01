@@ -1,6 +1,5 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.FoloBot
 import com.telegram.folobot.Utils.printExeptionMessage
 import com.telegram.folobot.persistence.dto.FoloPidorDto
 import com.telegram.folobot.persistence.dto.FoloUserDto

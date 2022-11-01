@@ -1,5 +1,6 @@
 package com.telegram.folobot.persistence.dto
 
+import com.telegram.folobot.persistence.entity.FoloUserEntity
 import java.io.Serializable
 
 class FoloUserDto(
@@ -60,3 +61,11 @@ class FoloUserDto(
         return this
     }
 }
+
+fun FoloUserDto.toEntity(): FoloUserEntity = FoloUserEntity(
+    userId = this.userId,
+    mainId = this.mainId,
+    anchor = this.anchor,
+    name = this.name,
+    tag = this.tag
+)

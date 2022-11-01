@@ -1,16 +1,15 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.persistence.dto.FoloPidorDto
+import com.telegram.folobot.persistence.dto.toEntity
 import com.telegram.folobot.persistence.entity.FoloPidorId
-import com.telegram.folobot.persistence.mappers.FoloPidorMapper
+import com.telegram.folobot.persistence.entity.toDto
 import com.telegram.folobot.persistence.repos.FoloPidorRepo
-import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Component
 
 @Component
 class FoloPidorService(
     private val foloPidorRepo: FoloPidorRepo,
-    private val foloPidorMapper: FoloPidorMapper,
     private val userService: UserService
 ) {
 
@@ -19,11 +18,9 @@ class FoloPidorService(
      * @return [<]
      */
     fun findAll(): List<FoloPidorDto> {
-        return foloPidorRepo.findAll(
-            Sort.by("id.chatId").ascending()
-                .and(Sort.by("score").descending())
-        )
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+        return foloPidorRepo.findAll()
+            .map { it.toDto() }
+            .sortedWith(compareBy<FoloPidorDto> { it.id.chatId }.thenByDescending { it.score })
     }
 
     /**
@@ -33,9 +30,8 @@ class FoloPidorService(
      * @return [FoloPidorDto]
      */
     fun findById(chatId: Long, userId: Long): FoloPidorDto {
-        return foloPidorRepo.findById(FoloPidorId(chatId, userId))
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
-            .orElse(FoloPidorDto(chatId, userId))
+        return foloPidorRepo.findFoloPidorById(FoloPidorId(chatId, userId))?.toDto()
+            ?: FoloPidorDto(chatId, userId)
     }
 
     /**
@@ -54,12 +50,9 @@ class FoloPidorService(
      * @return [<]
      */
     fun findByIdChatId(chatId: Long): List<FoloPidorDto> {
-        return foloPidorRepo.findByIdChatId(
-            chatId,
-            Sort.by("id.chatId").ascending()
-                .and(Sort.by("score").descending())
-        )
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+        return foloPidorRepo.findByIdChatId(chatId)
+            .map { it.toDto() }
+            .sortedWith(compareBy<FoloPidorDto> { it.id.chatId }.thenByDescending { it.score })
     }
 
     /**
@@ -68,8 +61,7 @@ class FoloPidorService(
      * @return [<]
      */
     fun findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId: Long): FoloPidorDto? {
-        return foloPidorRepo.findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId)
-            ?.let { foloPidorMapper.mapToFoloPidorDto(it) }
+        return foloPidorRepo.findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId)?.toDto()
     }
 
     /**
@@ -80,7 +72,7 @@ class FoloPidorService(
      */
     fun getRandom(chatId: Long): FoloPidorDto {
         return foloPidorRepo.findByIdChatId(chatId)
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
+            .map { it.toDto() }
             .filter { it.isAnchored() || (it.isValid() && userService.isInChat(it, chatId)) }
             .random()
     }
@@ -92,12 +84,9 @@ class FoloPidorService(
      */
     fun getTop(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(chatId)
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
-            .filter { foloPidorDto -> foloPidorDto.isValidTop() }
-            .sortedWith(
-                Comparator.comparing(FoloPidorDto::score)
-                    .thenComparing(FoloPidorDto::lastWinDate).reversed()
-            )
+            .map { it.toDto() }
+            .filter { it.isValidTop() }
+            .sortedWith(compareByDescending<FoloPidorDto> { it.score }.thenByDescending { it.lastWinDate })
             .take(10)
     }
 
@@ -108,9 +97,9 @@ class FoloPidorService(
      */
     fun getSlackers(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(chatId)
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
-            .filter { foloPidorDto -> userService.isInChat(foloPidorDto, chatId) && foloPidorDto.isValidSlacker() }
-            .sortedBy { foloPidorDto -> foloPidorDto.lastActiveDate }
+            .map { it.toDto() }
+            .filter { userService.isInChat(it, chatId) && it.isValidSlacker() }
+            .sortedBy { it.lastActiveDate }
             .take(10)
     }
 
@@ -121,8 +110,8 @@ class FoloPidorService(
      */
     fun getUnderdogs(chatId: Long): List<FoloPidorDto> {
         return foloPidorRepo.findByIdChatId(chatId)
-            .map { foloPidorEntity -> foloPidorMapper.mapToFoloPidorDto(foloPidorEntity) }
-            .filter { foloPidorDto -> userService.isInChat(foloPidorDto, chatId) && foloPidorDto.isValidUnderdog() }
+            .map { it.toDto() }
+            .filter { userService.isInChat(it, chatId) && it.isValidUnderdog() }
     }
 
     /**
@@ -130,7 +119,7 @@ class FoloPidorService(
      * @param dto [FoloPidorDto]
      */
     fun save(dto: FoloPidorDto) {
-        foloPidorRepo.save(foloPidorMapper.mapToFoloPidorEntity(dto))
+        foloPidorRepo.save(dto.toEntity())
     }
 
     /**
@@ -138,6 +127,6 @@ class FoloPidorService(
      * @param dto [FoloPidorDto]
      */
     fun delete(dto: FoloPidorDto) {
-        foloPidorRepo.delete(foloPidorMapper.mapToFoloPidorEntity(dto))
+        foloPidorRepo.delete(dto.toEntity())
     }
 }

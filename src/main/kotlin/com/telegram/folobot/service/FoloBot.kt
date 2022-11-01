@@ -1,9 +1,7 @@
-package com.telegram.folobot
+package com.telegram.folobot.service
 
 import com.telegram.folobot.constants.ActionsEnum
 import com.telegram.folobot.constants.BotCommandsEnum
-import com.telegram.folobot.service.MessageService
-import com.telegram.folobot.service.UserService
 import com.telegram.folobot.service.handlers.CommandHandler
 import com.telegram.folobot.service.handlers.ContextIndependentHandler
 import com.telegram.folobot.service.handlers.ReplyHandler
@@ -108,6 +106,17 @@ class FoloBot(
      * @return [BotApiMethod]
      */
     private fun onAction(action: ActionsEnum?, update: Update): BotApiMethod<*>? {
+        if (action?.let { it == ActionsEnum.COMMAND || it == ActionsEnum.REPLY } == true) {
+            return messageService.buildMessage(
+                "Я видел такое, что вам, людям, и не снилось. Атакующие свояки, пылающие над Бусиново;\n" +
+                        "Лучи мамкиной ярости, разрезающие мрак у ворот Химкинского лесопарка.\n" +
+                        "Все эти мгновения затеряются во времени, как... слёзы в дожде... Пришло время умирать.",
+                update
+            )
+        } else {
+            return null
+        }
+
         if (action?.let { it !== ActionsEnum.UNDEFINED } == true) {
             return when (action) {
                 ActionsEnum.COMMAND -> commandHandler.handle(update)

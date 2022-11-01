@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface FoloUserRepo : CrudRepository<FoloUserEntity, Long> {
+    fun findUserByUserId(userId: Long): FoloUserEntity?
 }
