@@ -1,7 +1,7 @@
 package com.telegram.folobot.controller
 
-import com.telegram.folobot.constants.ControllerCommandsEnum
-import com.telegram.folobot.persistence.dto.FoloPidorDto
+import com.telegram.folobot.model.ControllerCommandsEnum
+import com.telegram.folobot.model.dto.FoloPidorDto
 import com.telegram.folobot.service.FoloPidorService
 import com.telegram.folobot.service.FoloUserService
 import org.springframework.stereotype.Controller

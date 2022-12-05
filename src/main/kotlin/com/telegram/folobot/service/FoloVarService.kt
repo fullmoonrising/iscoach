@@ -1,6 +1,6 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.constants.VarTypeEnum
+import com.telegram.folobot.model.VarTypeEnum
 import com.telegram.folobot.persistence.entity.FoloVarEntity
 import com.telegram.folobot.persistence.entity.FoloVarId
 import com.telegram.folobot.persistence.repos.FoloVarRepo

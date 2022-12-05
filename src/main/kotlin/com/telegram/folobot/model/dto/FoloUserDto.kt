@@ -1,15 +1,14 @@
-package com.telegram.folobot.persistence.dto
+package com.telegram.folobot.model.dto
 
 import com.telegram.folobot.persistence.entity.FoloUserEntity
-import java.io.Serializable
 
-class FoloUserDto(
+data class FoloUserDto(
     val userId: Long,
     var mainId: Long = 0L,
     var anchor: Boolean = false,
     var name: String = "",
     var tag: String = ""
-) : Serializable {
+) {
 
     /**
      * Получить основоного пользователя

@@ -3,6 +3,7 @@ package com.telegram.folobot.service.handlers
 import com.telegram.folobot.ChatId.Companion.isAndrew
 import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.UserService
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -12,8 +13,7 @@ import kotlin.random.Random
 class ReplyHandler(
     private val userService: UserService,
     private val messageService: MessageService
-) {
-
+) : KLogging() {
     /**
      * Ответ на обращение
      *
@@ -21,18 +21,17 @@ class ReplyHandler(
      * @return [BotApiMethod]
      */
     fun handle(update: Update): BotApiMethod<*>? {
-        // Cообщение в чат
+        // Сообщение в чат
         val text = update.message.text.lowercase()
         if (text.contains("привет") || Random(System.nanoTime()).nextInt(100) < 20) {
             val userName = userService.getFoloUserName(update.message.from)
-            messageService.sendChatTyping(update)
             return if (isAndrew(update.message.from)) {
                 messageService
                     .buildMessage("Привет, моя сладкая бориспольская булочка!", update, true)
             } else {
                 messageService
                     .buildMessage("Привет, уважаемый фолофил $userName!", update, true)
-            }
+            }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
         }
         return null
     }

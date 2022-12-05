@@ -1,7 +1,7 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.persistence.dto.FoloPidorDto
-import com.telegram.folobot.persistence.dto.toEntity
+import com.telegram.folobot.model.dto.FoloPidorDto
+import com.telegram.folobot.model.dto.toEntity
 import com.telegram.folobot.persistence.entity.FoloPidorId
 import com.telegram.folobot.persistence.entity.toDto
 import com.telegram.folobot.persistence.repos.FoloPidorRepo
@@ -53,15 +53,6 @@ class FoloPidorService(
         return foloPidorRepo.findByIdChatId(chatId)
             .map { it.toDto() }
             .sortedWith(compareBy<FoloPidorDto> { it.id.chatId }.thenByDescending { it.score })
-    }
-
-    /**
-     * Получение фолопидора с максимальным количеством сообщений за день по Id чата
-     * @param chatId Id чата
-     * @return [<]
-     */
-    fun findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId: Long): FoloPidorDto? {
-        return foloPidorRepo.findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId)?.toDto()
     }
 
     /**

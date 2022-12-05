@@ -1,7 +1,7 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.persistence.dto.FoloUserDto
-import com.telegram.folobot.persistence.dto.toEntity
+import com.telegram.folobot.model.dto.FoloUserDto
+import com.telegram.folobot.model.dto.toEntity
 import com.telegram.folobot.persistence.entity.FoloUserEntity
 import com.telegram.folobot.persistence.entity.toDto
 import com.telegram.folobot.persistence.repos.FoloUserRepo

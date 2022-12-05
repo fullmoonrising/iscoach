@@ -1,4 +1,4 @@
-package com.telegram.folobot.constants
+package com.telegram.folobot.model
 
 enum class ControllerCommandsEnum {
     ADD, UPDATE, DELETE, FILTER

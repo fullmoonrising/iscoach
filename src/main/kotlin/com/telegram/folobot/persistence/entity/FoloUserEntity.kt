@@ -1,6 +1,6 @@
 package com.telegram.folobot.persistence.entity
 
-import com.telegram.folobot.persistence.dto.FoloUserDto
+import com.telegram.folobot.model.dto.FoloUserDto
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.FetchType

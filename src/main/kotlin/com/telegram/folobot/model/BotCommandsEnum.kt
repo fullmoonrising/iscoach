@@ -1,4 +1,4 @@
-package com.telegram.folobot.constants
+package com.telegram.folobot.model
 
 enum class BotCommandsEnum(val command: String) {
     START("/start"),
@@ -9,8 +9,7 @@ enum class BotCommandsEnum(val command: String) {
     FOLOPIDORTOP("/folopidortop"),
     FOLOSLACKERS("/foloslackers"),
     FOLOUNDERDOGS("/folounderdogs"),
-    FOLOPIDORALPHA("/folopidoralpha"),
-    FOLOPIDORDAILY("/folopidordaily");
+    FOLOPIDORALPHA("/folopidoralpha");
 
     companion object {
         private val map = BotCommandsEnum.values().associateBy(BotCommandsEnum::command)

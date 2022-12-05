@@ -1,16 +1,13 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.Utils.printExeptionMessage
-import com.telegram.folobot.persistence.dto.FoloPidorDto
-import com.telegram.folobot.persistence.dto.FoloUserDto
+import com.telegram.folobot.model.dto.FoloPidorDto
+import com.telegram.folobot.model.dto.FoloUserDto
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember
 import org.telegram.telegrambots.meta.api.objects.User
 import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
-import java.util.Objects
-import java.util.stream.Collectors
-import java.util.stream.Stream
 
 @Component
 class UserService(private val foloUserService: FoloUserService) {
@@ -23,32 +20,12 @@ class UserService(private val foloUserService: FoloUserService) {
      * @param user [User]
      * @return Имя пользователя
      */
-    fun getUserName(user: User?): String { //FIXME(упросить)
-        return user?.let {
-            Stream.of(
-                Stream.of(it.firstName, it.lastName)
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.joining(" ")),
-                it.userName
-            )
-                .filter(Objects::nonNull)
-                .findFirst()
-                .orElse(null)
-        } ?: ""
-    }
-
-    /**
-     * Получение имени пользователя
-     *
-     * @param user [User]
-     * @return Имя пользователя
-     */
     fun getFoloUserName(user: User): String {
         val foloUser: FoloUserDto = foloUserService.findById(user.id)
         // По тэгу
         var userName: String = foloUser.tag
         // Получение динамически
-        if (userName.isEmpty()) userName = getUserName(user)
+        if (userName.isEmpty()) userName = user.getName() ?: ""
         // По сохраненному имени
         if (userName.isEmpty()) userName = foloUser.name
         // Если не удалось определить
@@ -66,12 +43,7 @@ class UserService(private val foloUserService: FoloUserService) {
         // По тэгу
         var userName: String = foloPidorDto.getTag()
         // По пользователю
-        if (userName.isEmpty()) userName = getUserName(
-            getChatMember(
-                foloPidorDto.id.userId,
-                chatId
-            )?.user
-        )
+        if (userName.isEmpty()) userName = getChatMember(foloPidorDto.id.userId, chatId)?.user?.getName() ?: ""
         // По сохраненному имени
         if (userName.isEmpty()) userName = foloPidorDto.getName()
         // Если не удалось определить
@@ -108,7 +80,7 @@ class UserService(private val foloUserService: FoloUserService) {
     }
 
     /**
-     * Проверка что [User] это этот бот
+     * Проверка, что [User] это этот бот
      *
      * @param user [User]
      * @return да/нет
@@ -123,7 +95,7 @@ class UserService(private val foloUserService: FoloUserService) {
     }
 
     /**
-     * Проверка что пользователь состоит в чате
+     * Проверка, что пользователь состоит в чате
      * @param foloPidorDto [FoloPidorDto]
      * @param chatId [Long]
      * @return [Boolean]
@@ -133,3 +105,9 @@ class UserService(private val foloUserService: FoloUserService) {
             ?.let { !(it.status == "left" || it.status == "kicked") } ?: false
     }
 }
+
+/**
+ * Получение имени пользователя
+ * @return Имя пользователя
+ */
+fun User.getName(): String? = "${this.firstName}${this.lastName?.let { " $it" }}" ?: this.userName

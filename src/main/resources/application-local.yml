@@ -1,14 +1,15 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/folodb
-    username: folo
-    password: folo
+    url: jdbc:postgresql://localhost:5432/folodb?user=folo&password=folo
   jpa:
     properties:
       hibernate:
+        ddl-auto: update
         jdbc:
           time_zone: Europe/Moscow
     generate-ddl: true
+  liquibase:
+    enabled: false
 bot:
   username: ShurkaGurmanychBot
   token: 5306754558:AAGLFdpVE-VQJ3-Ym0uvLq5fbAU9q98cg-I

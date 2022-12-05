@@ -1,12 +1,13 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.constants.ActionsEnum
-import com.telegram.folobot.constants.BotCommandsEnum
+import com.telegram.folobot.model.ActionsEnum
 import com.telegram.folobot.service.handlers.CommandHandler
 import com.telegram.folobot.service.handlers.ContextIndependentHandler
 import com.telegram.folobot.service.handlers.ReplyHandler
 import com.telegram.folobot.service.handlers.UserJoinHandler
 import com.telegram.folobot.service.handlers.UserMessageHandler
+import mu.KLogger
+import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramWebhookBot
@@ -22,7 +23,8 @@ class FoloBot(
     private val replyHandler: ReplyHandler,
     private val userJoinHandler: UserJoinHandler,
     private val messageService: MessageService,
-    private val userService: UserService
+    private val userService: UserService,
+    private val logger: KLogger = KotlinLogging.logger {}
 ) : TelegramWebhookBot() {
     @Value("\${bot.username}")
     private val botUsername: String = ""
@@ -95,7 +97,7 @@ class FoloBot(
             Objects.nonNull(message.leftChatMember) -> ActionsEnum.USERLEFT
             // Неопределено
             else -> ActionsEnum.UNDEFINED
-        }
+        }.also { logger.info { "Received request with action $it" } }
     }
 
     /**
@@ -106,34 +108,16 @@ class FoloBot(
      * @return [BotApiMethod]
      */
     private fun onAction(action: ActionsEnum?, update: Update): BotApiMethod<*>? {
-        if (action?.let { it == ActionsEnum.COMMAND || it == ActionsEnum.REPLY } == true) {
-            return messageService.buildMessage(
-                "Я видел такое, что вам, людям, и не снилось. Атакующие свояки, пылающие над Бусиново;\n" +
-                        "Лучи мамкиной ярости, разрезающие мрак у ворот Химкинского лесопарка.\n" +
-                        "Все эти мгновения затеряются во времени, как... слёзы в дожде... Пришло время умирать.",
-                update
-            )
-        } else {
-            return null
-        }
-
         if (action?.let { it !== ActionsEnum.UNDEFINED } == true) {
             return when (action) {
                 ActionsEnum.COMMAND -> commandHandler.handle(update)
                 ActionsEnum.USERMESSAGE -> userMessageHandler.handle(update)
-                ActionsEnum.REPLY -> replyHandler.handle(update) //TODO обрабатывать фолопидор, алые паруса и восточная любовь
+                ActionsEnum.REPLY -> replyHandler.handle(update)
                 ActionsEnum.USERNEW -> userJoinHandler.handleJoin(update)
                 ActionsEnum.USERLEFT -> userJoinHandler.handleLeft(update)
                 else -> null
             }
         }
         return null
-    }
-
-    /**
-     * Обработка команды с внешнего хука
-     */
-    fun onExternalWebhookReceived(command: BotCommandsEnum) {
-        commandHandler.handleExternal(command)
     }
 }

@@ -1,21 +1,20 @@
-package com.telegram.folobot.persistence.dto
+package com.telegram.folobot.model.dto
 
 import com.telegram.folobot.persistence.entity.FoloPidorEntity
 import com.telegram.folobot.persistence.entity.FoloPidorId
-import java.io.Serializable
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import java.util.Objects
 import kotlin.math.absoluteValue
 
-class FoloPidorDto(
+data class FoloPidorDto(
     val id: FoloPidorId,
     val foloUser: FoloUserDto = FoloUserDto(id.userId),
     var score: Int = 0,
     var lastWinDate: LocalDate = LocalDate.of(1900, 1, 1),
     var lastActiveDate: LocalDate = LocalDate.now(),
     var messagesPerDay: Int = 0
-) : Serializable {
+) {
     constructor(chatId: Long, userId: Long) : this(FoloPidorId(chatId, userId))
 
     /**

@@ -1,1 +1,1 @@
-web: java -jar build/libs/Folobot-1.0-SNAPSHOT.jar --server.port=$PORT
+web: java -jar build/libs/folobot-3.0.0.jar --server.port=$PORT

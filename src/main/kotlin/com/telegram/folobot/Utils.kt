@@ -1,6 +1,6 @@
 package com.telegram.folobot
 
-import com.telegram.folobot.constants.NumTypeEnum
+import com.telegram.folobot.model.NumTypeEnum
 import java.text.ChoiceFormat
 import java.time.Period
 import kotlin.math.abs

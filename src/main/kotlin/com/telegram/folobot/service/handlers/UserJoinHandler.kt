@@ -5,6 +5,7 @@ import com.telegram.folobot.ChatId.Companion.isFolochat
 import com.telegram.folobot.ChatId.Companion.isVitalik
 import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.UserService
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -13,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 class UserJoinHandler(
     private val messageService: MessageService,
     private val userService: UserService
-    ) {
+) : KLogging() {
 
     /**
      * Пользователь зашел в чат
@@ -22,7 +23,6 @@ class UserJoinHandler(
      * @return [BotApiMethod]
      */
     fun handleJoin(update: Update): BotApiMethod<*>? {
-        messageService.sendChatTyping(update)
         val user = update.message.newChatMembers[0]
         if (isAndrew(user)) {
             return messageService
@@ -49,6 +49,7 @@ class UserJoinHandler(
                 messageService.sendMessage("настоящий тут: \nt.me/alexfolomkin", update)
             }
         }
+        logger.info { "Greeted user ${user.userName} in chat ${update.message.chatId}" }
         return null
     }
 
@@ -59,13 +60,12 @@ class UserJoinHandler(
      * @return [BotApiMethod]
      */
     fun handleLeft(update: Update): BotApiMethod<*> {
-        messageService.sendChatTyping(update)
         val user = update.message.leftChatMember
         return if (isAndrew(user)) {
             messageService.buildMessage("Сладкая бориспольская булочка покинула чат", update)
         } else {
             messageService
                 .buildMessage("Куда же ты, " + userService.getFoloUserName(user) + "! Не уходи!", update)
-        }
+        }.also { logger.info { "Said goodbye to  ${user.userName} in chat ${update.message.chatId}" } }
     }
 }

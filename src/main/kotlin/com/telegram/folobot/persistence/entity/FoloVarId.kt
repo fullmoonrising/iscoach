@@ -4,8 +4,10 @@ import java.io.Serializable
 import javax.persistence.Embeddable
 
 @Embeddable
-class FoloVarId(private val chatId: Long,
-                private val type: String) : Serializable {
+data class FoloVarId(
+    private val chatId: Long,
+    private val type: String
+) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

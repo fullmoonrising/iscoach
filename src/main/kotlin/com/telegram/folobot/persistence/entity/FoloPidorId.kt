@@ -4,8 +4,10 @@ import java.io.Serializable
 import javax.persistence.Embeddable
 
 @Embeddable
-class FoloPidorId(var chatId: Long,
-                  var userId: Long) : Serializable {
+data class FoloPidorId(
+    var chatId: Long,
+    var userId: Long
+) : Serializable {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

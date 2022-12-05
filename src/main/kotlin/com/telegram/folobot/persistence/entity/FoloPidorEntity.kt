@@ -1,6 +1,6 @@
 package com.telegram.folobot.persistence.entity
 
-import com.telegram.folobot.persistence.dto.FoloPidorDto
+import com.telegram.folobot.model.dto.FoloPidorDto
 import java.time.LocalDate
 import javax.persistence.CascadeType
 import javax.persistence.Column

@@ -1,7 +1,7 @@
 package com.telegram.folobot.controller
 
-import com.telegram.folobot.constants.ControllerCommandsEnum
-import com.telegram.folobot.persistence.dto.FoloUserDto
+import com.telegram.folobot.model.ControllerCommandsEnum
+import com.telegram.folobot.model.dto.FoloUserDto
 import com.telegram.folobot.service.FoloUserService
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping

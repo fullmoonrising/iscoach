@@ -1,9 +1,17 @@
 spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/${DB_NAME}?user=${DB_USER}&password=${DB_PASS}
   jpa:
     properties:
       hibernate:
+        ddl-auto: update
         jdbc:
           time_zone: Europe/Moscow
     generate-ddl: true
-
-
+  liquibase:
+    enabled: true
+    change-log: 'classpath:db/changelog/changelog-master.yml'
+bot:
+  username: ${BOT_USERNAME}
+  token: ${BOT_TOKEN}
+  path: ${BOT_PATH}

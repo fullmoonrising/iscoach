@@ -2,17 +2,13 @@ package com.telegram.folobot.service.handlers
 
 import com.ibm.icu.text.RuleBasedNumberFormat
 import com.telegram.folobot.ChatId.Companion.ANDREW_ID
-import com.telegram.folobot.ChatId.Companion.FOLOCHAT_ID
 import com.telegram.folobot.ChatId.Companion.isFo
 import com.telegram.folobot.Utils.getNumText
 import com.telegram.folobot.Utils.getPeriodText
-import com.telegram.folobot.constants.BotCommandsEnum
-import com.telegram.folobot.constants.NumTypeEnum
-import com.telegram.folobot.service.FoloPidorService
-import com.telegram.folobot.service.FoloVarService
-import com.telegram.folobot.service.MessageService
-import com.telegram.folobot.service.TextService
-import com.telegram.folobot.service.UserService
+import com.telegram.folobot.model.BotCommandsEnum
+import com.telegram.folobot.model.NumTypeEnum
+import com.telegram.folobot.service.*
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -20,8 +16,7 @@ import java.time.LocalDate
 import java.time.Period
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
-import java.util.StringJoiner
+import java.util.*
 
 @Component
 class CommandHandler(
@@ -30,7 +25,7 @@ class CommandHandler(
     private val messageService: MessageService,
     private val userService: UserService,
     private val textService: TextService,
-) {
+) : KLogging() {
 
     /**
      * Выполнение команды
@@ -39,11 +34,14 @@ class CommandHandler(
      * @return [BotApiMethod]
      */
     fun handle(update: Update): BotApiMethod<*>? {
-        val command = BotCommandsEnum.fromCommand(update.message.text.substringBefore("@"))
-        messageService.sendChatTyping(update)
-        when (command) {
+
+        when (BotCommandsEnum.fromCommand(update.message.text.substringBefore("@"))
+            .also { logger.info { "Received command $it" } }
+        ) {
             BotCommandsEnum.START -> messageService.sendSticker(messageService.randomSticker, update)
+                .also { logger.info { "Sent sticker to ${update.message.chatId}" } }
             BotCommandsEnum.SILENTSTREAM -> messageService.sendSticker(messageService.randomSticker, update)
+                .also { logger.info { "Sent sticker to ${update.message.chatId}" } }
             BotCommandsEnum.FREELANCE -> return frelanceTimer(update)
             BotCommandsEnum.NOFAP -> return nofapTimer(update)
             BotCommandsEnum.FOLOPIDOR -> return foloPidor(update)
@@ -54,16 +52,6 @@ class CommandHandler(
             else -> return null
         }
         return null
-    }
-
-    /**
-     * Выполнение внешней команды
-     */
-    fun handleExternal(command: BotCommandsEnum) {
-        when (command) {
-            BotCommandsEnum.FOLOPIDORDAILY -> folopidorDaily(FOLOCHAT_ID) //TODO move to hook
-            else -> {}
-        }
     }
 
     /**
@@ -79,7 +67,7 @@ class CommandHandler(
                 *${getPeriodText(Period.between(LocalDate.of(2019, 11, 18), LocalDate.now()))}*!
             """.trimIndent(),
             update
-        )
+        ).also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
     }
 
     /**
@@ -123,7 +111,7 @@ class CommandHandler(
                         "* твёрдо и уверенно держу \"Но Фап\".",
                 update
             )
-        }
+        }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
     }
 
     /**
@@ -148,10 +136,12 @@ class CommandHandler(
                 foloPidor.score++
                 foloPidor.lastWinDate = LocalDate.now()
                 foloPidorService.save(foloPidor)
+                logger.info { "Updated $foloPidor score" }
 
                 //Обновляем текущего победителя
                 foloVarService.setLastFolopidorWinner(chatId, foloPidor.id.userId)
                 foloVarService.setLastFolopidorDate(chatId, LocalDate.now())
+                logger.info { "Updated foloPidor winner ${foloPidor.id.userId} and win date ${LocalDate.now()}" }
 
                 //Поздравляем
                 messageService.sendMessage(textService.setup, update)
@@ -159,7 +149,8 @@ class CommandHandler(
                     textService.getPunch(
                         userService.getFoloUserNameLinked(foloPidor, chatId)
                     ), update
-                )
+                ).also { logger.info { "Sent ${it?.text} to ${it?.chatId}" } }
+
             } else {
                 return messageService.buildMessage(
                     "Фолопидор дня уже выбран, это *" +
@@ -169,7 +160,7 @@ class CommandHandler(
                             ) +
                             "*. Пойду лучше лампово попержу в диван",
                     update
-                )
+                ).also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
             }
         } else {
             return messageService.buildMessage(
@@ -177,7 +168,7 @@ class CommandHandler(
                         userService.getFoloUserName(update.message.from),
                 update,
                 true
-            )
+            ).also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
         }
         return null
     }
@@ -208,7 +199,7 @@ class CommandHandler(
             messageService.buildMessage(top.toString(), update)
         } else {
             messageService.buildMessage("Андрей - почетный фолопидор на все времена!", update)
-        }
+        }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
     }
 
     /**
@@ -233,7 +224,7 @@ class CommandHandler(
             )
         } else {
             messageService.buildMessage("Предавайтесь фоломании хотя бы 10 минут в день!", update)
-        }
+        }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
     }
 
     private fun foloUnderdogs(update: Update): BotApiMethod<*> {
@@ -265,7 +256,7 @@ class CommandHandler(
                 update,
                 true
             )
-        }
+        }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
     }
 
     /**
@@ -303,16 +294,6 @@ class CommandHandler(
                         "* через *${getPeriodText(Period.between(LocalDate.now(), nextAlphaBirthday))}*",
                 update
             )
-        }
-    }
-
-    fun folopidorDaily(chatId: Long) {
-        foloPidorService.findFirstByIdChatIdOrderByMessagesPerDayDesc(chatId)?.let { foloPidorDto ->
-            messageService.sendMessage(
-                "Фолопидор ${userService.getFoloUserNameLinked(foloPidorDto, chatId)} " +
-                        "сегодня трогал свою фоломанию *${foloPidorDto.messagesPerDay} раз*!" +
-                        "\nЯ ценю такое общение и внимание к своей персоне.", chatId
-            )
-        }
+        }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
     }
 }

@@ -1,7 +1,5 @@
 package com.telegram.folobot.controller
 
-import com.telegram.folobot.constants.BotCommandsEnum
-import com.telegram.folobot.service.FoloBot
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,14 +8,14 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/folopidordaily")
-class ExternalWebhookController(private val foloBot: FoloBot) {
+class ExternalWebhookController {
     @GetMapping
     fun get(): ResponseEntity<*> {
         return ResponseEntity.ok().build<Any>()
     }
 
     @PostMapping
-    fun onRequestReceived() {
-        return foloBot.onExternalWebhookReceived(BotCommandsEnum.FOLOPIDORDAILY)
+    fun onRequestReceived(): ResponseEntity<*> {
+        return ResponseEntity.ok().build<Any>()
     }
 }

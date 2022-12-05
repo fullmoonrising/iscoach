@@ -1,0 +1,37 @@
+version: '3'
+
+services:
+  app:
+    image: 'folobot:latest'
+    build:
+      context: .
+    container_name: app
+#    ports:
+#      - "8081:8080"
+    depends_on:
+      - db
+    environment:
+      - BOT_USERNAME
+      - BOT_TOKEN
+      - BOT_PATH
+      - DB_NAME
+      - DB_USER
+      - DB_PASS
+  db:
+    image: 'postgres:latest'
+    container_name: db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+      - POSTGRES_DB=${DB_NAME}
+  nginx:
+    container_name: nginx
+    restart: unless-stopped
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf

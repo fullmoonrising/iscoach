@@ -2,25 +2,26 @@ package com.telegram.folobot.service.handlers
 
 import com.telegram.folobot.ChatId
 import com.telegram.folobot.ChatId.Companion.isAndrew
+import com.telegram.folobot.prettyPrint
 import com.telegram.folobot.service.FoloPidorService
 import com.telegram.folobot.service.FoloUserService
 import com.telegram.folobot.service.MessageService
-import com.telegram.folobot.service.UserService
+import com.telegram.folobot.service.getName
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.Objects
+import java.util.*
 
 @Component
 class ContextIndependentHandler(
     private val foloUserService: FoloUserService,
     private val foloPidorService: FoloPidorService,
-    private val messageService: MessageService,
-    private val userService: UserService
-) {
+    private val messageService: MessageService
+) : KLogging() {
 
     fun handle(update: Update) {
         //Добавление фолопользователя в бд
-        addFoloUser(update)
+        saveFoloUser(update)
 
         //Пересылка личных сообщений в спецчат
         forwardPrivate(update)
@@ -31,7 +32,7 @@ class ContextIndependentHandler(
      *
      * @param update [Update]
      */
-    private fun addFoloUser(update: Update) {
+    private fun saveFoloUser(update: Update) {
         val message = update.message
         if (message.isAutomaticForward == null || !message.isAutomaticForward) {
             var user = message.from
@@ -40,14 +41,14 @@ class ContextIndependentHandler(
             }
             if (!Objects.isNull(user)) {
                 // Фолопользователь
-                foloUserService.save(
-                    foloUserService.findById(user.id).setName(userService.getUserName(user))
-                )
+                val foloUser = foloUserService.findById(user.id).setName(user.getName())
+                foloUserService.save(foloUser)
+                logger.info { "Saved foloUser ${foloUser.prettyPrint()}" }
                 // И фолопидор
                 if (!message.isUserMessage) {
-                    foloPidorService.save(
-                        foloPidorService.findById(message.chatId, user.id).updateMessagesPerDay()
-                    )
+                    val foloPidor = foloPidorService.findById(message.chatId, user.id).updateMessagesPerDay()
+                    foloPidorService.save(foloPidor)
+                    logger.info { "Saved foloPidor ${foloPidor.prettyPrint()}" }
                 }
             }
         }
@@ -61,8 +62,10 @@ class ContextIndependentHandler(
     private fun forwardPrivate(update: Update) {
         if (update.hasMessage()) if (update.message.isUserMessage) {
             messageService.forwardMessage(ChatId.POC_ID, update)
+            logger.info { "Forwarded message to POC" }
         } else if (isAndrew(update.message.from)) {
             messageService.forwardMessage(ChatId.ANDREWSLEGACY_ID, update)
+            logger.info { "Forwarded message to Andrews legacy" }
         }
     }
 }
