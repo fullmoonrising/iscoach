@@ -5,12 +5,12 @@ tasks.getByName<BootJar>("bootJar") { enabled = true; archiveBaseName.set(rootPr
 tasks.getByName<Jar>("jar") { enabled = false }
 
 plugins {
-    id("org.springframework.boot") version "2.6.8"
-    id("io.spring.dependency-management") version "1.0.11.RELEASE"
-    kotlin("plugin.jpa") version "1.6.21"
-    kotlin("plugin.allopen") version "1.6.21"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
+    id("org.springframework.boot") version "2.6.14"
+    id("io.spring.dependency-management") version "1.1.0"
+    kotlin("plugin.jpa") version "1.7.21"
+    kotlin("plugin.allopen") version "1.7.21"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.spring") version "1.7.21"
 }
 
 group = "com.telegram"
@@ -63,7 +63,7 @@ allOpen {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "16"
+        jvmTarget = "18"
     }
 }
 

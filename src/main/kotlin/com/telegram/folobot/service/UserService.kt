@@ -110,4 +110,5 @@ class UserService(private val foloUserService: FoloUserService) {
  * Получение имени пользователя
  * @return Имя пользователя
  */
-fun User.getName(): String? = "${this.firstName}${this.lastName?.let { " $it" }}" ?: this.userName
+fun User.getName(): String? = "${ this.firstName }${ this.lastName?.let { " $it" } ?: "" }" ?: this.userName
+

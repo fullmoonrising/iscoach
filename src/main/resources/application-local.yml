@@ -10,6 +10,9 @@ spring:
     generate-ddl: true
   liquibase:
     enabled: false
+  mustache:
+    prefix: classpath:/templates/
+    suffix: .mustache
 bot:
   username: ShurkaGurmanychBot
   token: 5306754558:AAGLFdpVE-VQJ3-Ym0uvLq5fbAU9q98cg-I

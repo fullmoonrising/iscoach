@@ -13,8 +13,8 @@ import java.time.LocalDate
 import java.util.Locale
 import java.util.Objects
 
-//TODO логику из контроллеров вынести в сервисы
-//TODO проверки ввода
+// TODO логику из контроллеров вынести в сервисы
+// TODO проверки ввода
 @Controller
 @RequestMapping("/folopidor")
 class FolopidorController(

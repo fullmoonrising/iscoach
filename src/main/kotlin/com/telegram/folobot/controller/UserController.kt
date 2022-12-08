@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.util.Objects
 
-//TODO логику из контроллеров вынести в сервисы
-//TODO проверки ввода
+// TODO логику из контроллеров вынести в сервисы
+// TODO проверки ввода
 @Controller
 @RequestMapping("/user")
 class UserController(private val foloUserService: FoloUserService) {
