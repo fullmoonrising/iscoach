@@ -9,9 +9,7 @@ import org.springframework.web.bind.annotation.*
 class IndexController() : KLogging() {
     @GetMapping(value=["", "/", "index"])
     fun index(model: MutableMap<String, Any>): String {
-        model["vid"] = ClassPathResource("static\\media\\wololo.mp4").inputStream
         return "index"
-
 //        return "redirect:/frontpage";
     }
 }
