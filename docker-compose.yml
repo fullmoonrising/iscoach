@@ -6,9 +6,9 @@ services:
     build:
       context: .
     container_name: app
+    restart: unless-stopped
     depends_on:
       - db
-      - nginx
     environment:
       - BOT_USERNAME
       - BOT_TOKEN
@@ -27,9 +27,11 @@ services:
       - POSTGRES_PASSWORD=${DB_PASS}
       - POSTGRES_DB=${DB_NAME}
   nginx:
+    image: 'nginx:latest'
     container_name: nginx
     restart: unless-stopped
-    image: 'nginx:latest'
+    depends_on:
+      - app
     ports:
       - "80:80"
       - "443:443"
@@ -39,7 +41,7 @@ services:
       - ./certbot/www:/var/www/certbot/:ro
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
   certbot:
-    image: certbot/certbot
+    image: "certbot/certbot"
     container_name: certbot
     restart: unless-stopped
     volumes:
