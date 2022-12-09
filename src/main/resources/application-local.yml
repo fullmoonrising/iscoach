@@ -1,3 +1,6 @@
+server:
+  error:
+    path: /error
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/folodb?user=folo&password=folo
