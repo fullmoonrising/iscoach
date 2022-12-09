@@ -10,7 +10,7 @@ import java.io.File
 class IndexController() : KLogging() {
     @GetMapping(value=["", "/", "index"])
     fun index(model: MutableMap<String, Any>): String {
-        model["rndvid"] = "/media/${ File("src/main/resources/static/media").list()?.random() }"
+        model["rndvid"] = "media/${ File("src/main/resources/static/media").list()?.random() }"
         return "index"
 //        return "redirect:/frontpage";
     }
