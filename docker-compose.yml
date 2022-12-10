@@ -20,8 +20,8 @@ services:
     image: 'postgres:latest'
     container_name: db
     restart: unless-stopped
-    ports:
-      - "5432:5432"
+#    ports:
+#      - "5432:5432"
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
