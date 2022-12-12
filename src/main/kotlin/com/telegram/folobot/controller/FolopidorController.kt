@@ -4,6 +4,7 @@ import com.telegram.folobot.model.ControllerCommandsEnum
 import com.telegram.folobot.model.dto.FoloPidorDto
 import com.telegram.folobot.service.FoloPidorService
 import com.telegram.folobot.service.FoloUserService
+import com.telegram.folobot.service.FoloVarService.Companion.INITIAL_USERID
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -45,29 +46,29 @@ class FolopidorController(
     @PostMapping
     fun onAction(
         @RequestParam chatId: Long,
-        @RequestParam(required = false) userId: Long,
-        @RequestParam(required = false) score: Int = 0,
-        @RequestParam(required = false) lastWinDate: String = LocalDate.of(1900,1,1).toString(),
-        @RequestParam(required = false) lastActiveDate: String = LocalDate.now().toString(),
-        @RequestParam(required = false) messagesPerDay: Int = 0,
+        @RequestParam(required = false) userId: Long? = INITIAL_USERID,
+        @RequestParam(required = false) score: Int? = 0,
+        @RequestParam(required = false) lastWinDate: String? = LocalDate.of(1900,1,1).toString(),
+        @RequestParam(required = false) lastActiveDate: String? = LocalDate.now().toString(),
+        @RequestParam(required = false) messagesPerDay: Int? = 0,
         @RequestParam action: String,
         model: MutableMap<String, Any>
     ): String {
-        when (ControllerCommandsEnum.valueOf(action.uppercase(Locale.getDefault()))) {
-            ControllerCommandsEnum.ADD -> if (foloUserService.existsById(userId) &&
+        when (ControllerCommandsEnum.valueOf(action.uppercase())) {
+            ControllerCommandsEnum.ADD -> if (foloUserService.existsById(userId!!) &&
                 !foloPidorService.existsById(chatId, userId)
             ) {
                 foloPidorService.save(FoloPidorDto(chatId, userId))
             }
-            ControllerCommandsEnum.UPDATE -> if (foloPidorService.existsById(chatId, userId)) {
+            ControllerCommandsEnum.UPDATE -> if (foloPidorService.existsById(chatId, userId!!)) {
                 val foloPidor = foloPidorService.findById(chatId, userId)
-                foloPidor.score = score
+                foloPidor.score = score!!
                 foloPidor.lastWinDate = LocalDate.parse(lastWinDate)
                 foloPidor.lastActiveDate = LocalDate.parse(lastActiveDate)
-                foloPidor.messagesPerDay = messagesPerDay
+                foloPidor.messagesPerDay = messagesPerDay!!
                 foloPidorService.save(foloPidor)
             }
-            ControllerCommandsEnum.DELETE -> foloPidorService.delete(FoloPidorDto(chatId, userId))
+            ControllerCommandsEnum.DELETE -> foloPidorService.delete(FoloPidorDto(chatId, userId!!))
             ControllerCommandsEnum.FILTER -> {
                 model["folopidors"] =
                     if (!Objects.isNull(chatId)) foloPidorService.findByIdChatId(chatId)

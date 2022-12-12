@@ -18,9 +18,9 @@ data class FoloUserDto(
     }
 
     /**
-     * Получить тэг, если он путст имя
+     * Получить тэг, если он пуст имя
      */
-    fun getTagName(): String { return if (tag.isNotEmpty()) tag else name }
+    fun getTagName(): String { return tag.ifEmpty { name } }
 
     /**
      * Установить основного пользователя и вернуть себя

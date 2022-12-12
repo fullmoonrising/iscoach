@@ -43,12 +43,12 @@ class ContextIndependentHandler(
                 // Фолопользователь
                 val foloUser = foloUserService.findById(user.id).setName(user.getName())
                 foloUserService.save(foloUser)
-                logger.info { "Saved foloUser ${foloUser.prettyPrint()}" }
+                logger.info { "Saved foloUser ${foloUser.getTagName()}" }
                 // И фолопидор
                 if (!message.isUserMessage) {
                     val foloPidor = foloPidorService.findById(message.chatId, user.id).updateMessagesPerDay()
                     foloPidorService.save(foloPidor)
-                    logger.info { "Saved foloPidor ${foloPidor.prettyPrint()}" }
+                    logger.info { "Saved foloPidor ${foloPidor.getTagName()}" }
                 }
             }
         }
