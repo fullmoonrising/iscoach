@@ -79,4 +79,5 @@ docker {
         this.files(it.archiveFile)
     }
     tag("DockerHub", "everbald/${rootProject.name}:latest")
+//    buildArgs(mapOf("target" to "image-cloud"))
 }

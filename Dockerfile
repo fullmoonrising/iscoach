@@ -1,6 +1,10 @@
-FROM openjdk:18-jdk-alpine
+FROM openjdk:18-jdk-alpine as base
 WORKDIR /app
-COPY /build/libs/folobot-*.jar folobot.jar
-ADD folobot-*.jar folobot.jar
-
 ENTRYPOINT ["java","-jar","folobot.jar"]
+
+FROM base as image-local
+COPY /build/libs/folobot-*.jar folobot.jar
+
+FROM base as image-cloud
+COPY folobot-*.jar folobot.jar
+
