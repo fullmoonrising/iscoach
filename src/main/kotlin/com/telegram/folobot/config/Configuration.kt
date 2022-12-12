@@ -13,6 +13,6 @@ class Configuration() : KLogging() {
     fun init() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"))
         logger.info { "Bot started ${LocalDate.now()} at ${LocalTime.now().withNano(0)} MSK" }
-        logger.info { "Hello folo!" }
+        logger.info { "Hello, folo!" }
     }
 }
