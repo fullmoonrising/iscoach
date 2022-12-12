@@ -11,10 +11,11 @@ plugins {
     kotlin("plugin.allopen") version "1.7.21"
     kotlin("jvm") version "1.7.21"
     kotlin("plugin.spring") version "1.7.21"
+    id("com.palantir.docker") version "0.34.0"
 }
 
 group = "com.telegram"
-version = "3.0.0"
+version = "3.0.4"
 description = "folobot"
 
 repositories {
@@ -50,10 +51,6 @@ dependencies {
 
     // formatter
     implementation("com.ibm.icu:icu4j:72.1")
-
-
-
-//    runtimeOnly("org.postgresql:postgresql")
 }
 
 allOpen {
@@ -73,4 +70,13 @@ tasks.withType<Test> {
 
 tasks.register("stage") {
     dependsOn("build")
+}
+
+docker {
+    name = "everbald/${rootProject.name}:latest"
+    tasks.getByName<BootJar>("bootJar").let {
+        this.dependsOn(it)
+        this.files(it.archiveFile)
+    }
+    tag("DockerHub", "everbald/${rootProject.name}:latest")
 }
