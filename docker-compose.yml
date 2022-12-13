@@ -65,3 +65,13 @@ services:
       - REPO_PASS
       - TZ=Europe/Moscow
     command: --interval 60 --cleanup --include-restarting app
+  portainer:
+      image: portainer/portainer-ce:latest
+      container_name: portainer
+      restart: unless-stopped
+      security_opt:
+        - no-new-privileges:true
+      volumes:
+        - /etc/localtime:/etc/localtime:ro
+        - /var/run/docker.sock:/var/run/docker.sock:ro
+        - ./portainer-data:/data

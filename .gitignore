@@ -19,3 +19,4 @@ out/
 
 /certbot/
 /pgdata/
+/portainer-data/
