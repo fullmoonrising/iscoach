@@ -1,12 +1,10 @@
-version: '3.4'
+version: '3.6'
 
 services:
   app:
-    image: 'everbald/folobot:latest'
+    image: 'ghcr.io/everbald/folobot:latest'
     build:
       context: .
-      dockerfile: Dockerfile
-      target: image-local
     container_name: app
     restart: unless-stopped
     depends_on:
@@ -66,4 +64,4 @@ services:
       - REPO_USER
       - REPO_PASS
       - TZ=Europe/Moscow
-    command: --interval 30 --cleanup --include-restarting app
+    command: --interval 60 --cleanup --include-restarting app
