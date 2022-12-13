@@ -33,7 +33,7 @@ class ContextIndependentHandler(
     private fun saveFoloUser(update: Update) {
         val message = update.message
         if (message.isAutomaticForward == null || !message.isAutomaticForward) {
-            message.from ?: message.newChatMembers?.firstOrNull()?.run {
+            (message.from ?: message.newChatMembers?.firstOrNull())?.run {
                 // Фолопользователь
                 foloUserService.save(foloUserService.findById(this.id).setName(this.getName()))
                 // И фолопидор
