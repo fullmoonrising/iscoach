@@ -97,7 +97,7 @@ class FoloBot(
             Objects.nonNull(message.leftChatMember) -> ActionsEnum.USERLEFT
             // Неопределено
             else -> ActionsEnum.UNDEFINED
-        }.also { logger.info { "Received request with action $it" } }
+        }.also { if (it != ActionsEnum.UNDEFINED) logger.info { "Received request with action $it" } }
     }
 
     /**
