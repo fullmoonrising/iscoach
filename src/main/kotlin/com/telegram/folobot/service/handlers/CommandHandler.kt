@@ -141,7 +141,7 @@ class CommandHandler(
                 //Обновляем текущего победителя
                 foloVarService.setLastFolopidorWinner(chatId, foloPidor.id.userId)
                 foloVarService.setLastFolopidorDate(chatId, LocalDate.now())
-                logger.info { "Updated foloPidor winner ${foloPidor.id.userId} and win date ${LocalDate.now()}" }
+                logger.info { "Updated foloPidor winner ${foloPidor.foloUser.getTagName()} and win date ${LocalDate.now()}" }
 
                 //Поздравляем
                 messageService.sendMessage(textService.setup, update)

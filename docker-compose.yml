@@ -5,6 +5,7 @@ services:
     image: 'ghcr.io/everbald/folobot:latest'
     build:
       context: .
+      dockerfile: Dockerfile
     container_name: app
     restart: unless-stopped
     depends_on:
@@ -18,13 +19,16 @@ services:
       - DB_PASS
       - TZ=Europe/Moscow
   db:
-    image: 'postgres:latest'
+    image: extended-postgres:latest
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
     container_name: db
     restart: unless-stopped
-#    ports:
-#      - "5432:5432"
+    ports:
+      - "5433:5432"
     volumes:
-      - ./pgdata:/var/lib/postgresql/data/:rw
+      - ./postgres/data:/var/lib/postgresql/data/:rw
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASS}
@@ -75,4 +79,4 @@ services:
       volumes:
         - /etc/localtime:/etc/localtime:ro
         - /var/run/docker.sock:/var/run/docker.sock:ro
-        - ./portainer-data:/data
+        - ./portainer:/data

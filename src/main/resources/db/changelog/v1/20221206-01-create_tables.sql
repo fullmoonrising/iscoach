@@ -1,4 +1,4 @@
-CREATE TABLE folo_user (
+CREATE TABLE IF NOT EXISTS folo_user (
     user_id bigint primary key,
     name varchar(255),
     tag varchar(255),
@@ -6,7 +6,7 @@ CREATE TABLE folo_user (
     anchor boolean DEFAULT false NOT NULL
 );
 
-CREATE TABLE folo_pidor (
+CREATE TABLE IF NOT EXISTS folo_pidor (
     chat_id bigint NOT NULL,
     user_id bigint NOT NULL,
     score integer,
@@ -18,10 +18,11 @@ CREATE TABLE folo_pidor (
     foreign key (user_id) references folo_user (user_id)
 );
 
-CREATE TABLE folo_var (
+CREATE TABLE IF NOT EXISTS folo_var (
     chat_id bigint NOT NULL,
     type varchar(255) NOT NULL,
     value varchar(255),
 
     primary key (chat_id, type)
 );
+
