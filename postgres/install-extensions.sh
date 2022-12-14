@@ -18,7 +18,7 @@ psql -U $POSTGRES_USER --dbname=postgres <<-'EOSQL'
   INSERT INTO pgagent.pga_job(
       jobjclid, jobname, jobdesc, jobhostagent, jobenabled
   ) VALUES (
-      1::integer, 'backup $POSTGRES_DB'::text, ''::text, ''::text, true
+      1::integer, 'backup'::text, ''::text, ''::text, true
   ) RETURNING jobid INTO jid;
 
   -- Steps

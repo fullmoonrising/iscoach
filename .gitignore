@@ -18,5 +18,4 @@ Thumbs.db
 out/
 
 /certbot/
-/portainer/
 /postgres/data/
