@@ -11,11 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import java.time.LocalDate
-import java.util.Locale
-import java.util.Objects
+import java.util.*
 
 // TODO логику из контроллеров вынести в сервисы
-// TODO проверки ввода
 @Controller
 @RequestMapping("/folopidor")
 class FolopidorController(
@@ -29,7 +27,7 @@ class FolopidorController(
      * @return Имя экрана
      */
     @GetMapping
-    fun main(model: MutableMap<String, Any>): String { //TODO add lastDate
+    fun main(model: MutableMap<String, Any>): String {
         model["folopidors"] = foloPidorService.findAll()
         return "folopidor"
     }

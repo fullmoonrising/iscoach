@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
-// TODO логику из контроллеров вынести в сервисы
-// TODO проверки ввода
 @Controller
 @RequestMapping("/main")
 class MainController(private val messageService: MessageService) : KLogging() {

@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(folobot.ru www.folobot.ru folomkin.ru www.folomkin.ru)
+domains=(folomkin.ru www.folomkin.ru folobot.ru www.folobot.ru)
 rsa_key_size=4096
 data_path="./certbot"
 email="aravin.roman@yandex.ru"
