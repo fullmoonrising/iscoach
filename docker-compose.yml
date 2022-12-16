@@ -19,10 +19,7 @@ services:
       - DB_PASS
       - TZ=Europe/Moscow
   db:
-    image: extended-postgres:latest
-    build:
-      context: ./postgres
-      dockerfile: Dockerfile
+    image: postgres:latest
     container_name: db
     restart: unless-stopped
 #    ports:
