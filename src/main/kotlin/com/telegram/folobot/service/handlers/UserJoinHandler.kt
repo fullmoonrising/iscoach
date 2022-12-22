@@ -66,6 +66,6 @@ class UserJoinHandler(
         } else {
             messageService
                 .buildMessage("Куда же ты, " + userService.getFoloUserName(user) + "! Не уходи!", update)
-        }.also { logger.info { "Said goodbye to  ${user.userName} in chat ${update.message.chatId}" } }
+        }.also { logger.info { "Said goodbye to ${user.userName} in chat ${update.message.chatId}" } }
     }
 }

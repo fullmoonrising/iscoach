@@ -18,7 +18,7 @@ class FoloPidorEntity(
     @Column(nullable = false)
     val id: FoloPidorId,
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "userId", insertable = false, updatable = false)
     var foloUserEntity: FoloUserEntity,
 

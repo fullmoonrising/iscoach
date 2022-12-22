@@ -11,7 +11,8 @@ object Utils {
         NumTypeEnum.MONTH to arrayOf("месяцев", "месяц", "месяца", "месяцев"),
         NumTypeEnum.DAY to arrayOf("дней", "день", "дня", "дней"),
         NumTypeEnum.COUNT to arrayOf("раз", "раз", "раза", "раз"),
-        NumTypeEnum.YEARISH to arrayOf("годиков", "годик", "годика", "годиков")
+        NumTypeEnum.YEARISH to arrayOf("годиков", "годик", "годика", "годиков"),
+        NumTypeEnum.MESSAGE to arrayOf("сообщений", "сообщение", "сообщения", "сообщений")
     )
 
     /**

@@ -6,6 +6,7 @@ import com.telegram.folobot.persistence.entity.FoloPidorId
 import com.telegram.folobot.persistence.entity.toDto
 import com.telegram.folobot.persistence.repos.FoloPidorRepo
 import org.springframework.stereotype.Component
+import java.time.LocalDate
 
 @Component
 class FoloPidorService(
@@ -103,6 +104,19 @@ class FoloPidorService(
         return foloPidorRepo.findByIdChatId(chatId)
             .map { it.toDto() }
             .filter { userService.isInChat(it, chatId) && it.isValidUnderdog() }
+    }
+
+    /**
+     * Активные фолопидоры чата
+     * @param chatId Id чата
+     * @return [<]
+     */
+    fun getTopActive(chatId: Long): List<FoloPidorDto> {
+        return foloPidorRepo.findByIdChatId(chatId)
+            .map { it.toDto() }
+            .filter { it.lastActiveDate == LocalDate.now() }
+            .sortedByDescending { it.messagesPerDay }
+            .take(5)
     }
 
     /**

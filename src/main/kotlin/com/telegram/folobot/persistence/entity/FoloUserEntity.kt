@@ -24,7 +24,7 @@ class FoloUserEntity(
     @Column(nullable = false)
     var tag: String = ""
 ) {
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "foloUserEntity", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "foloUserEntity", orphanRemoval = true)
     val foloPidorEntities: MutableSet<FoloPidorEntity> = mutableSetOf()
 }
 
