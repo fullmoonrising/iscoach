@@ -70,6 +70,16 @@ class UserService(private val foloUserService: FoloUserService) {
     }
 
     /**
+     * Получение кликабельного имени пользователя
+     *
+     * @param userId [Long]
+     * @return Имя пользователя
+     */
+    fun getFoloUserNameLinked(userId: Long): String {
+        return "[" + foloUserService.findById(userId).getTagName() + "](tg://user?id=" + userId + ")"
+    }
+
+    /**
      * Получение кликабельного имени фолопидора
      *
      * @param foloPidor [FoloPidorDto]

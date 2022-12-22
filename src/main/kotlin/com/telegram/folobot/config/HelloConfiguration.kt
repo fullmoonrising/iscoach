@@ -4,11 +4,11 @@ import mu.KLogging
 import org.springframework.context.annotation.Configuration
 import java.time.LocalDate
 import java.time.LocalTime
-import java.util.TimeZone
+import java.util.*
 import javax.annotation.PostConstruct
 
 @Configuration
-class Configuration() : KLogging() {
+class HelloConfiguration() : KLogging() {
     @PostConstruct
     fun init() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"))

@@ -11,6 +11,7 @@ class TextService {
     val foloPidorPunch = getText("foloPidorPunch")
     val foloPidorSetup = getText("foloPidorSetup")
     val quotesforAndrew = getText("quotesForAndrew")
+    val whatAboutIT = getText("whatAboutIT")
 
     /**
      * Чтение текстов из ресурсов
@@ -43,4 +44,8 @@ class TextService {
 
     val quoteforAndrew: String
         get() = quotesforAndrew.random()
+
+    fun getIT(userName: String): String {
+        return String.format(whatAboutIT.random(), userName)
+    }
 }
