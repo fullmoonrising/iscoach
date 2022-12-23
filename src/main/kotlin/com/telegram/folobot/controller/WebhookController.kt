@@ -9,7 +9,6 @@ import org.telegram.telegrambots.meta.api.objects.Update
 
 @RestController
 @RequestMapping("/telegram-hook")
-@PreAuthorize("permitAll()")
 class WebhookController(private val foloBot: FoloBot) {
     @GetMapping
     fun get(): ResponseEntity<*> {
