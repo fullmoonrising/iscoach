@@ -3,16 +3,16 @@
     <title>Amaizing folobot</title>
     <meta http-equiv="Content-Type" content="text/html" charset=UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <script src="js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/admin.css">
+    <script src="js/admin.js"></script>
 </head>
 <html>
     <body>
         <div>
-            <a href="/folopidor">
+            <a href="/admin/folopidor">
                 <button>Фолопидоры</button>
             </a>
-            <a href="/folouser">
+            <a href="/admin/folouser">
                 <button>Пользователи</button>
             </a>
         </div>
@@ -22,9 +22,10 @@
             <tbody>
                 <tr bgcolor="#acf6fa">
                     <form method="post">
-                       <td width="20%" height="30"><input id="chatId" type="number" name="chatId" placeholder="ChatId"/></td>
-                       <td width="70%" height="30"><input type="text" name="message" placeholder="Сообщение"/></td>
-                       <td width="10%" height="30"><button type="submit">Отправить</button></td>
+                        <td width="20%" height="30"><input id="chatId" type="number" name="chatId" placeholder="ChatId"/></td>
+                        <td width="70%" height="30"><input type="text" name="message" placeholder="Сообщение"/></td>
+                        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                        <td width="10%" height="30"><button type="submit">Отправить</button></td>
                     </form>
                 <tr>
                 <tr onclick="onClick(146072069)">
@@ -41,5 +42,10 @@
                 </tr>
             </tbody>
         </table>
+
+        <form action="/logout" method="post">
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <input type="submit" value="Sign Out"/>
+        </form>
     </body>
 </html>

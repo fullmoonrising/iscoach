@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-@RequestMapping("/main")
-class MainController(private val messageService: MessageService) : KLogging() {
+@RequestMapping("/admin")
+class AdminController(private val messageService: MessageService) : KLogging() {
     @GetMapping
     fun main(): String {
-        return "main"
+        return "admin"
     }
 
     @PostMapping
     fun sendMessage(@RequestParam chatId: Long, @RequestParam message: String): String {
         messageService.sendMessage(message, chatId)
-        return "main"
+        return "admin"
     }
 }
