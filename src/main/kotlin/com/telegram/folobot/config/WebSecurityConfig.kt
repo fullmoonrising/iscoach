@@ -22,7 +22,6 @@ class WebSecurityConfig(
             .authorizeRequests()
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
             .and()
                 .formLogin().loginPage("/login").permitAll()
             .and()
