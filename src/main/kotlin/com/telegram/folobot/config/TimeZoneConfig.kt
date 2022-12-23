@@ -8,7 +8,7 @@ import java.util.*
 import javax.annotation.PostConstruct
 
 @Configuration
-class HelloConfiguration() : KLogging() {
+class TimeZoneConfig() : KLogging() {
     @PostConstruct
     fun init() {
         TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"))
