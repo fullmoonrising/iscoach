@@ -116,7 +116,7 @@ class FoloPidorService(
             .map { it.toDto() }
             .filter { it.lastActiveDate == LocalDate.now() }
             .sortedByDescending { it.messagesPerDay }
-            .take(5)
+            .take(10)
     }
 
     /**
