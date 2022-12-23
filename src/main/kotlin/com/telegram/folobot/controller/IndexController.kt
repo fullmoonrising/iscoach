@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 
 @Controller
 class IndexController() : KLogging() {
-    @GetMapping(value = ["", "/", "index"])
+    @GetMapping(value = ["", "/", "/index"])
     fun index(model: MutableMap<String, Any>): String {
         model["rndvid"] = "media/${
             listOf(

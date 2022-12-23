@@ -15,7 +15,7 @@ import java.util.*
 
 // TODO логику из контроллеров вынести в сервисы
 @Controller
-@RequestMapping("/folopidor")
+@RequestMapping("/admin/folopidor")
 class FolopidorController(
     private val foloPidorService: FoloPidorService,
     private val foloUserService: FoloUserService

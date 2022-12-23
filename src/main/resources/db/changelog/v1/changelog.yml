@@ -39,3 +39,11 @@ databaseChangeLog:
             encoding: utf8
             path: v1/20221206-05-new_season_cleanup.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 20221223-01
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: v1/20221223-01-auth.sql
+            relativeToChangelogFile: true

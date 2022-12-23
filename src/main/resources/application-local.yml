@@ -12,7 +12,10 @@ spring:
           time_zone: Europe/Moscow
     generate-ddl: true
   liquibase:
-    enabled: false
+    enabled: true
+    change-log: 'classpath:db/changelog/changelog-master.yml'
+  mustache:
+    expose-request-attributes: true
 bot:
   username: ShurkaGurmanychBot
   token: 5306754558:AAGLFdpVE-VQJ3-Ym0uvLq5fbAU9q98cg-I

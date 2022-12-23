@@ -12,7 +12,7 @@ import java.util.Objects
 
 // TODO логику из контроллеров вынести в сервисы
 @Controller
-@RequestMapping("/folouser")
+@RequestMapping("/admin/folouser")
 class FoloUserController(private val foloUserService: FoloUserService) {
     @GetMapping
     fun user(model: MutableMap<String, Any>): String {

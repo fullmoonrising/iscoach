@@ -21,7 +21,7 @@ class TaskService(
         messageService.sendMessage(
             foloPidorService.getTopActive(chatId).withIndex().joinToString(
                 separator = "\n",
-                prefix = "*Самые активные фолопидоры дня*:\n\n",
+                prefix = "*Самые активные фолопидоры сегодня*:\n\n",
                 transform = {
                     "\u2004*${it.index + 1}*.\u2004${
                         userService.getFoloUserName(it.value, chatId)
