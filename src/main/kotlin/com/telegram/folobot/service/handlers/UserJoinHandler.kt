@@ -1,8 +1,9 @@
 package com.telegram.folobot.service.handlers
 
-import com.telegram.folobot.ChatId.Companion.isAndrew
-import com.telegram.folobot.ChatId.Companion.isFolochat
-import com.telegram.folobot.ChatId.Companion.isVitalik
+import com.telegram.folobot.IdUtils.Companion.getChatIdentity
+import com.telegram.folobot.IdUtils.Companion.isAndrew
+import com.telegram.folobot.IdUtils.Companion.isFolochat
+import com.telegram.folobot.IdUtils.Companion.isVitalik
 import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.UserService
 import mu.KLogging
@@ -49,7 +50,7 @@ class UserJoinHandler(
                 messageService.sendMessage("настоящий тут: \nt.me/alexfolomkin", update)
             }
         }
-        logger.info { "Greeted user ${user.userName} in chat ${update.message.chatId}" }
+        logger.info { "Greeted user ${user.userName} in chat ${getChatIdentity(update.message.chatId)}" }
         return null
     }
 
@@ -66,6 +67,6 @@ class UserJoinHandler(
         } else {
             messageService
                 .buildMessage("Куда же ты, " + userService.getFoloUserName(user) + "! Не уходи!", update)
-        }.also { logger.info { "Said goodbye to ${user.userName} in chat ${update.message.chatId}" } }
+        }.also { logger.info { "Said goodbye to ${user.userName} in chat ${getChatIdentity(update.message.chatId)}" } }
     }
 }

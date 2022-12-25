@@ -64,7 +64,7 @@ data class FoloPidorDto(
     }
 
     /**
-     * Проверка что на твинка
+     * Проверка на твинка
      */
     fun isTwink(): Boolean {
         return foloUser.userId != foloUser.getMainUserId()

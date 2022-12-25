@@ -1,6 +1,7 @@
 package com.telegram.folobot.service.handlers
 
-import com.telegram.folobot.ChatId.Companion.isAndrew
+import com.telegram.folobot.IdUtils.Companion.getChatIdentity
+import com.telegram.folobot.IdUtils.Companion.isAndrew
 import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.UserService
 import mu.KLogging
@@ -31,7 +32,7 @@ class ReplyHandler(
             } else {
                 messageService
                     .buildMessage("Привет, уважаемый фолофил $userName!", update, true)
-            }.also { logger.info { "Replied to ${it.chatId} with ${it.text}" } }
+            }.also { logger.info { "Replied to ${getChatIdentity(it.chatId)} with ${it.text}" } }
         }
         return null
     }

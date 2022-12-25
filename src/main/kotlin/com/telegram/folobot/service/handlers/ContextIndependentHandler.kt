@@ -1,11 +1,8 @@
 package com.telegram.folobot.service.handlers
 
-import com.telegram.folobot.ChatId
-import com.telegram.folobot.ChatId.Companion.isAndrew
-import com.telegram.folobot.service.FoloPidorService
-import com.telegram.folobot.service.FoloUserService
-import com.telegram.folobot.service.MessageService
-import com.telegram.folobot.service.getName
+import com.telegram.folobot.IdUtils
+import com.telegram.folobot.IdUtils.Companion.isAndrew
+import com.telegram.folobot.service.*
 import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -14,7 +11,8 @@ import org.telegram.telegrambots.meta.api.objects.Update
 class ContextIndependentHandler(
     private val foloUserService: FoloUserService,
     private val foloPidorService: FoloPidorService,
-    private val messageService: MessageService
+    private val messageService: MessageService,
+    private val foloIndexService: FoloIndexService
 ) : KLogging() {
 
     fun handle(update: Update) {
@@ -23,6 +21,9 @@ class ContextIndependentHandler(
 
         //Пересылка личных сообщений в спецчат
         forwardPrivate(update)
+
+        //Добавление очков активности
+        addActivityPoints(update)
     }
 
     /**
@@ -52,11 +53,15 @@ class ContextIndependentHandler(
      */
     private fun forwardPrivate(update: Update) {
         if (update.hasMessage()) if (update.message.isUserMessage) {
-            messageService.forwardMessage(ChatId.POC_ID, update)
+            messageService.forwardMessage(IdUtils.POC_ID, update)
             logger.info { "Forwarded message to POC" }
         } else if (isAndrew(update.message.from)) {
-            messageService.forwardMessage(ChatId.ANDREWSLEGACY_ID, update)
+            messageService.forwardMessage(IdUtils.ANDREWSLEGACY_ID, update)
             logger.info { "Forwarded message to Andrews legacy" }
         }
+    }
+
+    private fun addActivityPoints(update: Update) {
+        foloIndexService.addActivityPoints(update)
     }
 }

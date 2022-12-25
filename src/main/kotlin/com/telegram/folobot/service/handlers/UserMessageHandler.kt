@@ -1,7 +1,7 @@
 package com.telegram.folobot.service.handlers
 
-import com.telegram.folobot.ChatId
-import com.telegram.folobot.ChatId.Companion.isAndrew
+import com.telegram.folobot.IdUtils
+import com.telegram.folobot.IdUtils.Companion.isAndrew
 import com.telegram.folobot.service.MessageService
 import com.telegram.folobot.service.TextService
 import mu.KLogging
@@ -26,7 +26,7 @@ class UserMessageHandler(
             Random(System.nanoTime()).nextInt(100) < 7
         ) {
             messageService.forwardMessage(
-                ChatId.POC_ID,
+                IdUtils.POC_ID,
                 messageService.sendMessage(textService.quoteforAndrew, update, true)
                     .also { logger.info { "Replied to Andrew with ${it?.text}" } }
             )
