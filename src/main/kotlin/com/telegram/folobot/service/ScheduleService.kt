@@ -19,8 +19,7 @@ class ScheduleService(
         taskService.dayStats(FOLO_CHAT_ID)
     }
 
-//    @Scheduled(cron = "5 59 23 ? * *")
-    @Scheduled(cron = "0 * * ? * *")
+    @Scheduled(cron = "5 59 23 ? * *")
     private fun foloIndex() {
         taskService.foloIndex(FOLO_CHAT_ID)
     }
