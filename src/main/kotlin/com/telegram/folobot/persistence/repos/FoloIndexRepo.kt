@@ -10,6 +10,6 @@ import java.time.LocalDate
 @Repository
 interface FoloIndexRepo : CrudRepository<FoloIndexEntity, FoloIndexId> {
     fun findIndexById(id: FoloIndexId): FoloIndexEntity?
-    @Query("select avg(i.points) from FoloIndexEntity as i where i.id.chatId = ?1 and date between ?2 and ?3")
+    @Query(value = "select avg(points) from folo_index where chatId = ?1 and date between ?2 and ?3", nativeQuery = true)
     fun getAveragePointsByIdChatId(chatId: Long, startDate: LocalDate, endDate: LocalDate): Double?
 }

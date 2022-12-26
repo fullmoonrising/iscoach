@@ -1,8 +1,8 @@
 package com.telegram.folobot.persistence.entity
 
+import jakarta.persistence.Embeddable
 import java.io.Serializable
 import java.time.LocalDate
-import javax.persistence.Embeddable
 
 @Embeddable
 data class FoloIndexId(

@@ -1,7 +1,7 @@
 package com.telegram.folobot.persistence.entity
 
+import jakarta.persistence.Embeddable
 import java.io.Serializable
-import javax.persistence.Embeddable
 
 @Embeddable
 data class FoloVarId(

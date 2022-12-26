@@ -5,7 +5,7 @@ tasks.getByName<BootJar>("bootJar") { enabled = true; archiveBaseName.set(rootPr
 tasks.getByName<Jar>("jar") { enabled = false }
 
 plugins {
-    id("org.springframework.boot") version "2.6.14"
+    id("org.springframework.boot") version "3.0.1"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("plugin.jpa") version "1.7.21"
     kotlin("plugin.allopen") version "1.7.21"
@@ -15,7 +15,7 @@ plugins {
 }
 
 group = "com.telegram"
-version = "3.0.4"
+version = "3.1.0"
 description = "folobot"
 
 repositories {
@@ -27,7 +27,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-mustache")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security:3.0.0")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     // kotlin
@@ -36,7 +37,7 @@ dependencies {
 
     // db
     implementation("org.postgresql:postgresql")
-    runtimeOnly("org.liquibase:liquibase-core:4.17.2")
+    runtimeOnly("org.liquibase:liquibase-core:4.18.0")
 
     // telegram api
     implementation("org.telegram:telegrambots:6.1.0")
@@ -55,7 +56,7 @@ dependencies {
 }
 
 allOpen {
-    annotations("javax.persistence.Entity", "javax.persistence.MappedSuperclass", "javax.persistence.Embedabble")
+    annotations("javax.persistence.Entity", "javax.persistence.MappedSuperclass", "javax.persistence.Embeddable")
 }
 
 tasks.withType<KotlinCompile> {

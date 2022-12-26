@@ -1,19 +1,17 @@
 package com.telegram.folobot.persistence.entity
 
 import com.telegram.folobot.model.dto.FoloWebUserDto
-import javax.persistence.*
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "folo_web_user")
 class FoloWebUserEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Long?,
     var username: String,
     var password: String,
     var active: Boolean,
     @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
-    @CollectionTable(name = "folo_web_user_role", joinColumns = [JoinColumn(name = "id")])
+    @CollectionTable(name = "folo_web_user_role", joinColumns = [JoinColumn(name = "username")])
     @Enumerated(EnumType.STRING)
     var roles: Set<Role>
 )
