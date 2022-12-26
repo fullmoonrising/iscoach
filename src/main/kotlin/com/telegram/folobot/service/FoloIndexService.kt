@@ -1,10 +1,8 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.IdUtils.Companion.FOLOMKIN_ID
 import com.telegram.folobot.IdUtils.Companion.getChatIdentity
 import com.telegram.folobot.IdUtils.Companion.isAboutFo
 import com.telegram.folobot.IdUtils.Companion.isFo
-import com.telegram.folobot.IdUtils.Companion.isFromFoloSwarm
 import com.telegram.folobot.model.dto.FoloIndexDto
 import com.telegram.folobot.model.dto.toEntity
 import com.telegram.folobot.persistence.entity.FoloIndexId
@@ -20,8 +18,8 @@ class FoloIndexService(
     private val foloIndexRepo: FoloIndexRepo
 ) : KLogging() {
     fun getById(chatId: Long, date: LocalDate): FoloIndexDto {
-        return foloIndexRepo.findIndexById(FoloIndexId(chatId, LocalDate.now()))?.toDto()
-            ?: FoloIndexDto(chatId, LocalDate.now())
+        return foloIndexRepo.findIndexById(FoloIndexId(chatId, date))?.toDto()
+            ?: FoloIndexDto(chatId, date)
     }
 
     fun addActivityPoints(update: Update) {

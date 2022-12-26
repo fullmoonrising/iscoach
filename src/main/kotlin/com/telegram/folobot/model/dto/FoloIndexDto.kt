@@ -2,12 +2,7 @@ package com.telegram.folobot.model.dto
 
 import com.telegram.folobot.persistence.entity.FoloIndexEntity
 import com.telegram.folobot.persistence.entity.FoloIndexId
-import com.telegram.folobot.persistence.entity.FoloPidorEntity
-import com.telegram.folobot.persistence.entity.FoloPidorId
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
-import java.util.Objects
-import kotlin.math.absoluteValue
 
 data class FoloIndexDto(
     val id: FoloIndexId,

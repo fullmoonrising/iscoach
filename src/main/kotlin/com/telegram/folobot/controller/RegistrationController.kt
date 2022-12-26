@@ -1,7 +1,6 @@
 package com.telegram.folobot.controller
 
 import com.telegram.folobot.model.dto.FoloWebUserDto
-import com.telegram.folobot.persistence.entity.FoloWebUserEntity
 import com.telegram.folobot.persistence.entity.Role
 import com.telegram.folobot.service.FoloWebUserService
 import org.springframework.security.crypto.password.PasswordEncoder

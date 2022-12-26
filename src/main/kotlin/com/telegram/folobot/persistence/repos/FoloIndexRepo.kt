@@ -2,8 +2,6 @@ package com.telegram.folobot.persistence.repos
 
 import com.telegram.folobot.persistence.entity.FoloIndexEntity
 import com.telegram.folobot.persistence.entity.FoloIndexId
-import com.telegram.folobot.persistence.entity.FoloPidorEntity
-import com.telegram.folobot.persistence.entity.FoloPidorId
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

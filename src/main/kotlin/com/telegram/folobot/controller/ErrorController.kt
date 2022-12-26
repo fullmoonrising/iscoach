@@ -13,7 +13,7 @@ class CustomErrorController() : ErrorController, KLogging() {
     @RequestMapping("/error")
     fun handleError(request: HttpServletRequest): String? {
         request.parameterMap.flatMap { (key, values) -> values.associateBy { key }.toList() }
-        logger.error { "Bad request:\n" +
+        logger.trace { "Bad request:\n" +
                 "   method ${request.method}\n" +
                 "   status: ${request.getAttribute(ERROR_STATUS_CODE)}\n" +
                 "   URI: ${request.getAttribute(ERROR_REQUEST_URI)}\n" +

@@ -1,6 +1,5 @@
 package com.telegram.folobot.model.dto
 
-import com.telegram.folobot.persistence.entity.FoloPidorEntity
 import com.telegram.folobot.persistence.entity.FoloWebUserEntity
 import com.telegram.folobot.persistence.entity.Role
 

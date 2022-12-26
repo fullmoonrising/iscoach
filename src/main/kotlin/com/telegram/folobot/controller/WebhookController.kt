@@ -2,7 +2,6 @@ package com.telegram.folobot.controller
 
 import com.telegram.folobot.service.FoloBot
 import org.springframework.http.ResponseEntity
-import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
