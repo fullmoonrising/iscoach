@@ -41,7 +41,7 @@ class ContextIndependentHandler(
                 if (!message.isUserMessage) {
                     foloPidorService.save(foloPidorService.findById(message.chatId, this.id).updateMessagesPerDay())
                 }
-                logger.info { "Saved foloUser ${this.getName()}" }
+                logger.trace { "Saved foloUser ${this.getName()}" }
             }
         }
     }
