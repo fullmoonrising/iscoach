@@ -1,12 +1,12 @@
 package com.telegram.folobot.controller
 
+import jakarta.servlet.RequestDispatcher.ERROR_REQUEST_URI
+import jakarta.servlet.RequestDispatcher.ERROR_STATUS_CODE
+import jakarta.servlet.http.HttpServletRequest
 import mu.KLogging
 import org.springframework.boot.web.servlet.error.ErrorController
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import javax.servlet.RequestDispatcher.ERROR_REQUEST_URI
-import javax.servlet.RequestDispatcher.ERROR_STATUS_CODE
-import javax.servlet.http.HttpServletRequest
 
 @Controller
 class CustomErrorController() : ErrorController, KLogging() {

@@ -11,7 +11,6 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.util.*
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadLocalRandom
@@ -35,17 +34,16 @@ class DynamicSchedulingConfig(
                     .also {
                         logger.info {
                             "Last task completion time is ${
-                                it?.let { LocalDateTime.ofInstant(it,ZoneId.systemDefault()) } ?: "undefined"
+                                it?.let { LocalDateTime.ofInstant(it, ZoneId.systemDefault()) } ?: "undefined"
                             }"
                         }
                     }
-                val nextExecutionTime = generateNextExecutionTime(lastCompletionTime)
+                generateNextExecutionTime(lastCompletionTime)
                     .also {
                         logger.info {
                             "Next task execution time is ${LocalDateTime.ofInstant(it, ZoneId.systemDefault())}"
                         }
                     }
-                Date.from(nextExecutionTime)
             }
         )
     }

@@ -1,11 +1,11 @@
 package com.telegram.folobot.config
 
+import jakarta.annotation.PostConstruct
 import mu.KLogging
 import org.springframework.context.annotation.Configuration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.util.*
-import javax.annotation.PostConstruct
 
 @Configuration
 class TimeZoneConfig() : KLogging() {

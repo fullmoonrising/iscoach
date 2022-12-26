@@ -1,15 +1,8 @@
 package com.telegram.folobot.persistence.entity
 
 import com.telegram.folobot.model.dto.FoloPidorDto
+import jakarta.persistence.*
 import java.time.LocalDate
-import javax.persistence.CascadeType
-import javax.persistence.Column
-import javax.persistence.EmbeddedId
-import javax.persistence.Entity
-import javax.persistence.FetchType
-import javax.persistence.JoinColumn
-import javax.persistence.ManyToOne
-import javax.persistence.Table
 
 @Entity
 @Table(name = "folo_pidor")

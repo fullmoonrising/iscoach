@@ -1,6 +1,11 @@
 server:
   error:
     path: /error
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/folodb?user=folo&password=folo
@@ -15,7 +20,8 @@ spring:
     enabled: true
     change-log: 'classpath:db/changelog/changelog-master.yml'
   mustache:
-    expose-request-attributes: true
+    servlet:
+      expose-request-attributes: true
 bot:
   username: ShurkaGurmanychBot
   token: 5306754558:AAGLFdpVE-VQJ3-Ym0uvLq5fbAU9q98cg-I

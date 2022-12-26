@@ -11,7 +11,6 @@ data class FoloWebUserDto(
 )
 
 fun FoloWebUserDto.toEntity(): FoloWebUserEntity = FoloWebUserEntity(
-    id = null,
     username = username,
     password = password,
     active = active,

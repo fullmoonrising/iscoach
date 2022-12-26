@@ -5,7 +5,7 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221206-01-create_tables.sql
+            path: 20221206-01-create_tables.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 20221206-02
@@ -13,7 +13,7 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221206-02-2022_backup_folouser.sql
+            path: 20221206-02-2022_backup_folouser.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 20221206-03
@@ -21,7 +21,7 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221206-03-2022_backup_folopidor.sql
+            path: 20221206-03-2022_backup_folopidor.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 20221206-04
@@ -29,7 +29,7 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221206-04-2022_backup_folovar.sql
+            path: 20221206-04-2022_backup_folovar.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 20221206-05
@@ -37,7 +37,7 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221206-05-new_season_cleanup.sql
+            path: 20221206-05-new_season_cleanup.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 20221223-01
@@ -45,7 +45,7 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221223-01-auth.sql
+            path: 20221223-01-auth.sql
             relativeToChangelogFile: true
   - changeSet:
       id: 20221225-01
@@ -53,5 +53,5 @@ databaseChangeLog:
       changes:
         - sqlFile:
             encoding: utf8
-            path: v1/20221225-01-foloindex.sql
+            path: 20221225-01-foloindex.sql
             relativeToChangelogFile: true
