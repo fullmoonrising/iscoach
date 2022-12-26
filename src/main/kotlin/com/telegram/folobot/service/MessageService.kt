@@ -7,6 +7,7 @@ import org.telegram.telegrambots.meta.api.methods.ForwardMessage
 import org.telegram.telegrambots.meta.api.methods.ParseMode
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
+import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Message
@@ -180,6 +181,29 @@ class MessageService {
                     .builder()
                     .chatId(update.message.chatId.toString())
                     .action(ActionType.TYPING.toString())
+                    .build()
+            )
+        } catch (e: TelegramApiException) {
+            printExeptionMessage(e)
+        }
+    }
+
+    /**
+     * Отправить изображение
+     *
+     * @param photoId идентификатор изображения
+     * @param text    текст сообщения
+     * @param chatid  ID чата(пользователя)
+     */
+    fun sendPhoto(photoId: String, text: String, chatid: Long) {
+        try {
+            foloBot.execute(
+                SendPhoto
+                    .builder()
+                    .parseMode(ParseMode.MARKDOWN)
+                    .chatId(chatid.toString())
+                    .photo(InputFile(photoId))
+                    .caption(text)
                     .build()
             )
         } catch (e: TelegramApiException) {

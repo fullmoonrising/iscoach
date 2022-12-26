@@ -2,7 +2,6 @@ package com.telegram.folobot.service
 
 import com.telegram.folobot.model.dto.FoloWebUserDto
 import com.telegram.folobot.model.dto.toEntity
-import com.telegram.folobot.persistence.entity.FoloWebUserEntity
 import com.telegram.folobot.persistence.entity.toDto
 import com.telegram.folobot.persistence.repos.FoloWebUserRepo
 import org.springframework.stereotype.Service
