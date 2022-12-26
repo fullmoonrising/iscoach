@@ -33,13 +33,14 @@ class FoloIndexService(
         }
     }
 
-    fun getAveragePoints(chatId: Long, date: LocalDate): Double? {
-        return foloIndexRepo.getAveragePointsByIdChatId(chatId, date.minusYears(1), date)
+    fun getAveragePoints(chatId: Long, date: LocalDate): Double {
+        return foloIndexRepo.getAveragePointsByIdChatId(chatId, date.minusYears(1), date) ?: 0.0
     }
 
     fun calcAndSaveIndex(chatId: Long, date: LocalDate): Double {
         val foloIndex = getById(chatId, date)
-        foloIndex.index = getAveragePoints(chatId, date)?.let { foloIndex.points / it * 100 } ?: 0.0
+        val average = getAveragePoints(chatId, date)
+        foloIndex.index = if (average > 0 ) foloIndex.points / average * 100 else 0.0
         foloIndexRepo.save(foloIndex.toEntity())
         return foloIndex.index!!
     }
