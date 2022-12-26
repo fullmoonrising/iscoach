@@ -1,6 +1,11 @@
 server:
   error:
     path: /error
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
 spring:
   datasource:
     url: jdbc:postgresql://db:5432/${DB_NAME}?user=${DB_USER}&password=${DB_PASS}
