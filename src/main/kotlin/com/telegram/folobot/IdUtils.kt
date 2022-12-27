@@ -19,8 +19,6 @@ class IdUtils {
         val ANDREW_ID = 146072069L
         val VITALIK_ID = 800522859L
         val FOLOMKIN_ID = 362689512L
-        val MOONMOON_ID = 50496196L
-
         fun isFolochat(chat: Chat?): Boolean {
             return chat != null && chat.id == FOLO_CHAT_ID
         }
@@ -31,10 +29,6 @@ class IdUtils {
 
         fun isVitalik(user: User?): Boolean {
             return user != null && user.id == VITALIK_ID
-        }
-
-        fun isMoonMoon(user: User?): Boolean {
-            return user != null && user.id == MOONMOON_ID
         }
 
         fun isFo(user: User?): Boolean {
@@ -53,13 +47,20 @@ class IdUtils {
                                 "фолик",
                                 "алекс фо",
                                 "гуру",
-                                "сашка",
-                                "фоломба",
+                                "сашк",
+                                "фоломб",
                                 "сашок",
                                 "санчоус",
-                                "фоломкиен"
+                                "фоломкиен",
+                                "шурк",
+                                "александр",
+                                "гурманыч",
+                                "вайтифас",
+                                "просвещения",
+                                "цветочкин",
+                                "расческин"
                             )
-                                .any { update.message.text.lowercase().contains(it) })
+                                .any { update.message.text.contains(it, ignoreCase = true) })
         }
 
         fun getChatIdentity(chatId: Long?) : String {
