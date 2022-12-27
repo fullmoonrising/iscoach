@@ -27,7 +27,6 @@ class RegistrationController(
             return "registration"
         }
 
-
         if (userDetailsManager.userExists(username)) {
             model["message"] = "Фоло ID уже существует!"
             return "registration"
