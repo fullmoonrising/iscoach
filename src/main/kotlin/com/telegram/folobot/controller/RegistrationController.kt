@@ -1,9 +1,8 @@
 package com.telegram.folobot.controller
 
-import com.telegram.folobot.model.dto.FoloWebUserDto
-import com.telegram.folobot.persistence.entity.Role
-import com.telegram.folobot.service.FoloWebUserService
+import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @Controller
 @RequestMapping("/registration")
 class RegistrationController(
-    private val foloWebUserService: FoloWebUserService,
+    private val userDetailsManager: UserDetailsManager,
     private val passwordEncoder: PasswordEncoder
 ) {
     @GetMapping
@@ -22,12 +21,14 @@ class RegistrationController(
 
     @PostMapping
     fun addUser(username: String, password: String, model: MutableMap<String, Any>): String {
-        foloWebUserService.findUserByUsername(username)?.run {
+        if (userDetailsManager.userExists(username)) {
             model["message"] = "User already exists!"
             return "registration"
         }
 
-        foloWebUserService.save(FoloWebUserDto(username, passwordEncoder.encode(password), true, setOf(Role.USER)))
+        userDetailsManager.createUser(
+            User.withUsername(username).password(passwordEncoder.encode(password)).roles("WOLOLO").build()
+        )
 
         return "redirect:/login"
     }

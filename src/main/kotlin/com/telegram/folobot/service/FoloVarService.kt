@@ -10,7 +10,7 @@ import java.time.LocalDate
 @Component
 class FoloVarService(private val foloVarRepo: FoloVarRepo) {
     companion object {
-        private val COMMON_CHATID = 0L
+        val COMMON_CHATID = 0L
         val INITIAL_USERID = 0L
     }
 
