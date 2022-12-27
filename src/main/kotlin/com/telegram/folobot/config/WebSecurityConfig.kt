@@ -1,6 +1,6 @@
 package com.telegram.folobot.config
 
-import com.telegram.folobot.persistence.entity.Role
+import com.telegram.folobot.model.Authority
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -22,7 +22,7 @@ class WebSecurityConfig(
     fun getFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests()
-                .requestMatchers("/admin/**").hasAuthority(Role.ROLE_ADMIN.name)
+                .requestMatchers("/admin/**").hasAuthority(Authority.ROLE_ADMIN.name)
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             .and()

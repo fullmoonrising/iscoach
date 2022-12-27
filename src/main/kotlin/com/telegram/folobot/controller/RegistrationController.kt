@@ -1,5 +1,6 @@
 package com.telegram.folobot.controller
 
+import com.telegram.folobot.model.Authority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.provisioning.UserDetailsManager
@@ -21,13 +22,14 @@ class RegistrationController(
 
     @PostMapping
     fun addUser(username: String, password: String, model: MutableMap<String, Any>): String {
+
         if (userDetailsManager.userExists(username)) {
             model["message"] = "User already exists!"
             return "registration"
         }
 
         userDetailsManager.createUser(
-            User.withUsername(username).password(passwordEncoder.encode(password)).roles("WOLOLO").build()
+            User.withUsername(username).password(passwordEncoder.encode(password)).roles(Authority.ROLE_USER.role).build()
         )
 
         return "redirect:/login"

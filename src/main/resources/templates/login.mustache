@@ -1,26 +1,33 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Spring Security Example </title>
+    <title>Я читаю текст вы слушаете текст</title>
+    <meta http-equiv="Content-Type" content="text/html" charset=UTF-8"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
 </head>
 <body>
-Login page
+    <div>
+        <img src="/images/halo.png">
+    </div>
 
-<form action="/login" method="post">
-    <div><label> Логин <input type="text" name="username"/> </label></div>
-    <div><label> Пароль <input type="password" name="password"/> </label></div>
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <div><input type="submit" value="Войти"/></div>
-</form>
+    <h3>Войдите с Фоло ID</h3>
 
-<a href="/registration">
-    <button>Регистрация</button>
-</a>
+    <form action="/login" method="post">
+        <div><input required type="text" name="username" placeholder="Логин"></div>
+        <div><input required type="password" name="password" placeholder="Пароль"/></div>
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        <div><input type="submit" value="Войти"/></div>
+    </form>
 
-<form action="/logout" method="post">
-    <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-    <input type="submit" value="Выйти"/>
-</form>
+    <a href="/registration">
+        <button>Регистрация</button>
+    </a>
+
+    <form action="/logout" method="post">
+        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+        <input type="submit" value="Выйти"/>
+    </form>
 
 </body>
 </html>
