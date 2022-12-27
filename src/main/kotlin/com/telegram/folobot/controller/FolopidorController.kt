@@ -4,6 +4,7 @@ import com.telegram.folobot.model.ControllerCommandsEnum
 import com.telegram.folobot.model.dto.FoloPidorDto
 import com.telegram.folobot.service.FoloPidorService
 import com.telegram.folobot.service.FoloUserService
+import com.telegram.folobot.service.FoloVarService.Companion.COMMON_CHATID
 import com.telegram.folobot.service.FoloVarService.Companion.INITIAL_USERID
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -43,7 +44,7 @@ class FolopidorController(
      */
     @PostMapping
     fun onAction(
-        @RequestParam chatId: Long,
+        @RequestParam chatId: Long = COMMON_CHATID,
         @RequestParam(required = false) userId: Long? = INITIAL_USERID,
         @RequestParam(required = false) score: Int? = 0,
         @RequestParam(required = false) lastWinDate: String? = LocalDate.of(1900,1,1).toString(),

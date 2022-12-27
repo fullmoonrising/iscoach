@@ -1,19 +1,17 @@
-create table if not exists folo_web_user (
-    username varchar(255) primary key,
-    password varchar(255) not null,
-    active boolean not null
+create table if not exists users (
+    username varchar(50) primary key,
+    password varchar(68) not null,
+    enabled boolean not null
 );
 
-create table if not exists folo_web_user_role(
-    username varchar(255) not null,
-    roles character varying(255),
-        foreign key (username)
-        references folo_web_user (username) match simple
-        on update no action
-        on delete no action
+create table if not exists authorities (
+    username varchar(50) not null,
+    authority varchar(68) not null,
+
+    foreign key (username) references users (username)
 );
 
 create extension if not exists pgcrypto;
 
-insert into folo_web_user (username, password, active) values ('moonmoon', crypt('${DB_PASS}', gen_salt('bf', 8)), true);
-insert into folo_web_user_role (username, roles) values ('moonmoon', 'ADMIN'), ('moonmoon', 'USER');
+insert into users (username, password, enabled) values ('moonmoon', crypt('${DB_PASS}', gen_salt('bf', 8)), true);
+insert into authorities (username, authority) values ('moonmoon', 'ROLE_ADMIN'), ('moonmoon', 'ROLE_USER');

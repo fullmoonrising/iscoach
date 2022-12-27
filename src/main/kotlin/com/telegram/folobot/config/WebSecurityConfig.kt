@@ -19,10 +19,10 @@ class WebSecurityConfig(
     private val dataSource: DataSource
 ) {
     @Bean
-    fun filterChain(http: HttpSecurity): SecurityFilterChain {
+    fun getFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .authorizeHttpRequests()
-                .requestMatchers("/admin/**").hasAuthority(Role.ADMIN.name)
+                .requestMatchers("/admin/**").hasAuthority(Role.ROLE_ADMIN.name)
                 .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             .and()
@@ -36,11 +36,8 @@ class WebSecurityConfig(
     }
 
     @Bean
-    fun users(dataSource: DataSource): UserDetailsManager {
-        val users = JdbcUserDetailsManager(dataSource)
-        users.usersByUsernameQuery = "select username, password, active from folo_web_user where username=?"
-        users.setAuthoritiesByUsernameQuery("select u.username, ur.roles from folo_web_user as u inner join folo_web_user_role as ur on u.username = ur.username where u.username=?")
-        return users;
+    fun getUserDetailsManager(dataSource: DataSource): UserDetailsManager {
+        return JdbcUserDetailsManager(dataSource);
     }
 
     @Bean

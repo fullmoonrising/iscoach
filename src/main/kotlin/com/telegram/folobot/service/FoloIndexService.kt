@@ -15,7 +15,8 @@ import java.time.LocalDate
 
 @Service
 class FoloIndexService(
-    private val foloIndexRepo: FoloIndexRepo
+    private val foloIndexRepo: FoloIndexRepo,
+    private val userService: UserService
 ) : KLogging() {
     fun getById(chatId: Long, date: LocalDate): FoloIndexDto {
         return foloIndexRepo.findIndexById(FoloIndexId(chatId, date))?.toDto()
@@ -29,7 +30,10 @@ class FoloIndexService(
                 else if (isAboutFo(update)) 2
                 else 1
             foloIndexRepo.save(getById(update.message.chatId, LocalDate.now()).addPoints(points).toEntity())
-            logger.info { "Added $points activity points to chat ${getChatIdentity(update.message.chatId)}" }
+            logger.info {
+                "Added $points activity points to chat ${getChatIdentity(update.message.chatId)} " +
+                        "thanks to ${userService.getFoloUserName(update.message.from)}"
+            }
         }
     }
 
@@ -40,7 +44,7 @@ class FoloIndexService(
     fun calcAndSaveIndex(chatId: Long, date: LocalDate): Double {
         val foloIndex = getById(chatId, date)
         val average = getAveragePoints(chatId, date)
-        foloIndex.index = if (average > 0 ) foloIndex.points / average * 100 else 0.0
+        foloIndex.index = if (average > 0) foloIndex.points / average * 100 else 0.0
         foloIndexRepo.save(foloIndex.toEntity())
         return foloIndex.index!!
     }
