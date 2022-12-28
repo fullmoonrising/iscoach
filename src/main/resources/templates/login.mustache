@@ -1,31 +1,36 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Я читаю текст вы слушаете текст</title>
-    <meta http-equiv="Content-Type" content="text/html" charset=UTF-8"/>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    {{> header}}
     <link rel="stylesheet" type="text/css" href="/css/login.css">
 </head>
 <body>
     <div class="block">
         <img src="/images/halo.png">
+        {{^user}}
+            <h3>Войдите с Фоло ID</h3>
 
-        <h3>Войдите с Фоло ID</h3>
+            <p class="error">
+                {{#message}}{{message}}{{/message}}
+                {{^message}}&nbsp;{{/message}}
+            </p>
 
-        <form action="/login" method="post">
-            <div><input class="input top_border" required type="text" name="username" placeholder="Логин"></div>
-            <div><input class="input" required type="password" name="password" placeholder="Пароль"/></div>
-            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-            <div><input class="submit bottom_border" type="submit" value="Войти"/></div>
-        </form>
-        <br>
-        <div><a class="pseudo_button border" href="/registration"><span>Создать ID</span></a></div>
+            <form action="/login" method="post">
+                <div><input class="input top_border" required type="text" name="username" placeholder="Логин"></div>
+                <div><input class="input" required type="password" name="password" placeholder="Пароль"/></div>
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <div><input class="submit bottom_border" type="submit" value="Войти"/></div>
+            </form>
+            <br>
+            <div><a class="pseudo_button border" href="/registration"><span>Создать ID</span></a></div>
+        {{/user}}
+        {{#user}}
+            <h3>Привет, {{user.username}}!</h3>
+            <form action="/logout" method="post">
+                <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+                <input class="submit border" type="submit" value="Выйти"/>
+            </form>
+        {{/user}}
     </div>
-
-    <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <input type="submit" value="Выйти"/>
-    </form>
-
 </body>
 </html>

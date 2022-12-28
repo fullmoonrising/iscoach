@@ -30,7 +30,7 @@ class FoloIndexService(
                 else if (isAboutFo(update)) 2
                 else 1
             foloIndexRepo.save(getById(update.message.chatId, LocalDate.now()).addPoints(points).toEntity())
-            logger.info {
+            logger.trace {
                 "Added $points activity points to chat ${getChatIdentity(update.message.chatId)} " +
                         "thanks to ${userService.getFoloUserName(update.message.from)}"
             }

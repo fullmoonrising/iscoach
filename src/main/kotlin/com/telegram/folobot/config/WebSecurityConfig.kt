@@ -30,6 +30,7 @@ class WebSecurityConfig(
                 .ignoringRequestMatchers("/telegram-hook")
             .and()
                 .formLogin().loginPage("/login").permitAll()
+                .failureUrl("/login?error=true")
             .and()
                 .logout().permitAll()
        return http.build()

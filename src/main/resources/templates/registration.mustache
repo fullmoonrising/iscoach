@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Я читаю текст вы слушаете текст</title>
-    <meta http-equiv="Content-Type" content="text/html" charset=UTF-8"/>
-    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    {{> header}}
     <link rel="stylesheet" type="text/css" href="/css/registration.css">
 </head>
 
@@ -13,17 +11,17 @@
 
         <h3>Создать новый Фоло ID</h3>
 
+        <p class="error">
+            {{#message}}{{message}}{{/message}}
+            {{^message}}&nbsp;{{/message}}
+        </p>
+
         <form action="/registration" method="post">
             <div><input class="input top_border" required type="text" name="username" placeholder="Логин"></div>
             <div><input class="input" required type="password" name="password" placeholder="Пароль"/></div>
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
             <div><input class="submit bottom_border" type="submit" value="Создать ID"/></div>
         </form>
-
-        {{#message}}
-            {{message}}
-        {{/message}}
-
     </div>
 </body>
 </html>

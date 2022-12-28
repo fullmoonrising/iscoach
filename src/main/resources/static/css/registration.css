@@ -4,12 +4,14 @@ body {
 }
 
 h3 {
+    margin: 5px;
+    padding: 5px;
     font-size: 25px;
 }
 
 .block {
     display: inline-block;
-    padding: 10px 15px;
+    padding: 15px 15px;
     width: 512px;
     border-radius: 1em;
     border: 1px solid lightgray;
@@ -51,4 +53,10 @@ img {
 
 .bottom_border {
     border-radius: 0 0 0.5em 0.5em;
+}
+
+.error {
+    margin: 5px;
+    padding: 0;
+    color:red;
 }
