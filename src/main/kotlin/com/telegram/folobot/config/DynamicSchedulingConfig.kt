@@ -30,7 +30,7 @@ class DynamicSchedulingConfig(
         taskRegistrar.addTriggerTask(
             { scheduleService.whatAboutIT() },
             {
-                val lastCompletionTime = it.lastCompletionTime()?.toInstant()
+                val lastCompletion = it.lastCompletion()
                     .also {
                         logger.info {
                             "Last task completion time is ${
@@ -38,7 +38,7 @@ class DynamicSchedulingConfig(
                             }"
                         }
                     }
-                generateNextExecutionTime(lastCompletionTime)
+                generateNextExecutionTime(lastCompletion)
                     .also {
                         logger.info {
                             "Next task execution time is ${LocalDateTime.ofInstant(it, ZoneId.systemDefault())}"

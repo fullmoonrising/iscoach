@@ -70,12 +70,13 @@ class IdUtils {
                 FOLO_TEST_CHAT_ID -> "тестовый чат"
                 POC_ID -> "тайна личной переписки"
                 ANDREWSLEGACY_ID -> "наследие андрея"
+                ADEQUATE_COMMUNICATION -> "Васин загон"
                 else -> chatId.toString()
             }
         }
 
-        fun getChatIdentity(chatid: String): String {
-            return getChatIdentity(chatid.toLong())
+        fun getChatIdentity(chatId: String): String {
+            return getChatIdentity(chatId.toLong())
         }
     }
 }

@@ -52,12 +52,14 @@ class ContextIndependentHandler(
      * @param update [Update]
      */
     private fun forwardPrivate(update: Update) {
-        if (update.hasMessage()) if (update.message.isUserMessage) {
-            messageService.forwardMessage(IdUtils.POC_ID, update)
-            logger.info { "Forwarded message to POC" }
-        } else if (isAndrew(update.message.from)) {
-            messageService.forwardMessage(IdUtils.ANDREWSLEGACY_ID, update)
-            logger.info { "Forwarded message to Andrews legacy" }
+        if (update.hasMessage()) {
+            if (update.message.isUserMessage) {
+                messageService.forwardMessage(IdUtils.POC_ID, update)
+                logger.info { "Forwarded message to POC" }
+            } else if (isAndrew(update.message.from)) {
+                messageService.forwardMessage(IdUtils.ANDREWSLEGACY_ID, update)
+                logger.info { "Forwarded message to Andrews legacy" }
+            }
         }
     }
 
