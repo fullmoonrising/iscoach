@@ -2,6 +2,7 @@ package com.telegram.folobot.service.handlers
 
 import com.telegram.folobot.IdUtils
 import com.telegram.folobot.IdUtils.Companion.isAndrew
+import com.telegram.folobot.IdUtils.Companion.isFo
 import com.telegram.folobot.service.*
 import mu.KLogging
 import org.springframework.stereotype.Component
@@ -56,6 +57,9 @@ class ContextIndependentHandler(
             if (update.message.isUserMessage) {
                 messageService.forwardMessage(IdUtils.POC_ID, update)
                 logger.info { "Forwarded message to POC" }
+            } else if (isFo(update.message.from)) {
+                messageService.forwardMessage(IdUtils.FO_LEGACY_ID, update)
+                logger.info { "Forwarded message to Fo's legacy" }
             } else if (isAndrew(update.message.from)) {
                 messageService.forwardMessage(IdUtils.ANDREWSLEGACY_ID, update)
                 logger.info { "Forwarded message to Andrews legacy" }
