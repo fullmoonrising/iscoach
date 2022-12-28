@@ -7,22 +7,20 @@
     <link rel="stylesheet" type="text/css" href="/css/login.css">
 </head>
 <body>
-    <div>
+    <div class="block">
         <img src="/images/halo.png">
+
+        <h3>Войдите с Фоло ID</h3>
+
+        <form action="/login" method="post">
+            <div><input class="input top_border" required type="text" name="username" placeholder="Логин"></div>
+            <div><input class="input" required type="password" name="password" placeholder="Пароль"/></div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <div><input class="submit bottom_border" type="submit" value="Войти"/></div>
+        </form>
+        <br>
+        <div><a class="pseudo_button border" href="/registration"><span>Создать ID</span></a></div>
     </div>
-
-    <h3>Войдите с Фоло ID</h3>
-
-    <form action="/login" method="post">
-        <div><input required type="text" name="username" placeholder="Логин"></div>
-        <div><input required type="password" name="password" placeholder="Пароль"/></div>
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <div><input type="submit" value="Войти"/></div>
-    </form>
-
-    <a href="/registration">
-        <button>Регистрация</button>
-    </a>
 
     <form action="/logout" method="post">
         <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>

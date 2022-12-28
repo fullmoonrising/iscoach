@@ -6,23 +6,24 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" type="text/css" href="/css/registration.css">
 </head>
+
 <body>
-
-    <div>
+    <div class="block">
         <img src="/images/halo.png">
+
+        <h3>Создать новый Фоло ID</h3>
+
+        <form action="/registration" method="post">
+            <div><input class="input top_border" required type="text" name="username" placeholder="Логин"></div>
+            <div><input class="input" required type="password" name="password" placeholder="Пароль"/></div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
+            <div><input class="submit bottom_border" type="submit" value="Создать ID"/></div>
+        </form>
+
+        {{#message}}
+            {{message}}
+        {{/message}}
+
     </div>
-
-    <h3>Создать новый Фоло ID</h3>
-
-    <form action="/registration" method="post">
-        <div><input required type="text" name="username" placeholder="Логин"></div>
-        <div><input required type="password" name="password" placeholder="Пароль"/></div>
-        <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        <div><input type="submit" value="Создать ID"/></div>
-    </form>
-
-    {{#message}}
-        {{message}}
-    {{/message}}
 </body>
 </html>
