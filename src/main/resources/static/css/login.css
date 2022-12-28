@@ -4,12 +4,14 @@ body {
 }
 
 h3 {
+    margin: 5px;
+    padding: 5px;
     font-size: 25px;
 }
 
 .block {
     display: inline-block;
-    padding: 10px 15px;
+    padding: 15px 15px;
     width: 512px;
     border-radius: 1em;
     border: 1px solid lightgray;
@@ -72,4 +74,10 @@ img {
 
 .pseudo_button:hover {
   background-color: lightgray;
+}
+
+.error {
+    margin: 5px;
+    padding: 0;
+    color:red;
 }

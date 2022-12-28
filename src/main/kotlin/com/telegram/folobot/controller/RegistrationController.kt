@@ -23,7 +23,7 @@ class RegistrationController(
     @PostMapping
     fun addUser(username: String, password: String, model: MutableMap<String, Any>): String {
         if (username.isEmpty() || password.isEmpty()) {
-            model["message"] = "Некорректный Фоло ID или пароль!"
+            model["message"] = "Неверный Фоло ID или пароль!"
             return "registration"
         }
 
