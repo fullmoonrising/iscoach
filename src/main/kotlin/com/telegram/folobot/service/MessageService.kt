@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendChatAction
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
 import org.telegram.telegrambots.meta.api.methods.send.SendSticker
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
@@ -52,15 +53,15 @@ class MessageService {
      * Отправить сообщение
      *
      * @param text   текст сообщения
-     * @param chatid ID чата(пользователя)
+     * @param chatId ID чата(пользователя)
      */
-    fun sendMessage(text: String, chatid: Long) {
+    fun sendMessage(text: String, chatId: Long) {
         try {
             foloBot.execute(
                 SendMessage
                     .builder()
                     .parseMode(ParseMode.MARKDOWN)
-                    .chatId(chatid.toString())
+                    .chatId(chatId.toString())
                     .text(text)
                     .build()
             )
@@ -134,15 +135,15 @@ class MessageService {
     /**
      * Пересылка сообщений
      *
-     * @param chatid Чат куда будет переслано сообщение
+     * @param chatId Чат куда будет переслано сообщение
      * @param update [Update]
      */
-    fun forwardMessage(chatid: Long, update: Update) {
+    fun forwardMessage(chatId: Long, update: Update) {
         try {
             foloBot.execute(
                 ForwardMessage
                     .builder()
-                    .chatId((chatid).toString())
+                    .chatId((chatId).toString())
                     .messageId(update.message.messageId)
                     .fromChatId(update.message.chatId.toString())
                     .build()
@@ -152,13 +153,13 @@ class MessageService {
         }
     }
 
-    fun forwardMessage(chatid: Long, message: Message?) {
+    fun forwardMessage(chatId: Long, message: Message?) {
         message?.let {
             try {
                 foloBot.execute(
                     ForwardMessage
                         .builder()
-                        .chatId(chatid.toString())
+                        .chatId(chatId.toString())
                         .messageId(it.messageId)
                         .fromChatId(it.chatId.toString())
                         .build()
@@ -193,15 +194,15 @@ class MessageService {
      *
      * @param photoId идентификатор изображения
      * @param text    текст сообщения
-     * @param chatid  ID чата(пользователя)
+     * @param chatId  ID чата(пользователя)
      */
-    fun sendPhoto(photoId: String, text: String, chatid: Long) {
+    fun sendPhoto(photoId: String, text: String, chatId: Long) {
         try {
             foloBot.execute(
                 SendPhoto
                     .builder()
                     .parseMode(ParseMode.MARKDOWN)
-                    .chatId(chatid.toString())
+                    .chatId(chatId.toString())
                     .photo(InputFile(photoId))
                     .caption(text)
                     .build()
@@ -209,6 +210,29 @@ class MessageService {
         } catch (e: TelegramApiException) {
             printExeptionMessage(e)
         }
+    }
+
+    /**
+     * Удалить сообщение
+     *
+     * @param update [Update]
+     */
+    fun deleteMessage(update: Update) {
+        try {
+            foloBot.execute(DeleteMessage(update.message.chatId.toString(), update.message.messageId ))
+        } catch (e: TelegramApiException) {
+            printExeptionMessage(e)
+        }
+    }
+
+    /**
+     * Переотправить сообщение
+     *
+     * @param update [Update]
+     */
+    fun resendMessage(update: Update) {
+        forwardMessage(update.message.chatId, update)
+        deleteMessage(update)
     }
 
     /**

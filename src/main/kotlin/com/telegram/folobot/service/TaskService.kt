@@ -45,6 +45,7 @@ class TaskService(
     fun foloIndex(chatId: Long) {
         val photoId: String
         val indexText: String
+        val forecast: String
 
         val todayIndex = (foloIndexService.calcAndSaveIndex(chatId, LocalDate.now()) * 100)
             .roundToInt().toDouble() / 100
@@ -55,17 +56,21 @@ class TaskService(
         if (indexChange > 0) {
             photoId = STOCKS_UP_FILE_ID
             indexText = "растет на ${indexChange.absoluteValue} пунктов"
+            forecast = "Держать"
         } else if (indexChange < 0) {
             photoId = STOCKS_DOWN_FILE_ID
             indexText = "падает на ${indexChange.absoluteValue} пунктов"
+            forecast = "Продавать"
         } else {
             photoId = STOCKS_NEUTRAL_FILE_ID
             indexText = "не изменился"
+            forecast = "Держать"
         }
 
         messageService.sendPhoto(
             photoId,
-            "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%*",
+            "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%*\n" +
+                    "Консенсус-прогноз: *$forecast* (_Основано на мнении 3 аналитиков_)",
             IdUtils.FOLO_TEST_CHAT_ID
         ).also { logger.info { "Sent foloindex to ${IdUtils.getChatIdentity(chatId)}" } }
     }
