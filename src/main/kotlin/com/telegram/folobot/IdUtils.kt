@@ -21,6 +21,7 @@ class IdUtils {
         val ANDREW_ID = 146072069L
         val VITALIK_ID = 800522859L
         val FOLOMKIN_ID = 362689512L
+
         fun isFolochat(chat: Chat?): Boolean {
             return chat != null && chat.id == FOLO_CHAT_ID
         }
@@ -69,8 +70,9 @@ class IdUtils {
             return when (chatId) {
                 FOLO_CHAT_ID -> "фолочат"
                 FOLO_TEST_CHAT_ID -> "тестовый чат"
-                POC_ID -> "тайна личной переписки"
-                ANDREWSLEGACY_ID -> "наследие андрея"
+                POC_ID -> "Тайна личной переписки"
+                ANDREWSLEGACY_ID -> "Наследие Андрея"
+                FO_LEGACY_ID -> "Наследие Фо"
                 ADEQUATE_COMMUNICATION -> "Васин загон"
                 else -> chatId.toString()
             }
