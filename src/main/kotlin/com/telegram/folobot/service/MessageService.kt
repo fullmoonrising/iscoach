@@ -226,11 +226,11 @@ class MessageService {
     }
 
     /**
-     * Переотправить сообщение
+     * Заместить сообщение
      *
      * @param update [Update]
      */
-    fun resendMessage(update: Update) {
+    fun substituteMessage(update: Update) {
         forwardMessage(update.message.chatId, update)
         deleteMessage(update)
     }
