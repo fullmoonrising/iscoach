@@ -32,7 +32,9 @@ class WebSecurityConfig(
                 .formLogin().loginPage("/login").permitAll()
                 .failureUrl("/login?error=true")
             .and()
-                .logout().permitAll()
+                .logout().permitAll().deleteCookies("JSESSIONID")
+            .and()
+                .rememberMe().key("rm-key");
        return http.build()
     }
 
