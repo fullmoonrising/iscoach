@@ -11,20 +11,19 @@ import kotlin.math.roundToInt
 
 @Service
 class TaskService(
-    private val textService: TextService,
     private val messageService: MessageService,
     private val foloPidorService: FoloPidorService,
     private val userService: UserService,
     private val foloIndexService: FoloIndexService
 ) : KLogging() {
     companion object {
-        const val STOCKS_UP_FILE_ID = "AgACAgIAAx0CalJ4RAACA7pjqYc-XLfJIUqmbRE_9t7hc_mYWQAC9cQxG9HfSUm6ppIKEMXUzQEAAwIAA3MAAywE"
-        const val STOCKS_DOWN_FILE_ID = "AgACAgIAAx0CalJ4RAACA7xjqYdtRgrjurwwIqT77sFofZvf0wAC9sQxG9HfSUmlxfLtU3pX1AEAAwIAA3MAAywE"
+        const val STOCKS_UP_FILE_ID = "AgACAgIAAx0CalJ4RAACA-JjrpoX4BJQ-3E8K_cwvJMK5OdvRwACQ74xG-7AeEnhBk-2_2G9fAEAAwIAA3MAAy0E"
+        const val STOCKS_DOWN_FILE_ID = "AgACAgIAAx0CalJ4RAACA-Njrpphj7-mGoWd30gW-x2-3heiCwACRr4xG-7AeElUbtWKdhQl8AEAAwIAA3MAAy0E"
         const val STOCKS_NEUTRAL_FILE_ID = "AgACAgIAAx0CalJ4RAACA71jqYeaF8ggrrXLp2Gr7_q6oM-hQgAC98QxG9HfSUlvTsOJyxrXSwEAAwIAA3MAAywE"
     }
 
-    fun whatAboutIT(chatId: Long) {
-        messageService.sendMessage(textService.getIT(userService.getFoloUserNameLinked(IdUtils.FOLOMKIN_ID)), chatId)
+    fun foloAnimal(chatId: Long) {
+        messageService.sendVoice(chatId = chatId, voiceId = messageService.randomVoice)
     }
 
     fun dayStats(chatId: Long) {

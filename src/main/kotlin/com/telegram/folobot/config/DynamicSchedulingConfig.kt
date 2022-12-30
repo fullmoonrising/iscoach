@@ -28,7 +28,7 @@ class DynamicSchedulingConfig(
     override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {
         taskRegistrar.setScheduler(taskExecutor())
         taskRegistrar.addTriggerTask(
-            { scheduleService.whatAboutIT() },
+            { scheduleService.foloAnimal() },
             {
                 val lastCompletion = it.lastCompletion()
                     .also {

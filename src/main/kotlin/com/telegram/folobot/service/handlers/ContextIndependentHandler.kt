@@ -62,7 +62,7 @@ class ContextIndependentHandler(
                 logger.info { "Forwarded message to Fo's legacy" }
             } else if (isAndrew(update.message.from)) {
                 messageService.forwardMessage(IdUtils.ANDREWSLEGACY_ID, update)
-                messageService.resendMessage(update)
+//                messageService.substituteMessage(update)
                 logger.info { "Forwarded message to Andrews legacy" }
             }
         }
