@@ -1,6 +1,7 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.Utils.printExeptionMessage
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.ActionType
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage
@@ -13,7 +14,7 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 @Component
-class MessageService {
+class MessageService : KLogging() {
     lateinit var foloBot: FoloBot
 
     /**
@@ -289,7 +290,7 @@ class MessageService {
                 "AwACAgIAAx0CalJ4RAACA-1jrqYN2zuKJlOsGFv0axmb9fEQkAACWiAAAtdTaEmXrdHjHqpcuS0E",
                 "AwACAgIAAx0CalJ4RAACA-xjrqXXu1XQ5hXJEnMPtpvanb8AAbMAAo0gAALXU2hJ7zW2BlNcqNQtBA",
                 "AwACAgIAAx0CalJ4RAACA-RjrpzcC28Em0wcuOsF-6GYvOGp2AACVCUAAjifcEkyH_coYlbNJS0E"
-            ).random()
+            ).random().also { logger.info { "Random voiceId is $it" } }
 
         }
 }
