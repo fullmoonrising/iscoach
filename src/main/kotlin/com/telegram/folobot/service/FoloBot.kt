@@ -1,11 +1,7 @@
 package com.telegram.folobot.service
 
 import com.telegram.folobot.model.ActionsEnum
-import com.telegram.folobot.service.handlers.CommandHandler
-import com.telegram.folobot.service.handlers.ContextIndependentHandler
-import com.telegram.folobot.service.handlers.ReplyHandler
-import com.telegram.folobot.service.handlers.UserJoinHandler
-import com.telegram.folobot.service.handlers.UserMessageHandler
+import com.telegram.folobot.service.handlers.*
 import mu.KLogger
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Value
@@ -13,7 +9,7 @@ import org.springframework.stereotype.Service
 import org.telegram.telegrambots.bots.TelegramWebhookBot
 import org.telegram.telegrambots.meta.api.methods.BotApiMethod
 import org.telegram.telegrambots.meta.api.objects.Update
-import java.util.Objects
+import java.util.*
 
 @Service
 class FoloBot(

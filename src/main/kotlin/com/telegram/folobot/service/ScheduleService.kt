@@ -10,8 +10,8 @@ class ScheduleService(
 
 
 ) {
-    fun whatAboutIT() {
-        taskService.whatAboutIT(FOLO_CHAT_ID)
+    fun foloAnimal() {
+        taskService.foloAnimal(FOLO_CHAT_ID)
     }
 
     @Scheduled(cron = "0 59 23 ? * MON-FRI")

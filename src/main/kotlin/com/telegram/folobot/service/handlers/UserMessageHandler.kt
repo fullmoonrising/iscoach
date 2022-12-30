@@ -27,7 +27,7 @@ class UserMessageHandler(
         ) {
             messageService.forwardMessage(
                 IdUtils.POC_ID,
-                messageService.sendMessage(textService.quoteforAndrew, update, true)
+                messageService.sendMessage(textService.quoteForAndrew, update, true)
                     .also { logger.info { "Replied to Andrew with ${it?.text}" } }
             )
         }

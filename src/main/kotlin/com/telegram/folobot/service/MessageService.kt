@@ -5,10 +5,7 @@ import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.ActionType
 import org.telegram.telegrambots.meta.api.methods.ForwardMessage
 import org.telegram.telegrambots.meta.api.methods.ParseMode
-import org.telegram.telegrambots.meta.api.methods.send.SendChatAction
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage
-import org.telegram.telegrambots.meta.api.methods.send.SendPhoto
-import org.telegram.telegrambots.meta.api.methods.send.SendSticker
+import org.telegram.telegrambots.meta.api.methods.send.*
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.meta.api.objects.InputFile
 import org.telegram.telegrambots.meta.api.objects.Message
@@ -107,23 +104,23 @@ class MessageService {
         return null
     }
 
-    private fun buildSticker(stickerFile: InputFile, update: Update): SendSticker? {
+    private fun buildSticker(stickerId: String, update: Update): SendSticker? {
         return SendSticker
-                .builder()
-                .chatId(update.message.chatId.toString())
-                .sticker(stickerFile)
-                .replyToMessageId(update.message.messageId)
-                .build()
+            .builder()
+            .chatId(update.message.chatId.toString())
+            .sticker(InputFile(stickerId))
+            .replyToMessageId(update.message.messageId)
+            .build()
     }
 
     /**
      * Отправить стикер
      *
-     * @param stickerFile [InputFile]
+     * @param stickerId [String]
      * @param update      [Update]
      */
-    fun sendSticker(stickerFile: InputFile?, update: Update) {
-        stickerFile?.let {
+    fun sendSticker(stickerId: String?, update: Update) {
+        stickerId?.let {
             try {
                 foloBot.execute(buildSticker(it, update))
             } catch (e: TelegramApiException) {
@@ -213,13 +210,34 @@ class MessageService {
     }
 
     /**
+     * Отправить аудио
+     *
+     * @param voiceId идентификатор audio
+     * @param text    текст сообщения
+     * @param chatId  ID чата(пользователя)
+     */
+    fun sendVoice(voiceId: String, text: String? = null, chatId: Long) {
+        val voice = SendVoice
+            .builder()
+            .parseMode(ParseMode.MARKDOWN)
+            .chatId(chatId.toString())
+            .voice(InputFile(voiceId))
+        text?.let { voice.caption(text) }
+        try {
+            foloBot.execute(voice.build())
+        } catch (e: TelegramApiException) {
+            printExeptionMessage(e)
+        }
+    }
+
+    /**
      * Удалить сообщение
      *
      * @param update [Update]
      */
     fun deleteMessage(update: Update) {
         try {
-            foloBot.execute(DeleteMessage(update.message.chatId.toString(), update.message.messageId ))
+            foloBot.execute(DeleteMessage(update.message.chatId.toString(), update.message.messageId))
         } catch (e: TelegramApiException) {
             printExeptionMessage(e)
         }
@@ -240,14 +258,38 @@ class MessageService {
      *
      * @return [InputFile]
      */
-    val randomSticker: InputFile
+    val randomSticker: String
         get() {
-            val stickers = arrayOf(
+            return arrayOf(
                 "CAACAgIAAxkBAAICCGKCCI-Ff-uqMZ-y4e0YmQEAAXp_RQAClxQAAnmaGEtOsbVbM13tniQE",
                 "CAACAgIAAxkBAAPpYn7LsjgOH0OSJFBGx6WoIIKr_vcAAmQZAAJgRSBL_cLL_Nrl4OskBA",
                 "CAACAgIAAxkBAAICCWKCCLoO6Itf6HSKKGedTPzbyeioAAJQFAACey0pSznSfTz0daK-JAQ",
                 "CAACAgIAAxkBAAICCmKCCN_lePGRwqFYK4cPGBD4k_lpAAJcGQACmGshS9K8iR0VSuDVJAQ"
-            )
-            return InputFile(stickers.random())
+            ).random()
+        }
+
+    /**
+     * Получить случайный войс
+     *
+     * @return [InputFile]
+     */
+    val randomVoice: String
+        get() {
+            return arrayOf(
+                "AwACAgIAAx0CalJ4RAACA_hjrqdvukOceJlwA1wpsxaIuQVWoQACPSAAAtdTaEmR_F2nU3-2SC0E",
+                "AwACAgIAAx0CalJ4RAACA_djrqdcnxZcgNpRBJ_c3ML9dQ7JjgACQCAAAtdTaElCaBn1tNd33y0E",
+                "AwACAgIAAx0CalJ4RAACA_ZjrqdAl8eaemRjQrlbZgABBD28I4MAAkEgAALXU2hJn3J-0xhG50UtBA",
+                "AwACAgIAAx0CalJ4RAACA_VjrqcdkqK6dPY-n2FhdNIQmeQ_HQACRCAAAtdTaEmwShiRBaMuVS0E",
+                "AwACAgIAAx0CalJ4RAACA_RjrqcHCF0XQNN6eexJOlqpufgQnwACRyAAAtdTaEnOjaACAklQ3S0E",
+                "AwACAgIAAx0CalJ4RAACA_Njrqbp30AAAeKauK1taq2U_DMtWQMAAkkgAALXU2hJNeY3egNoq84tBA",
+                "AwACAgIAAx0CalJ4RAACA_JjrqbKV7u3nIeW9Cubrc3mNRxCswACTyAAAtdTaElGaFICyutkdS0E",
+                "AwACAgIAAx0CalJ4RAACA_Fjrqaz4jYfU8u0gAV0mnXqgxlQywACUCAAAtdTaEmftSLquEa8GS0E",
+                "AwACAgIAAx0CalJ4RAACA-9jrqaEPhpOX4ZadYvneuSVikw0FQACUSAAAtdTaEl8D6NwlexODy0E",
+                "AwACAgIAAx0CalJ4RAACA-5jrqZHw1i_TTy8AcwX_kUWmWLYAwACViAAAtdTaEklG8wzFEN2Wi0E",
+                "AwACAgIAAx0CalJ4RAACA-1jrqYN2zuKJlOsGFv0axmb9fEQkAACWiAAAtdTaEmXrdHjHqpcuS0E",
+                "AwACAgIAAx0CalJ4RAACA-xjrqXXu1XQ5hXJEnMPtpvanb8AAbMAAo0gAALXU2hJ7zW2BlNcqNQtBA",
+                "AwACAgIAAx0CalJ4RAACA-RjrpzcC28Em0wcuOsF-6GYvOGp2AACVCUAAjifcEkyH_coYlbNJS0E"
+            ).random()
+
         }
 }

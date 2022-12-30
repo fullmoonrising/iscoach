@@ -11,14 +11,13 @@ class TextService {
     val foloPidorPunch = getText("foloPidorPunch")
     val foloPidorSetup = getText("foloPidorSetup")
     val quotesforAndrew = getText("quotesForAndrew")
-    val whatAboutIT = getText("whatAboutIT")
 
     /**
      * Чтение текстов из ресурсов
      * @param textName Имя файла без расширения
      * @return [<] Тексты
      */
-    final fun getText(textName: String): List<String> {
+    private final fun getText(textName: String): List<String> {
         try {
             BufferedReader(
                 InputStreamReader(
@@ -42,10 +41,6 @@ class TextService {
         return String.format(foloPidorPunch.random(), userName)
     }
 
-    val quoteforAndrew: String
+    val quoteForAndrew: String
         get() = quotesforAndrew.random()
-
-    fun getIT(userName: String): String {
-        return String.format(whatAboutIT.random(), userName)
-    }
 }
