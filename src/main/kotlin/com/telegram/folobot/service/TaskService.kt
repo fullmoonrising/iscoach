@@ -17,8 +17,8 @@ class TaskService(
     private val foloIndexService: FoloIndexService
 ) : KLogging() {
     companion object {
-        const val STOCKS_UP_FILE_ID = "AgACAgIAAx0CalJ4RAACA-JjrpoX4BJQ-3E8K_cwvJMK5OdvRwACQ74xG-7AeEnhBk-2_2G9fAEAAwIAA3MAAy0E"
-        const val STOCKS_DOWN_FILE_ID = "AgACAgIAAx0CalJ4RAACA-Njrpphj7-mGoWd30gW-x2-3heiCwACRr4xG-7AeElUbtWKdhQl8AEAAwIAA3MAAy0E"
+        const val STOCKS_UP_FILE_ID = "AgACAgIAAx0CalJ4RAACBA1jsKAU_JuwmySASMb72dCnoB8hxAACBsUxG3_EgEljCXwHO9U7dAEAAwIAA3MAAy0E"
+        const val STOCKS_DOWN_FILE_ID = "AgACAgIAAx0CalJ4RAACBA5jsKA70P4Qc4pcWJXfiKajmaA8kwACB8UxG3_EgEm24Fjy9UCWgQEAAwIAA3MAAy0E"
         const val STOCKS_NEUTRAL_FILE_ID = "AgACAgIAAx0CalJ4RAACA71jqYeaF8ggrrXLp2Gr7_q6oM-hQgAC98QxG9HfSUlvTsOJyxrXSwEAAwIAA3MAAywE"
     }
 
