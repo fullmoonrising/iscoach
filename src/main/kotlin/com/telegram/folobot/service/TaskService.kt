@@ -68,9 +68,9 @@ class TaskService(
 
         messageService.sendPhoto(
             photoId,
-            "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%*\n" +
+            "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%* от среднегодового значения\n" +
                     "Консенсус-прогноз: *$forecast* (_Основано на мнении 3 аналитиков_)",
-            IdUtils.FOLO_TEST_CHAT_ID
+            IdUtils.FOLO_CHAT_ID
         ).also { logger.info { "Sent foloindex to ${IdUtils.getChatIdentity(chatId)}" } }
     }
 }
