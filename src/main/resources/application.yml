@@ -1,6 +1,9 @@
 server:
   error:
     path: /error
+  tomcat:
+    accesslog:
+      enabled: true
   servlet:
     encoding:
       charset: UTF-8
