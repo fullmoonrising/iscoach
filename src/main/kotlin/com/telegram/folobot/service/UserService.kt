@@ -1,6 +1,6 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.Utils.printExeptionMessage
+import com.telegram.folobot.Utils.Companion.printExeptionMessage
 import com.telegram.folobot.model.dto.FoloPidorDto
 import com.telegram.folobot.model.dto.FoloUserDto
 import org.springframework.stereotype.Component

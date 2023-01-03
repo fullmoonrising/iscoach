@@ -54,11 +54,11 @@ class TaskService(
 
         if (indexChange > 0) {
             photoId = STOCKS_UP_FILE_ID
-            indexText = "растет на ${indexChange.absoluteValue} пунктов"
+            indexText = "растет на ${Utils.getNumText(indexChange.absoluteValue, NumTypeEnum.POINT)}"
             forecast = "Держать"
         } else if (indexChange < 0) {
             photoId = STOCKS_DOWN_FILE_ID
-            indexText = "падает на ${indexChange.absoluteValue} пунктов"
+            indexText = "падает на ${Utils.getNumText(indexChange.absoluteValue, NumTypeEnum.POINT)}"
             forecast = "Продавать"
         } else {
             photoId = STOCKS_NEUTRAL_FILE_ID
@@ -69,7 +69,7 @@ class TaskService(
         messageService.sendPhoto(
             photoId,
             "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%* от среднегодового значения\n" +
-                    "Консенсус-прогноз: *$forecast* (_Основано на мнении 3 аналитиков_)",
+                    "Консенсус-прогноз: *$forecast* _(Основано на мнении 3 аналитиков)_",
             IdUtils.FOLO_CHAT_ID
         ).also { logger.info { "Sent foloindex to ${IdUtils.getChatIdentity(chatId)}" } }
     }

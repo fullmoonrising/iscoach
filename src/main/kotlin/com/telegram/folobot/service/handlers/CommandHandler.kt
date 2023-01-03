@@ -4,8 +4,8 @@ import com.ibm.icu.text.RuleBasedNumberFormat
 import com.telegram.folobot.IdUtils.Companion.ANDREW_ID
 import com.telegram.folobot.IdUtils.Companion.getChatIdentity
 import com.telegram.folobot.IdUtils.Companion.isFo
-import com.telegram.folobot.Utils.getNumText
-import com.telegram.folobot.Utils.getPeriodText
+import com.telegram.folobot.Utils.Companion.getNumText
+import com.telegram.folobot.Utils.Companion.getPeriodText
 import com.telegram.folobot.model.BotCommandsEnum
 import com.telegram.folobot.model.NumTypeEnum
 import com.telegram.folobot.service.*

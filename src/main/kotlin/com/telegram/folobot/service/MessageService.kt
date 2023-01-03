@@ -1,6 +1,6 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.Utils.printExeptionMessage
+import com.telegram.folobot.Utils.Companion.printExeptionMessage
 import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.ActionType
