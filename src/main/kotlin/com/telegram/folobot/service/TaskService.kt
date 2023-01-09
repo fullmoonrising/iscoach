@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 import kotlin.math.absoluteValue
 import kotlin.math.roundToInt
+import kotlin.random.Random
 
 @Service
 class TaskService(
@@ -44,7 +45,6 @@ class TaskService(
     fun foloIndex(chatId: Long) {
         val photoId: String
         val indexText: String
-        val forecast: String
 
         val todayIndex = (foloIndexService.calcAndSaveIndex(chatId, LocalDate.now()) * 100)
             .roundToInt().toDouble() / 100
@@ -55,21 +55,20 @@ class TaskService(
         if (indexChange > 0) {
             photoId = STOCKS_UP_FILE_ID
             indexText = "растет на ${Utils.getNumText(indexChange.absoluteValue, NumTypeEnum.POINT)}"
-            forecast = "Держать"
         } else if (indexChange < 0) {
             photoId = STOCKS_DOWN_FILE_ID
             indexText = "падает на ${Utils.getNumText(indexChange.absoluteValue, NumTypeEnum.POINT)}"
-            forecast = "Продавать"
         } else {
             photoId = STOCKS_NEUTRAL_FILE_ID
             indexText = "не изменился"
-            forecast = "Держать"
         }
+        val forecast = listOf("Продавать", "Держать", "Покупать").random()
 
         messageService.sendPhoto(
             photoId,
             "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%* от среднегодового значения\n" +
-                    "Консенсус-прогноз: *$forecast* _(Основано на мнении 3 аналитиков)_",
+                    "Консенсус-прогноз: *$forecast* _(Основано на мнении ${Random.Default.nextInt(2,5)} аналитиков)_\n" +
+                    "#фолоиндекс",
             IdUtils.FOLO_CHAT_ID
         ).also { logger.info { "Sent foloindex to ${IdUtils.getChatIdentity(chatId)}" } }
     }
