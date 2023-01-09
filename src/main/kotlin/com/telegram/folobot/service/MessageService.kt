@@ -1,6 +1,5 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.Utils.Companion.printExeptionMessage
 import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.ActionType
@@ -64,7 +63,7 @@ class MessageService : KLogging() {
                     .build()
             )
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
     }
 
@@ -79,7 +78,7 @@ class MessageService : KLogging() {
         try {
             return foloBot.execute(buildMessage(text, update))
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
         return null
     }
@@ -99,7 +98,7 @@ class MessageService : KLogging() {
             try {
                 return foloBot.execute(buildMessage(text, update, reply))
             } catch (e: TelegramApiException) {
-                printExeptionMessage(e)
+                logger.error { e }
             }
         }
         return null
@@ -125,7 +124,7 @@ class MessageService : KLogging() {
             try {
                 foloBot.execute(buildSticker(it, update))
             } catch (e: TelegramApiException) {
-                printExeptionMessage(e)
+                logger.error { e }
             }
         }
     }
@@ -147,7 +146,7 @@ class MessageService : KLogging() {
                     .build()
             )
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
     }
 
@@ -163,7 +162,7 @@ class MessageService : KLogging() {
                         .build()
                 )
             } catch (e: TelegramApiException) {
-                printExeptionMessage(e)
+                logger.error { e }
             }
         }
     }
@@ -183,7 +182,7 @@ class MessageService : KLogging() {
                     .build()
             )
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
     }
 
@@ -206,7 +205,7 @@ class MessageService : KLogging() {
                     .build()
             )
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
     }
 
@@ -227,7 +226,7 @@ class MessageService : KLogging() {
         try {
             foloBot.execute(voice.build())
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
     }
 
@@ -240,7 +239,7 @@ class MessageService : KLogging() {
         try {
             foloBot.execute(DeleteMessage(update.message.chatId.toString(), update.message.messageId))
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
         }
     }
 

@@ -49,10 +49,5 @@ class Utils {
             }
             return stringBuilder.toString()
         }
-
-        fun printExeptionMessage(throwable: Throwable) {
-            val stackTrace = throwable.stackTrace
-            println(stackTrace[stackTrace.size - 1].toString() + " > " + throwable.message)
-        }
     }
 }
