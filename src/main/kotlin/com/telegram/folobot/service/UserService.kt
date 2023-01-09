@@ -1,8 +1,8 @@
 package com.telegram.folobot.service
 
-import com.telegram.folobot.Utils.Companion.printExeptionMessage
 import com.telegram.folobot.model.dto.FoloPidorDto
 import com.telegram.folobot.model.dto.FoloUserDto
+import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.methods.groupadministration.GetChatMember
 import org.telegram.telegrambots.meta.api.objects.User
@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.chatmember.ChatMember
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 
 @Component
-class UserService(private val foloUserService: FoloUserService) {
+class UserService(private val foloUserService: FoloUserService) : KLogging() {
 
     lateinit var foloBot: FoloBot
 
@@ -54,7 +54,8 @@ class UserService(private val foloUserService: FoloUserService) {
     fun getChatMember(userId: Long, chatId: Long = userId): ChatMember? {
         return try {
             foloBot.execute(GetChatMember(chatId.toString(), userId))
-        } catch (ignored: TelegramApiException) {
+        } catch (e: TelegramApiException) {
+            logger.error { e }
             null
         }
     }
@@ -99,7 +100,7 @@ class UserService(private val foloUserService: FoloUserService) {
         return try {
             user.id == foloBot.me.id
         } catch (e: TelegramApiException) {
-            printExeptionMessage(e)
+            logger.error { e }
             false
         }
     }
