@@ -210,6 +210,34 @@ class MessageService : KLogging() {
     }
 
     /**
+     * Отправить изображение
+     *
+     * @param photoId идентификатор изображения
+     * @param text    текст сообщения
+     * @param chatId  ID чата(пользователя)
+     */
+    fun sendPhotoFromResources(photoPath: String, text: String, chatId: Long) {
+        try {
+            foloBot.execute(
+                SendPhoto
+                    .builder()
+                    .parseMode(ParseMode.MARKDOWN)
+                    .chatId(chatId.toString())
+                    .photo(
+                        InputFile(
+                            this::class.java.getResourceAsStream(photoPath),
+                            photoPath.substringAfterLast("/")
+                        )
+                    )
+                    .caption(text)
+                    .build()
+            )
+        } catch (e: Exception) {
+            logger.error { e }
+        }
+    }
+
+    /**
      * Отправить аудио
      *
      * @param voiceId идентификатор audio
@@ -229,6 +257,7 @@ class MessageService : KLogging() {
             logger.error { e }
         }
     }
+
 
     /**
      * Удалить сообщение

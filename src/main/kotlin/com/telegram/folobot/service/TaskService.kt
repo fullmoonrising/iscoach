@@ -17,12 +17,6 @@ class TaskService(
     private val userService: UserService,
     private val foloIndexService: FoloIndexService
 ) : KLogging() {
-    companion object {
-        const val STOCKS_UP_FILE_ID = "AgACAgIAAx0CalJ4RAACBA1jsKAU_JuwmySASMb72dCnoB8hxAACBsUxG3_EgEljCXwHO9U7dAEAAwIAA3MAAy0E"
-        const val STOCKS_DOWN_FILE_ID = "AgACAgIAAx0CalJ4RAACBA5jsKA70P4Qc4pcWJXfiKajmaA8kwACB8UxG3_EgEm24Fjy9UCWgQEAAwIAA3MAAy0E"
-        const val STOCKS_NEUTRAL_FILE_ID = "AgACAgIAAx0CalJ4RAACA71jqYeaF8ggrrXLp2Gr7_q6oM-hQgAC98QxG9HfSUlvTsOJyxrXSwEAAwIAA3MAAywE"
-    }
-
     fun foloAnimal(chatId: Long) {
         messageService.sendVoice(chatId = chatId, voiceId = messageService.randomVoice)
     }
@@ -43,7 +37,7 @@ class TaskService(
     }
 
     fun foloIndex(chatId: Long) {
-        val photoId: String
+        val photoPath: String
         val indexText: String
 
         val todayIndex = (foloIndexService.calcAndSaveIndex(chatId, LocalDate.now()) * 100)
@@ -53,23 +47,23 @@ class TaskService(
         val indexChange = ((todayIndex - yesterdayIndex) * 100).roundToInt()
 
         if (indexChange > 0) {
-            photoId = STOCKS_UP_FILE_ID
+            photoPath = "/static/images/index/index_up.jpg"
             indexText = "растет на ${Utils.getNumText(indexChange.absoluteValue, NumTypeEnum.POINT)}"
         } else if (indexChange < 0) {
-            photoId = STOCKS_DOWN_FILE_ID
+            photoPath = "/static/images/index/index_down.jpg"
             indexText = "падает на ${Utils.getNumText(indexChange.absoluteValue, NumTypeEnum.POINT)}"
         } else {
-            photoId = STOCKS_NEUTRAL_FILE_ID
+            photoPath = "/static/images/index/index_neutral.jpg"
             indexText = "не изменился"
         }
         val forecast = listOf("Продавать", "Держать", "Покупать").random()
 
-        messageService.sendPhoto(
-            photoId,
+        messageService.sendPhotoFromResources(
+            photoPath,
             "Индекс фолоактивности *$indexText* и на сегодня составляет *$todayIndex%* от среднегодового значения\n" +
                     "Консенсус-прогноз: *$forecast* _(Основано на мнении ${Random.Default.nextInt(2,5)} аналитиков)_\n" +
                     "#фолоиндекс",
-            IdUtils.FOLO_CHAT_ID
+            chatId
         ).also { logger.info { "Sent foloindex to ${IdUtils.getChatIdentity(chatId)}" } }
     }
 }
