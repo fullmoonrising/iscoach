@@ -14,9 +14,9 @@ plugins {
     id("com.palantir.docker") version "0.34.0"
 }
 
-group = "com.telegram"
-version = "3.1.0"
-description = "folobot"
+group = "ru"
+version = "1.0.0"
+description = "iscoach"
 
 repositories {
     mavenCentral()
@@ -26,21 +26,11 @@ dependencies {
     // spring
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-mustache")
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     // kotlin
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-
-    // db
-    implementation("org.postgresql:postgresql")
-    runtimeOnly("org.liquibase:liquibase-core:4.18.0")
-
-    // telegram api
-    implementation("org.telegram:telegrambots:6.1.0")
 
     // serialisation
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
