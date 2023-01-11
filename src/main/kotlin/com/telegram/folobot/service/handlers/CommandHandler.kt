@@ -37,7 +37,7 @@ class CommandHandler(
     fun handle(update: Update): BotApiMethod<*>? {
 
         when (BotCommandsEnum.fromCommand(update.message.text.substringBefore("@"))
-            .also { logger.info { "Received command $it" } }
+            .also { logger.info { "Received command $it in chat ${getChatIdentity(update.message.chatId)}" } }
         ) {
             BotCommandsEnum.START -> messageService.sendSticker(messageService.randomSticker, update)
                 .also { logger.info { "Sent sticker to ${getChatIdentity(update.message.chatId)}" } }

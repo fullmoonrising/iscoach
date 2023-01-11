@@ -1,5 +1,6 @@
 package com.telegram.folobot.service
 
+import com.telegram.folobot.IdUtils
 import com.telegram.folobot.model.ActionsEnum
 import com.telegram.folobot.service.handlers.*
 import mu.KLogger
@@ -93,7 +94,11 @@ class FoloBot(
             Objects.nonNull(message.leftChatMember) -> ActionsEnum.USERLEFT
             // Неопределено
             else -> ActionsEnum.UNDEFINED
-        }.also { if (it != ActionsEnum.UNDEFINED) logger.info { "Received request with action $it" } }
+        }.also {
+            if (it != ActionsEnum.UNDEFINED) logger.info {
+                "Received request with action $it in chat ${IdUtils.getChatIdentity(message.chatId)}"
+            }
+        }
     }
 
     /**
