@@ -1,4 +1,4 @@
-rootProject.name = "folobot"
+rootProject.name = "iscoach"
 
 plugins {
     id("com.gradle.enterprise") version("3.9")
