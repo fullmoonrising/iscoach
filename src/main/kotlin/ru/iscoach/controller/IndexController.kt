@@ -9,6 +9,5 @@ class IndexController() : KLogging() {
     @GetMapping(value = ["", "/", "/index"])
     fun index(): String {
         return "index"
-//        return "redirect:/frontpage";
     }
 }
