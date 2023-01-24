@@ -21,6 +21,6 @@ class CustomErrorController() : ErrorController, KLogging() {
                 "   params: ${request.parameterMap.flatMap { (key, value) -> value.map { key to it } }}\n" +
                 "   body ${request.reader.readLines()}"
         }
-        return "error"
+        return "redirect:/"
     }
 }
