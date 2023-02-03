@@ -12,7 +12,7 @@
   width: 791px;
   height: 791px;
   background-image: url("/images/index.jpg");
-  background-position: 50% 40%;
+  background-position: 50% 50%;
   box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.4);
   margin: -263px 32px 0 auto;
 }
@@ -36,7 +36,6 @@
   box-shadow: 5px 5px 20px 0 rgba(0,0,0,0.4);
   height: auto;
   margin: -443px auto 59px 0;
-  background: #ffffff;
 }
 
 .u-section-1 .u-container-layout-1 {
@@ -305,7 +304,7 @@
   min-width: 128px;
   margin-top: 20px;
   margin-right: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   box-shadow: rgba(var(---r),var(---g),var(---b),0);
   text-shadow: rgba(var(---r),var(---g),var(---b),0);
   transition-duration: 0.5s;
@@ -335,19 +334,14 @@
   margin-bottom: 0;
 }
 
-.u-section-2 .u-social-icons-2 {
-  white-space: nowrap;
-  min-width: 16px;
-  height: 32px;
-  min-height: 16px;
-  width: 32px;
-  margin-top: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
+.u-section-2 .u-btn-1 {
+  background-image: none;
+  margin: 20px auto 0 0;
+  padding: 0;
 }
 
 .u-section-2 .u-icon-4 {
-  height: 32px;
+  margin-right: 10px;
 }
 
 .u-section-2 .u-text-7 {
@@ -356,16 +350,16 @@
   font-size: 1.25rem;
   margin-top: 20px;
   margin-right: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
 .u-section-2 .u-text-8 {
   margin-top: 20px;
   margin-right: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
 }
 
-.u-section-2 .u-btn-1 {
+.u-section-2 .u-btn-2 {
   background-image: none;
   margin-top: 20px;
   margin-right: 20px;
@@ -396,7 +390,7 @@
   }
 
   .u-section-2 .u-layout-cell-2 {
-    min-height: 440px;
+    min-height: 342px;
   }
 
   .u-section-2 .u-text-5 {
@@ -410,7 +404,6 @@
   }
 
   .u-section-2 .u-text-7 {
-    margin-top: 14px;
     margin-left: 0;
     margin-right: 0;
   }
@@ -420,9 +413,9 @@
     margin-right: 0;
   }
 
-  .u-section-2 .u-btn-1 {
-    margin-right: 0;
+  .u-section-2 .u-btn-2 {
     margin-left: 0;
+    margin-right: 0;
   }
 }
 
@@ -454,16 +447,7 @@
     padding-bottom: 22px;
   }
 
-  .u-section-2 .u-text-6 {
-    margin-top: -1px;
-  }
-
-  .u-section-2 .u-social-icons-2 {
-    margin-left: 0;
-  }
-
   .u-section-2 .u-text-7 {
-    margin-top: 20px;
     margin-right: 20px;
   }
 }
@@ -480,10 +464,6 @@
 
   .u-section-2 .u-layout-cell-1 {
     min-height: 339px;
-  }
-
-  .u-section-2 .u-text-6 {
-    margin-top: 20px;
   }
 }
 
@@ -521,10 +501,6 @@
   .u-section-2 .u-text-3 {
     margin-left: 2px;
     margin-right: 2px;
-  }
-
-  .u-section-2 .u-layout-cell-2 {
-    min-height: 457px;
   }
 
   .u-section-2 .u-text-4 {
