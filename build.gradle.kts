@@ -32,6 +32,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
 
+    // telegram api
+    implementation("org.telegram:telegrambots:6.5.0")
+
     // serialisation
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 

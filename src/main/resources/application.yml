@@ -11,13 +11,11 @@ server:
       charset: UTF-8
       force: true
 
-logging:
-  group:
-    tomcat: org.apache.catalina, org.apache.coyote, org.apache.tomcat
-  level:
-    tomcat: OFF
-
 spring:
   mustache:
     servlet:
       expose-request-attributes: true
+
+bot:
+  username: ${BOT_USERNAME}
+  token: ${BOT_TOKEN}
