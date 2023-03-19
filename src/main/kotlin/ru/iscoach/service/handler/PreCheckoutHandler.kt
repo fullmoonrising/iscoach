@@ -18,6 +18,5 @@ class PreCheckoutHandler(
 
     override fun handle(update: Update) {
         preCheckoutService.sendConfirmation(update)
-        // TODO log update.preCheckoutQuery.orderInfo
     }
 }

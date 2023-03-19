@@ -8,9 +8,9 @@ import ru.iscoach.ISCoachBot
 @Service
 class SuccessfulPaymentService(
     private val bot: ISCoachBot
-) :KLogging() {
+) : KLogging() {
     fun processPayment(update: Update) {
-
+        // TODO save update.message.successfulPayment.orderInfo
     }
 
 }

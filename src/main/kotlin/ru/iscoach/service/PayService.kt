@@ -17,7 +17,7 @@ import ru.iscoach.ISCoachBot
 class PayService(
     private val bot: ISCoachBot,
     private val objectMapper: ObjectMapper
-) :KLogging() {
+) : KLogging() {
     fun sendInvoice(update: Update): Message? {
         return try {
             bot.execute(buildInvoice(update))
@@ -35,7 +35,7 @@ class PayService(
             .payload(objectMapper.writeValueAsString(update.message.chat))
             .providerToken("381764678:TEST:52779")
             .currency("RUB")
-            .price(LabeledPrice("Сессия", 1000*100))
+            .price(LabeledPrice("Сессия", 1000 * 100))
             .startParameter("")
             .photoUrl("https://clevermemo.com/blog/wp-content/uploads/2019/08/complimentary-coaching-session-sample.png")
             .needName(true)
@@ -45,7 +45,7 @@ class PayService(
             .build()
     }
 
-    private fun buildPayButton(): InlineKeyboardMarkup{
+    private fun buildPayButton(): InlineKeyboardMarkup {
         return InlineKeyboardMarkup.builder()
             .keyboardRow(
                 listOf(

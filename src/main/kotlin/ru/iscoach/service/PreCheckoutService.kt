@@ -11,7 +11,7 @@ import ru.iscoach.ISCoachBot
 @Service
 class PreCheckoutService(
     private val bot: ISCoachBot
-) :KLogging() {
+) : KLogging() {
     fun sendConfirmation(update: Update): Boolean {
         return try {
             bot.execute(buildConfirmation(update))
