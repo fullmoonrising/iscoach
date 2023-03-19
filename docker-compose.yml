@@ -9,6 +9,8 @@ services:
     container_name: app
     restart: unless-stopped
     environment:
+      - BOT_USERNAME
+      - BOT_TOKEN
       - TZ=Europe/Moscow
   nginx:
     image: 'nginx:latest'
