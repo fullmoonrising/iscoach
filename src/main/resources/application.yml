@@ -12,10 +12,34 @@ server:
       force: true
 
 spring:
+  datasource:
+    url: jdbc:postgresql://db:5432/${DB_NAME}?user=${DB_USER}&password=${DB_PASS}
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: Europe/Moscow
+  liquibase:
+    enabled: true
+    change-log: 'classpath:db/changelog/changelog-master.yml'
   mustache:
     servlet:
       expose-request-attributes: true
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: ${BOT_MAIL}
+    password: ${BOT_MAIL_PASS}
+    test-connection: false
+    properties:
+      mail:
+        smtp:
+          auth: true
+          ssl:
+            enable: true
 
 bot:
   username: ${BOT_USERNAME}
   token: ${BOT_TOKEN}
+  provider.token: ${BOT_PROVIDER_TOKEN}
+  mail: ${BOT_MAIL}

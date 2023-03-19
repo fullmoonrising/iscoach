@@ -10,14 +10,14 @@ import ru.iscoach.config.BotCredentialsConfig
 import ru.iscoach.extrensions.addActionReceived
 import ru.iscoach.extrensions.getBotCommand
 import ru.iscoach.extrensions.isNotForward
-import ru.iscoach.service.PayService
+import ru.iscoach.service.InvoiceService
 import ru.iscoach.service.model.Actions
 import ru.iscoach.service.model.BotCommands
 
 @Component
 @Priority(1)
 class CommandHandler(
-    private val payService: PayService,
+    private val invoiceService: InvoiceService,
     private val botCredentials: BotCredentialsConfig
 ) : Handler, KLogging() {
     fun Message?.isMyCommand() = this?.isCommand == true && this.isNotForward() && (this.chat?.isUserChat == true ||
@@ -33,8 +33,8 @@ class CommandHandler(
             BotCommands.fromCommand(update.message.getBotCommand())
                 .also { logger.info { "Received command ${it ?: "UNDEFINED"}" } }
         ) {
-            BotCommands.START -> payService.sendInvoice(update)
-            BotCommands.PAY -> payService.sendInvoice(update)
+            BotCommands.START -> invoiceService.sendInvoice(update)
+            BotCommands.PAY -> invoiceService.sendInvoice(update)
             else -> {}
         }
     }

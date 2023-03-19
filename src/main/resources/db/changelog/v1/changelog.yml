@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: 20230320-01
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: 20230320-01-create_tables.sql
+            relativeToChangelogFile: true
+  - changeSet:
+      id: 20230320-02
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: 20230320-02-initial_values.sql
+            relativeToChangelogFile: true

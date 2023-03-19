@@ -10,4 +10,10 @@ class BotCredentialsConfig {
 
     @Value("\${bot.token}")
     val botToken: String = ""
+
+    @Value("\${bot.provider.token}")
+    val botProviderToken: String = ""
+
+    @Value("\${bot.mail}")
+    val botMail: String = ""
 }
