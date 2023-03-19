@@ -20,14 +20,12 @@ class CommandHandler(
     private val payService: PayService,
     private val botCredentials: BotCredentialsConfig
 ) : Handler, KLogging() {
-    fun Message.isMyCommand() =
-        this.isCommand && this.isNotForward() &&
-                (this.chat.isUserChat ||
-                        this.entities.firstOrNull { it.type == EntityType.BOTCOMMAND }?.text
-                            ?.contains(botCredentials.botUsername) == true)
+    fun Message?.isMyCommand() = this?.isCommand == true && this.isNotForward() && (this.chat?.isUserChat == true ||
+            this.entities?.firstOrNull { it.type == EntityType.BOTCOMMAND }?.text
+                ?.contains(botCredentials.botUsername) == true)
 
     override fun canHandle(update: Update): Boolean {
-        return update.message.isMyCommand().also { if (it) logger.addActionReceived(Actions.COMMAND) }
+        return (update.message?.isMyCommand() ?: false).also { if (it) logger.addActionReceived(Actions.COMMAND) }
     }
 
     override fun handle(update: Update) {
