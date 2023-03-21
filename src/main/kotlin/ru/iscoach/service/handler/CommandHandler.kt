@@ -34,7 +34,7 @@ class CommandHandler(
                 .also { logger.info { "Received command ${it ?: "UNDEFINED"}" } }
         ) {
             BotCommands.START -> invoiceService.sendInvoice(update)
-            BotCommands.PAY -> invoiceService.sendInvoice(update)
+            BotCommands.SESSION -> invoiceService.sendInvoice(update)
             else -> {}
         }
     }

@@ -24,11 +24,17 @@ class InvoiceService(
     private val bot: ISCoachBot,
     private val botCredentials: BotCredentialsConfig,
     private val priceListRepo: PriceListRepo,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val messageService: MessageService
 ) : KLogging() {
+    private val issuedInvoices: MutableList<Message> = mutableListOf()
     fun sendInvoice(update: Update): Message? {
+        issuedInvoices.forEach { messageService.deleteMessage(it.chatId, it.messageId) }
+        issuedInvoices.clear()
         return try {
-            bot.execute(buildInvoice(update))
+            bot.execute(buildInvoice(update)).also {
+                issuedInvoices.add(it)
+            }
         } catch (ex: TelegramApiException) {
             logger.error(ex) { "Error occurred while sending invoice" }
             null
@@ -62,9 +68,9 @@ class InvoiceService(
 
     private fun buildPayload(update: Update, product: PriceListDto) =
         InvoicePayload(
-            product = product.id,
+            product = product,
             userId = update.message.from.id,
-            chatId = update.message.chatId
+            chatId = update.message.chatId,
         )
 
     private fun buildPayButton(): InlineKeyboardMarkup {

@@ -11,7 +11,7 @@ create table order_info (
     payment jsonb
 );
 
-comment on table price_list is 'Заказы';
+comment on table order_info is 'Заказы';
 
 create extension citext;
 create domain email as citext

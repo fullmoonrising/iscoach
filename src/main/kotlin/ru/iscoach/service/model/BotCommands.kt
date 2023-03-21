@@ -2,7 +2,7 @@ package ru.iscoach.service.model
 
 enum class BotCommands(val command: String) {
     START("/start"),
-    PAY("/pay");
+    SESSION("/session");
 
     companion object {
         private val map = BotCommands.values().associateBy(BotCommands::command)

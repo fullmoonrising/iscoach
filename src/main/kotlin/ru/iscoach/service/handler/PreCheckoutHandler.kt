@@ -8,7 +8,7 @@ import ru.iscoach.extrensions.addPreCheckoutQueryReceived
 import ru.iscoach.service.PreCheckoutService
 
 @Component
-@Priority(2)
+@Priority(1)
 class PreCheckoutHandler(
     private val preCheckoutService: PreCheckoutService,
 ) : Handler, KLogging() {
@@ -17,6 +17,6 @@ class PreCheckoutHandler(
     }
 
     override fun handle(update: Update) {
-        preCheckoutService.sendConfirmation(update)
+        preCheckoutService.confirmOrder(update)
     }
 }

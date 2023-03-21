@@ -51,11 +51,12 @@ class NotificationService(
             .build()
     }
 
+
     private fun buildCaption(orderInfo: OrderInfoDto) =
         """
             <b>Получен новый заказ №${orderInfo.id} с помощью <a href="tg://user?id=${bot.me.id}">бота</a></b>
             <b>Детали заказа:</b>
-            <i>Тип:</i> <b>${orderInfo.payload.product.label}</b>
+            <i>Тип:</i> <b>${orderInfo.payload.product.id.label}</b>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b>
             <i>Клиент:</i>
                 <i>Имя:</i> <b>${orderInfo.payment.orderInfo.name}</b>
@@ -78,7 +79,7 @@ class NotificationService(
         """
             <b>Получен новый заказ №${orderInfo.id} с помощью <a href="tg://user?id=${bot.me.id}">бота</a></b><br>
             <b>Детали заказа:</b><br>
-            <i>Тип:</i> <b>${orderInfo.payload.product.label}</b><br>
+            <i>Тип:</i> <b>${orderInfo.payload.product.id.label}</b><br>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b><br>
             <i>Клиент:</i><br>
             &emsp;&emsp;<i>Имя:</i> <b>${orderInfo.payment.orderInfo.name}</b><br>
