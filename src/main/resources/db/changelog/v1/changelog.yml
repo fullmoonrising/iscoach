@@ -15,3 +15,11 @@ databaseChangeLog:
             encoding: utf8
             path: 20230320-02-initial_values.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 20230501-01
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: 20230501-01-price_list.sql
+            relativeToChangelogFile: true

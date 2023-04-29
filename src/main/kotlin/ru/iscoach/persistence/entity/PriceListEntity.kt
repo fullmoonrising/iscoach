@@ -13,7 +13,16 @@ class PriceListEntity(
     val id: Product,
 
     @Column(nullable = false)
-    val amount: Int
+    val amount: Int,
+
+    @Column(nullable = false)
+    val name: String,
+
+    @Column(nullable = false)
+    val description: String,
+
+    @Column(nullable = false)
+    val order: Int
 )
 
-fun PriceListEntity.toDto(): PriceListDto = PriceListDto(id, amount)
+fun PriceListEntity.toDto(): PriceListDto = PriceListDto(id, amount, name, description, order)

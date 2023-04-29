@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html style="font-size: 16px;" lang="ru">
+<head>
+    {{>head}}
+    <link rel="stylesheet" href="/css/prices.css" media="screen">
+</head>
+
+<body class="u-body u-xl-mode" data-lang="ru"><header class="u-clearfix u-header u-header" id="sec-a386"><div class="u-clearfix u-sheet u-sheet-1">
+    <nav class="u-menu u-menu-one-level u-menu-open-right u-offcanvas u-menu-1">
+        <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
+            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-active-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
+                <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
+                <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
+                </g></svg>
+            </a>
+        </div>
+        <div class="u-custom-menu u-nav-container">
+            <ul class="u-nav u-spacing-2 u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="/index" style="padding: 10px 20px;">Обо мне</a>
+            </li><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="/prices#sec-contacts" style="padding: 10px 20px;">Контакты</a>
+            </li><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="/about" style="padding: 10px 20px;">Консультация</a>
+            </li><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="/prices#carousel_f9a7" style="padding: 10px 20px;">Стоимость</a>
+            </li></ul>
+        </div>
+        <div class="u-custom-menu u-nav-container-collapse">
+            <div class="u-container-style u-custom-color-5 u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
+                <div class="u-inner-container-layout u-sidenav-overflow">
+                    <div class="u-menu-close"></div>
+                    <ul class="u-align-left u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/index">Обо мне</a>
+                    </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/prices#sec-contacts">Контакты</a>
+                    </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/about">Консультация</a>
+                    </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/prices#carousel_f9a7">Стоимость</a>
+                    </li></ul>
+                </div>
+            </div>
+            <div class="u-menu-overlay"></div>
+        </div>
+    </nav>
+</div></header>
+<section class="u-align-center u-clearfix u-section-1" id="carousel_f9a7">
+    <div class="u-clearfix u-sheet u-sheet-1">
+        <div class="u-container-style u-expanded-width u-group u-shape-rectangle u-white u-group-1">
+            <div class="u-container-layout u-valign-bottom-lg u-container-layout-1">
+                <div class="u-clearfix u-group-elements u-group-elements-1">
+                    <h2 class="u-align-left u-text u-text-1"> Любой вариант взаимодействия со мной - это абсолютная гарантия 100% конфиденциальности</h2>
+                    <h2 class="u-align-left u-text u-text-2"> Форматы консультаций:</h2>
+                </div><!--products--><!--products_options_json--><!--{"type":"Recent","source":"","tags":"","count":""}--><!--/products_options_json-->
+                <div class="u-layout-horizontal u-products u-products-1">
+                    <div class="u-repeater u-repeater-1"><!--product_item-->
+                        {{#products}}
+                            <div class="u-border-1 u-border-custom-color-5 u-container-style u-products-item u-radius-40 u-repeater-item u-shape-round u-white u-repeater-item-{{order}}">
+                                <div class="u-container-layout u-similar-container u-valign-top u-container-layout-2"><!--product_title-->
+                                    <h4 class="u-align-center u-product-control u-text u-text-custom-color-5 u-text-3">
+                                        <a class="u-product-title-link" href="#"><!--product_title_content-->{{name}}<!--/product_title_content--></a>
+                                    </h4><!--/product_title--><!--product_content-->
+                                    <div class="u-align-justify u-product-control u-product-desc u-text u-text-4"><!--product_content_content-->{{description}}<!--/product_content_content--></div><!--/product_content--><!--product_price-->
+                                    <div class="u-product-control u-product-price u-product-price-{{order}}">
+                                        <div class="u-price-wrapper u-spacing-10"><!--product_old_price-->
+                                            <div class="u-hide-price u-old-price"><!--product_old_price_content-->{{prettyAmount}}<!--/product_old_price_content--></div><!--/product_old_price--><!--product_regular_price-->
+                                            <div class="u-price u-text-palette-1-base" style="font-size: 1.5rem; font-weight: 700;"><!--product_regular_price_content-->{{prettyAmount}}<!--/product_regular_price_content--></div><!--/product_regular_price-->
+                                        </div>
+                                    </div><!--/product_price--><!--product_button--><!--options_json--><!--{"clickType":"go-to-page","content":"ОПЛАТИТЬ"}--><!--/options_json-->
+                                    <a href="/pay?product-id={{id}}" class="u-active-palette-1-light-1 u-btn u-button-style u-custom-color-5 u-hover-palette-1-light-1 u-product-control u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-{{order}}" data-animation-name="" data-animation-duration="0" data-animation-delay="0" data-animation-direction=""><!--product_button_content-->ОПЛАТИТЬ<!--/product_button_content--></a><!--/product_button-->
+                                </div>
+                            </div><!--/product_item--><!--product_item-->
+                        {{/products}}
+                    </div>
+                    <a class="u-absolute-vcenter u-custom-color-5 u-gallery-nav u-gallery-nav-prev u-icon-circle u-opacity u-opacity-70 u-spacing-10 u-text-white u-gallery-nav-1" href="#" role="button">
+                <span aria-hidden="true">
+                  <svg viewBox="0 0 451.847 451.847"><path d="M97.141,225.92c0-8.095,3.091-16.192,9.259-22.366L300.689,9.27c12.359-12.359,32.397-12.359,44.751,0
+c12.354,12.354,12.354,32.388,0,44.748L173.525,225.92l171.903,171.909c12.354,12.354,12.354,32.391,0,44.744
+c-12.354,12.365-32.386,12.365-44.745,0l-194.29-194.281C100.226,242.115,97.141,234.018,97.141,225.92z"></path></svg>
+                </span>
+                        <span class="sr-only">
+                  <svg viewBox="0 0 451.847 451.847"><path d="M97.141,225.92c0-8.095,3.091-16.192,9.259-22.366L300.689,9.27c12.359-12.359,32.397-12.359,44.751,0
+c12.354,12.354,12.354,32.388,0,44.748L173.525,225.92l171.903,171.909c12.354,12.354,12.354,32.391,0,44.744
+c-12.354,12.365-32.386,12.365-44.745,0l-194.29-194.281C100.226,242.115,97.141,234.018,97.141,225.92z"></path></svg>
+                </span>
+                    </a>
+                    <a class="u-absolute-vcenter u-custom-color-5 u-gallery-nav u-gallery-nav-next u-icon-circle u-opacity u-opacity-70 u-spacing-10 u-text-white u-gallery-nav-2" href="#" role="button">
+                <span aria-hidden="true">
+                  <svg viewBox="0 0 451.846 451.847"><path d="M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744
+L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.359,32.391-12.359,44.75,0l194.287,194.284
+c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z"></path></svg>
+                </span>
+                        <span class="sr-only">
+                  <svg viewBox="0 0 451.846 451.847"><path d="M345.441,248.292L151.154,442.573c-12.359,12.365-32.397,12.365-44.75,0c-12.354-12.354-12.354-32.391,0-44.744
+L278.318,225.92L106.409,54.017c-12.354-12.359-12.354-32.394,0-44.748c12.354-12.359,32.391-12.359,44.75,0l194.287,194.284
+c6.177,6.18,9.262,14.271,9.262,22.366C354.708,234.018,351.617,242.115,345.441,248.292z"></path></svg>
+                </span>
+                    </a>
+                </div><!--/products-->
+            </div>
+        </div>
+    </div>
+</section>
+{{>contacts}}
+</body></html>
