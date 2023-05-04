@@ -7424,7 +7424,8 @@ section.u-image:not(.u-hover-box),
 }
 .u-valign-middle,
 .u-valign-top,
-.u-valign-bottom {
+.u-valign-bottom,
+.u-valign-space-between{
   display: flex;
   flex-direction: column;
 }
@@ -7486,8 +7487,12 @@ section.u-image:not(.u-hover-box),
 }
 .u-valign-middle > *,
 .u-valign-top > *,
-.u-valign-bottom > * {
+.u-valign-bottom > *,
+..u-valign-space-between {
   flex-shrink: 0;
+}
+.u-valign-space-between {
+  justify-content: space-between;
 }
 .u-valign-middle {
   justify-content: center;
