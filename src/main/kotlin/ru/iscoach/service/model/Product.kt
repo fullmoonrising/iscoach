@@ -5,5 +5,6 @@ enum class Product(val label: String) {
     SESSION("Коучинговая сессия"),
     REGRESSION("Регрессия"),
     PACKAGE("Пакет сессий"),
-    MARATHON("Участие в марафоне")
+    MARATHON("Участие в марафоне"),
+    TEST("Тестовый тест")
 }
