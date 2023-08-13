@@ -1,38 +1,41 @@
 package ru.iscoach.service
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KLogging
 import org.springframework.stereotype.Service
 import org.telegram.telegrambots.meta.api.methods.invoices.SendInvoice
 import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException
 import ru.iscoach.ISCoachBot
 import ru.iscoach.config.BotCredentialsConfig
+import ru.iscoach.extrensions.chatId
+import ru.iscoach.extrensions.toJson
 import ru.iscoach.persistence.entity.toDto
 import ru.iscoach.persistence.repos.PriceListRepo
-import ru.iscoach.service.model.Product
 import ru.iscoach.service.model.InvoicePayload
 import ru.iscoach.service.model.InvoiceProviderData
-import ru.iscoach.service.model.dto.PriceListDto
-import ru.iscoach.service.model.dto.toLabeledPrice
+import ru.iscoach.service.model.Product
+import ru.iscoach.service.model.ProductCategory
+import ru.iscoach.service.model.entity.toLabeledPrice
 
 @Service
 class InvoiceService(
     private val bot: ISCoachBot,
     private val botCredentials: BotCredentialsConfig,
     private val priceListRepo: PriceListRepo,
-    private val objectMapper: ObjectMapper,
     private val messageService: MessageService
 ) : KLogging() {
     private val issuedInvoices: MutableList<Message> = mutableListOf()
-    fun sendInvoice(update: Update): Message? {
-        issuedInvoices.forEach { messageService.deleteMessage(it.chatId, it.messageId) }
-        issuedInvoices.clear()
+
+    fun clearInvoices(chatId: Long) {
+        issuedInvoices.filter { it.chatId == chatId }.forEach { messageService.deleteMessage(it.chatId, it.messageId) }
+        issuedInvoices.removeIf { it.chatId == chatId }
+    }
+
+    fun sendInvoice(product: Product, update: Update): Message? {
+        clearInvoices(update.chatId)
         return try {
-            bot.execute(buildInvoice(update)).also {
+            bot.execute(buildInvoice(product, update)).also {
                 issuedInvoices.add(it)
             }
         } catch (ex: TelegramApiException) {
@@ -41,48 +44,31 @@ class InvoiceService(
         }
     }
 
-    private fun buildInvoice(update: Update): SendInvoice {
-        val product = priceListRepo.findItemById(Product.SESSION)?.toDto()
-            ?: throw RuntimeException("${Product.SESSION} is not found in price list")
-        val payload = buildPayload(update, product)
-        val providerData = InvoiceProviderData(product)
+    private fun buildInvoice(product: Product, update: Update): SendInvoice {
+        val productDetails = priceListRepo.findItemById(product)?.toDto()
+            ?: throw RuntimeException("$product is not found in price list")
+        val payload = InvoicePayload(productDetails, update)
+        val providerData = InvoiceProviderData(productDetails)
         return SendInvoice.builder()
-            .chatId(update.message.chatId)
-            .title(product.id.label)
-            .description("Запись на коуч сессию со мной (тут нужно опбольше текста типа после оплаты я с вами свяжусь и назначим время и тд)")
-            .payload(objectMapper.writeValueAsString(payload))
+            .chatId(update.chatId)
+            .title(productDetails.id.label)
+            .description(productDetails.description)
+            .payload(payload.toJson())
             .providerToken(botCredentials.botProviderToken)
-            .providerData(objectMapper.writeValueAsString(providerData))
+            .providerData(providerData.toJson())
             .currency("RUB")
-            .price(product.toLabeledPrice())
+            .price(productDetails.toLabeledPrice())
             .startParameter("")
-            .photoUrl("https://clevermemo.com/blog/wp-content/uploads/2019/08/complimentary-coaching-session-sample.png")
-            .needName(true)
-            .needPhoneNumber(true)
-            .needEmail(true)
-            .sendPhoneNumberToProvider(true)
-            .sendEmailToProvider(true)
-            .replyMarkup(buildPayButton())
-            .build()
-    }
-
-    private fun buildPayload(update: Update, product: PriceListDto) =
-        InvoicePayload(
-            product = product,
-            userId = update.message.from.id,
-            chatId = update.message.chatId,
-        )
-
-    private fun buildPayButton(): InlineKeyboardMarkup {
-        return InlineKeyboardMarkup.builder()
-            .keyboardRow(
-                listOf(
-                    InlineKeyboardButton.builder()
-                        .text("Записаться на сессию")
-                        .pay(true)
-                        .build()
-                )
-            )
+            .also { invoiceBuilder -> productDetails.photoUrl?.let { invoiceBuilder.photoUrl(it) } }
+            .also {
+                if (product.category == ProductCategory.SERVICE) {
+                    it.needName(true)
+                        .needPhoneNumber(true)
+                        .needEmail(true)
+                        .sendPhoneNumberToProvider(true)
+                        .sendEmailToProvider(true)
+                }
+            }
             .build()
     }
 }

@@ -41877,7 +41877,8 @@ a.u-link.u-text-hover-grey-90:hover {
         }
         p.u-large-text
         {
-        font-size: 1.25rem;
+        font-size: 1rem;
+        text-align: justify;
         margin-top: 20px;
         margin-bottom: 20px;
         }

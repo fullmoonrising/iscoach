@@ -5,14 +5,13 @@ tasks.getByName<BootJar>("bootJar") { enabled = true; archiveBaseName.set(rootPr
 tasks.getByName<Jar>("jar") { enabled = false }
 
 plugins {
-    id("org.springframework.boot") version "3.0.1"
+    id("org.springframework.boot") version "3.1.2"
     id("io.spring.dependency-management") version "1.1.0"
-    kotlin("plugin.jpa") version "1.7.21"
-    kotlin("plugin.noarg") version "1.7.21"
-    kotlin("plugin.allopen") version "1.7.21"
-    kotlin("jvm") version "1.7.21"
-    kotlin("plugin.spring") version "1.7.21"
-    id("com.palantir.docker") version "0.34.0"
+    kotlin("plugin.jpa") version "1.8.10"
+    kotlin("plugin.noarg") version "1.8.10"
+    kotlin("plugin.allopen") version "1.8.10"
+    kotlin("jvm") version "1.8.10"
+    kotlin("plugin.spring") version "1.8.10"
 }
 
 group = "ru"
@@ -31,6 +30,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 //    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework:spring-core") {
+        exclude("commons-logging", "commons-logging")
+    }
     runtimeOnly("org.springframework.boot:spring-boot-devtools")
 
     // kotlin
@@ -42,7 +44,7 @@ dependencies {
     runtimeOnly("org.liquibase:liquibase-core:4.20.0")
 
     // telegram api
-    implementation("org.telegram:telegrambots:6.5.0")
+    implementation("org.telegram:telegrambots:6.7.0")
 
     // serialisation
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
@@ -74,13 +76,4 @@ tasks.withType<Test> {
 
 tasks.register("stage") {
     dependsOn("build")
-}
-
-docker {
-    name = "everbald/${rootProject.name}:latest"
-    tasks.getByName<BootJar>("bootJar").let {
-        this.dependsOn(it)
-        this.files(it.archiveFile)
-    }
-    tag("GitHub", "everbald/${rootProject.name}:latest")
 }

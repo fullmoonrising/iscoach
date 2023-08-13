@@ -1,9 +1,14 @@
 package ru.iscoach.service.model
 
-import ru.iscoach.service.model.dto.PriceListDto
+import org.telegram.telegrambots.meta.api.objects.Update
+import ru.iscoach.extrensions.chatId
+import ru.iscoach.service.model.entity.PriceListItem
 
 data class InvoicePayload(
-    val product: PriceListDto,
-    val userId: Long,
-    val chatId: Long,
-)
+    val product: Product,
+    val amount: Int,
+    val chatId: Long
+) {
+    constructor(product: PriceListItem, update: Update): this(product.id, product.amount, update.chatId)
+}
+

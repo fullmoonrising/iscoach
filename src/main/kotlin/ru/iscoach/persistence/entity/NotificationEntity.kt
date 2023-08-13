@@ -4,7 +4,7 @@ import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
-import ru.iscoach.service.model.dto.NotificationDto
+import ru.iscoach.service.model.entity.Notification
 
 @Entity
 @Table(name = "notification")
@@ -16,4 +16,4 @@ class NotificationEntity(
     val email: String
 )
 
-fun NotificationEntity.toDto() = NotificationDto(userId, email)
+fun NotificationEntity.toDto() = Notification(userId, email)

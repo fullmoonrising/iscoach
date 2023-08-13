@@ -23,3 +23,11 @@ databaseChangeLog:
             encoding: utf8
             path: 20230501-01-price_list.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 20230814-01
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: 20230814-01-add_meditation.sql
+            relativeToChangelogFile: true

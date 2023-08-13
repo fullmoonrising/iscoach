@@ -5,7 +5,7 @@ import jakarta.persistence.*
 import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.telegram.telegrambots.meta.api.objects.payments.SuccessfulPayment
-import ru.iscoach.service.model.dto.OrderInfoDto
+import ru.iscoach.service.model.entity.OrderInfo
 import ru.iscoach.service.model.OrderStatus
 
 @Entity
@@ -24,4 +24,4 @@ class OrderInfoEntity(
     val payment: SuccessfulPayment
 )
 
-fun OrderInfoEntity.toDto() = OrderInfoDto(id, status, payment)
+fun OrderInfoEntity.toDto() = OrderInfo(id, status, payment)

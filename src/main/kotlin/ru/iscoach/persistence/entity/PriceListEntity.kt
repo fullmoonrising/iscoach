@@ -2,7 +2,7 @@ package ru.iscoach.persistence.entity
 
 import jakarta.persistence.*
 import ru.iscoach.service.model.Product
-import ru.iscoach.service.model.dto.PriceListDto
+import ru.iscoach.service.model.entity.PriceListItem
 
 @Entity
 @Table(name = "price_list")
@@ -21,8 +21,14 @@ class PriceListEntity(
     @Column(nullable = false)
     val description: String,
 
+    @Column(nullable = true)
+    val photoUrl: String?,
+
+    @Column(nullable = true)
+    val fileUrl: String?,
+
     @Column(nullable = false)
     val order: Int
 )
 
-fun PriceListEntity.toDto(): PriceListDto = PriceListDto(id, amount, name, description, order)
+fun PriceListEntity.toDto(): PriceListItem = PriceListItem(id, amount, name, description, photoUrl, fileUrl, order)

@@ -2,10 +2,8 @@ package ru.iscoach.service.model
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import ru.iscoach.extrensions.format
-import ru.iscoach.service.model.dto.PriceListDto
+import ru.iscoach.service.model.entity.PriceListItem
 import java.io.Serializable
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
 
 data class InvoiceProviderData(
     val receipt: Receipt
@@ -27,7 +25,7 @@ data class InvoiceProviderData(
         }
     }
 
-    constructor(product: PriceListDto) : this(
+    constructor(product: PriceListItem) : this(
         receipt = Receipt(
             listOf(
                 Receipt.ReceiptItem(

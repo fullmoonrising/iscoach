@@ -14,7 +14,8 @@ import ru.iscoach.config.BotCredentialsConfig
 import ru.iscoach.extrensions.format
 import ru.iscoach.persistence.entity.toDto
 import ru.iscoach.persistence.repos.NotificationRepo
-import ru.iscoach.service.model.dto.OrderInfoDto
+import ru.iscoach.service.model.ProductCategory
+import ru.iscoach.service.model.entity.OrderInfo
 
 @Service
 class NotificationService(
@@ -25,14 +26,17 @@ class NotificationService(
 ) : KLogging() {
     private val photoPath = "/static/images/OrderReceived.png"
 
-    fun sendNotifications(orderInfo: OrderInfoDto) {
+    fun sendNotifications(orderInfo: OrderInfo) {
         notificationRepo.findAll().map { it.toDto() }.forEach {
             sendSellerTelegramNotification(orderInfo, it.userId)
             sendSellerMailNotification(orderInfo, it.email)
         }
-        sendCustomerMailNotification(orderInfo)
+        if (orderInfo.payload.product.category != ProductCategory.DIGITAL_GOODS) {
+            sendCustomerMailNotification(orderInfo)
+        }
     }
-    private fun sendSellerTelegramNotification(orderInfo: OrderInfoDto, messageTo: Long) {
+
+    private fun sendSellerTelegramNotification(orderInfo: OrderInfo, messageTo: Long) {
         try {
             bot.execute(buildSellerTelegramNotification(orderInfo, messageTo))
             logger.info { "Send order notification to $messageTo" }
@@ -41,7 +45,7 @@ class NotificationService(
         }
     }
 
-    private fun buildSellerTelegramNotification(orderInfo: OrderInfoDto, messageTo: Long): SendPhoto {
+    private fun buildSellerTelegramNotification(orderInfo: OrderInfo, messageTo: Long): SendPhoto {
         return SendPhoto
             .builder()
             .parseMode(ParseMode.HTML)
@@ -52,19 +56,19 @@ class NotificationService(
     }
 
 
-    private fun buildSellerCaption(orderInfo: OrderInfoDto) =
+    private fun buildSellerCaption(orderInfo: OrderInfo) =
         """
             <b>Получен новый заказ №${orderInfo.id} с помощью <a href="tg://user?id=${bot.me.id}">бота</a></b>
             <b>Детали заказа:</b>
-            <i>Услуга:</i> <b>${orderInfo.payload.product.id.label}</b>
+            <i>Услуга:</i> <b>${orderInfo.payload.product.label}</b>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b>
             <i>Клиент:</i>
-                <i>Имя:</i> <b>${orderInfo.payment.orderInfo.name}</b>
-                <i>Телефон:</i> <b>+${orderInfo.payment.orderInfo.phoneNumber}</b>
-                <i>Почта:</i> <b>${orderInfo.payment.orderInfo.email}</b>
+                <i>Имя:</i> <b>${orderInfo.payment.orderInfo?.name ?: ""}</b>
+                <i>Телефон:</i> <b>+${orderInfo.payment.orderInfo?.phoneNumber ?: ""}</b>
+                <i>Почта:</i> <b>${orderInfo.payment.orderInfo?.email ?: ""}</b>
         """.trimIndent()
 
-    private fun sendSellerMailNotification(orderInfo: OrderInfoDto, mailTo: String) {
+    private fun sendSellerMailNotification(orderInfo: OrderInfo, mailTo: String) {
         val message = javaMailSender.createMimeMessage()
         val helper = MimeMessageHelper(message)
         helper.setFrom(InternetAddress(botCredentials.botMail, "ISCoach бот"))
@@ -75,19 +79,19 @@ class NotificationService(
         logger.info { "Send order notification to $mailTo" }
     }
 
-    private fun buildSellerMailBody(orderInfo: OrderInfoDto) =
+    private fun buildSellerMailBody(orderInfo: OrderInfo) =
         """
             <b>Получен новый заказ №${orderInfo.id} с помощью <a href="tg://user?id=${bot.me.id}">бота</a></b><br>
             <b>Детали заказа:</b><br>
-            <i>Услуга:</i> <b>${orderInfo.payload.product.id.label}</b><br>
+            <i>Услуга:</i> <b>${orderInfo.payload.product.label}</b><br>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b><br>
             <i>Клиент:</i><br>
-            &emsp;&emsp;<i>Имя:</i> <b>${orderInfo.payment.orderInfo.name}</b><br>
-            &emsp;&emsp;<i>Телефон:</i> <b>+${orderInfo.payment.orderInfo.phoneNumber}</b><br>
-            &emsp;&emsp;<i>Почта:</i> <b>${orderInfo.payment.orderInfo.email}</b><br>
+            &emsp;&emsp;<i>Имя:</i> <b>${orderInfo.payment.orderInfo?.name ?: ""}</b><br>
+            &emsp;&emsp;<i>Телефон:</i> <b>+${orderInfo.payment.orderInfo?.phoneNumber ?: ""}</b><br>
+            &emsp;&emsp;<i>Почта:</i> <b>${orderInfo.payment.orderInfo?.email ?: ""}</b><br>
         """.trimIndent()
 
-    private fun sendCustomerMailNotification(orderInfo: OrderInfoDto) {
+    private fun sendCustomerMailNotification(orderInfo: OrderInfo) {
         val message = javaMailSender.createMimeMessage()
         val helper = MimeMessageHelper(message)
         helper.setFrom(InternetAddress(botCredentials.botMail, "ISCoach бот"))
@@ -98,11 +102,11 @@ class NotificationService(
         logger.info { "Send order notification to ${orderInfo.payment.orderInfo.email}" }
     }
 
-    private fun buildCustomerSellerMailBody(orderInfo: OrderInfoDto) =
+    private fun buildCustomerSellerMailBody(orderInfo: OrderInfo) =
         """
             <b>Получен новый заказ №${orderInfo.id} с помощью <a href="tg://user?id=${bot.me.id}">бота</a></b><br>
             <b>Детали заказа:</b><br>
-            <i>Услуга:</i> <b>${orderInfo.payload.product.id.label}</b><br>
+            <i>Услуга:</i> <b>${orderInfo.payload.product.label}</b><br>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b><br>
             Мы свяжемся с вами в ближайшее время для уточнения деталей
         """.trimIndent()
