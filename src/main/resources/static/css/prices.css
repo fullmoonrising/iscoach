@@ -32,7 +32,10 @@
   font-size: 1.0rem;
   font-style: italic;
   font-color: red !important;
-  margin: 0 3 0 0;
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
 
 .u-section-1 .u-text-2 {
