@@ -6,7 +6,8 @@ import ru.iscoach.service.model.entity.PriceListItem
 import java.io.Serializable
 
 data class InvoiceProviderData(
-    val receipt: Receipt
+    val receipt: Receipt,
+    val customer: Customer?
 ) : Serializable {
     data class Receipt(
         val items: List<ReceiptItem>,
@@ -25,7 +26,12 @@ data class InvoiceProviderData(
         }
     }
 
-    constructor(product: PriceListItem) : this(
+    data class Customer(
+        val email: String,
+        val phone: String
+    ): Serializable
+
+    constructor(product: PriceListItem, customer: Customer? = null) : this(
         receipt = Receipt(
             listOf(
                 Receipt.ReceiptItem(
@@ -35,6 +41,7 @@ data class InvoiceProviderData(
                     ),
                 )
             )
-        )
+        ),
+        customer = customer
     )
 }
