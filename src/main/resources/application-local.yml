@@ -41,5 +41,5 @@ spring:
 bot:
   username: ${IS_BOT_USERNAME}
   token: ${IS_BOT_TOKEN}
-  provider.token: 401643678:TEST:54f8a934-56e3-4fb2-a21d-eaa6c847f927
+  provider.token: ${IS_BOT_PROVIDER_TOKEN}
   mail: ${IS_BOT_MAIL}

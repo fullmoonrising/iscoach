@@ -5,13 +5,13 @@ tasks.getByName<BootJar>("bootJar") { enabled = true; archiveBaseName.set(rootPr
 tasks.getByName<Jar>("jar") { enabled = false }
 
 plugins {
-    id("org.springframework.boot") version "3.1.2"
+    id("org.springframework.boot") version "3.1.5"
     id("io.spring.dependency-management") version "1.1.0"
-    kotlin("plugin.jpa") version "1.8.10"
-    kotlin("plugin.noarg") version "1.8.10"
-    kotlin("plugin.allopen") version "1.8.10"
-    kotlin("jvm") version "1.8.10"
-    kotlin("plugin.spring") version "1.8.10"
+    kotlin("plugin.jpa") version "1.9.20"
+    kotlin("plugin.noarg") version "1.9.20"
+    kotlin("plugin.allopen") version "1.9.20"
+    kotlin("jvm") version "1.9.20"
+    kotlin("plugin.spring") version "1.9.20"
 }
 
 group = "ru"
@@ -44,7 +44,7 @@ dependencies {
     runtimeOnly("org.liquibase:liquibase-core:4.20.0")
 
     // telegram api
-    implementation("org.telegram:telegrambots:6.7.0")
+    implementation("org.telegram:telegrambots:6.8.0")
 
     // serialisation
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

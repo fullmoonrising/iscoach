@@ -13,7 +13,6 @@ import ru.iscoach.extrensions.toJson
 import ru.iscoach.persistence.entity.toDto
 import ru.iscoach.persistence.repos.PriceListRepo
 import ru.iscoach.service.model.InvoicePayload
-import ru.iscoach.service.model.InvoiceProviderData
 import ru.iscoach.service.model.Product
 import ru.iscoach.service.model.ProductCategory
 import ru.iscoach.service.model.entity.toLabeledPrice
@@ -48,14 +47,12 @@ class InvoiceService(
         val productDetails = priceListRepo.findItemById(product)?.toDto()
             ?: throw RuntimeException("$product is not found in price list")
         val payload = InvoicePayload(productDetails, update)
-        val providerData = InvoiceProviderData(productDetails)
         return SendInvoice.builder()
             .chatId(update.chatId)
             .title(productDetails.id.label)
             .description(productDetails.description)
             .payload(payload.toJson())
             .providerToken(botCredentials.botProviderToken)
-            .providerData(providerData.toJson())
             .currency("RUB")
             .price(productDetails.toLabeledPrice())
             .startParameter("")
