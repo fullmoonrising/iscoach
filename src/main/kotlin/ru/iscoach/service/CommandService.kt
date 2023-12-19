@@ -32,9 +32,6 @@ class CommandService(
             "/static/images/session/session_title.jpg",
             update.chatId,
             null,
-//            """
-//                Текст давай
-//            """.trimIndent(),
             keyboardBuilder.buildProductCategoryKeyboard(ProductCategory.SERVICE)
         )
     }
