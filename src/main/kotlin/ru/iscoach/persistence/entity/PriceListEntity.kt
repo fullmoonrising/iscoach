@@ -21,6 +21,9 @@ class PriceListEntity(
     @Column(nullable = false)
     val description: String,
 
+    @Column
+    val shortDescription: String?,
+
     @Column(nullable = true)
     val photoUrl: String?,
 
@@ -28,7 +31,8 @@ class PriceListEntity(
     val fileUrl: String?,
 
     @Column(nullable = false)
-    val order: Int
+    val order: Int,
 )
 
-fun PriceListEntity.toDto(): PriceListItem = PriceListItem(id, amount, name, description, photoUrl, fileUrl, order)
+fun PriceListEntity.toDto(): PriceListItem =
+    PriceListItem(id, amount, name, description, shortDescription, photoUrl, fileUrl, order)

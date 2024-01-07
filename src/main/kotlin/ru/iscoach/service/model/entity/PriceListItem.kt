@@ -10,13 +10,15 @@ data class PriceListItem(
     val amount: Int,
     val name: String,
     val description: String,
+    val shortDescription: String?,
     val photoUrl: String?,
     val fileUrl: String?,
     val order: Int,
     val doubleAmount: Double = amount / 100.0,
-    val prettyAmount: String = "${doubleAmount.format()} ₽"
+    val prettyAmount: String = "${doubleAmount.format()} ₽",
 )
 
 fun PriceListItem.toLabeledPrice(): LabeledPrice = LabeledPrice(name, amount)
 
-fun PriceListItem.toEntity(): PriceListEntity = PriceListEntity(id, amount, name, description, photoUrl, fileUrl, order)
+fun PriceListItem.toEntity(): PriceListEntity =
+    PriceListEntity(id, amount, name, description, shortDescription, photoUrl, fileUrl, order)
