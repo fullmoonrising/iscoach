@@ -50,7 +50,7 @@ class InvoiceService(
         return SendInvoice.builder()
             .chatId(update.chatId)
             .title(productDetails.id.label)
-            .description(productDetails.description)
+            .description(productDetails.shortDescription ?: productDetails.description)
             .payload(payload.toJson())
             .providerToken(botCredentials.botProviderToken)
             .currency("RUB")
