@@ -1,4 +1,4 @@
-package ru.iscoach.service.model
+package ru.iscoach.service
 
 import mu.KLogging
 import org.springframework.stereotype.Service
@@ -9,6 +9,7 @@ import ru.iscoach.ISCoachBot
 import ru.iscoach.extrensions.toObject
 import ru.iscoach.persistence.entity.toDto
 import ru.iscoach.persistence.repos.PriceListRepo
+import ru.iscoach.service.model.InvoicePayload
 
 @Service
 class PreCheckoutService(

@@ -1,6 +1,7 @@
 package ru.iscoach.service.model
 
 enum class Product(val label: String, val category: ProductCategory) {
+    DONATE_SESSION("Сессия", ProductCategory.SERVICE),
     SESSION("Сессия", ProductCategory.SERVICE),
     DEEP_THERAPY("Глубинная терапия", ProductCategory.SERVICE),
     REGRESSION("Регрессия", ProductCategory.SERVICE),

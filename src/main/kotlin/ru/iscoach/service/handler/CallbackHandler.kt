@@ -10,7 +10,7 @@ import ru.iscoach.extrensions.chat
 import ru.iscoach.extrensions.from
 import ru.iscoach.service.CallbackService
 import ru.iscoach.service.InvoiceService
-import ru.iscoach.service.model.Action
+import ru.iscoach.service.model.type.Action
 import ru.iscoach.service.model.Product
 
 @Component

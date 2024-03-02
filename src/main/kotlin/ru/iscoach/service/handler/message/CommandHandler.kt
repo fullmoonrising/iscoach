@@ -8,8 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.Update
 import ru.iscoach.config.BotCredentialsConfig
 import ru.iscoach.extrensions.*
 import ru.iscoach.service.CommandService
-import ru.iscoach.service.model.Action
-import ru.iscoach.service.model.BotCommand
+import ru.iscoach.service.model.type.Action
+import ru.iscoach.service.model.type.BotCommand
 
 @Component
 @Priority(1)

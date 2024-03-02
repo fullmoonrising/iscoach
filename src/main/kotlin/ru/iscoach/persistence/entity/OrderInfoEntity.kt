@@ -6,7 +6,7 @@ import org.hibernate.annotations.JdbcTypeCode
 import org.hibernate.type.SqlTypes
 import org.telegram.telegrambots.meta.api.objects.payments.SuccessfulPayment
 import ru.iscoach.service.model.entity.OrderInfo
-import ru.iscoach.service.model.OrderStatus
+import ru.iscoach.service.model.type.OrderStatus
 
 @Entity
 @Table(name = "order_info")

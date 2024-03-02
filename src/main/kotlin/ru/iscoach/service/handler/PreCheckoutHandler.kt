@@ -5,7 +5,7 @@ import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.iscoach.extrensions.addPreCheckoutQueryReceived
-import ru.iscoach.service.model.PreCheckoutService
+import ru.iscoach.service.PreCheckoutService
 
 @Component
 @Priority(1)

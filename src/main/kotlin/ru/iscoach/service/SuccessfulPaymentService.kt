@@ -8,7 +8,7 @@ import ru.iscoach.persistence.entity.toDto
 import ru.iscoach.persistence.repos.OrderRepo
 import ru.iscoach.persistence.repos.PriceListRepo
 import ru.iscoach.service.model.entity.OrderInfo
-import ru.iscoach.service.model.OrderStatus
+import ru.iscoach.service.model.type.OrderStatus
 import ru.iscoach.service.model.ProductCategory
 import ru.iscoach.service.model.entity.toEntity
 
