@@ -3,8 +3,8 @@ package ru.iscoach.extrensions
 import mu.KLogger
 import org.telegram.telegrambots.meta.api.objects.Chat
 import org.telegram.telegrambots.meta.api.objects.User
-import ru.iscoach.service.model.Action
-import ru.iscoach.service.model.BotCommand
+import ru.iscoach.service.model.type.Action
+import ru.iscoach.service.model.type.BotCommand
 import ru.iscoach.service.model.Product
 
 fun KLogger.addActionReceived(action: Action, chat: Chat) =

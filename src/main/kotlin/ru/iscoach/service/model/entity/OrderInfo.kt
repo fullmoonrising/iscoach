@@ -4,7 +4,7 @@ import org.telegram.telegrambots.meta.api.objects.payments.SuccessfulPayment
 import ru.iscoach.extrensions.toObject
 import ru.iscoach.persistence.entity.OrderInfoEntity
 import ru.iscoach.service.model.InvoicePayload
-import ru.iscoach.service.model.OrderStatus
+import ru.iscoach.service.model.type.OrderStatus
 
 class OrderInfo(
     val id: Int? = null,
