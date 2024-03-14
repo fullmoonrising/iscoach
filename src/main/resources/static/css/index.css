@@ -49,6 +49,13 @@
   margin: 0;
 }
 
+.u-section-1 .u-text-1-1 {
+  font-size: 1.75rem;
+  font-weight: 200;
+  line-height: 1.2;
+  margin: 0;
+}
+
 .u-section-1 .u-text-2 {
   margin: 32px 0 0;
 }
@@ -214,6 +221,10 @@
 
   .u-section-1 .u-text-1 {
     font-size: 1.5rem;
+  }
+
+  .u-section-1 .u-text-1-1 {
+    font-size: 1.25rem;
   }
 } .u-section-2 {
   background-image: none;
