@@ -63,3 +63,11 @@ databaseChangeLog:
             encoding: utf8
             path: 20240302-02-donate_session_bookings.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 20240402-01
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: 20240402-01-update_services.sql
+            relativeToChangelogFile: true
