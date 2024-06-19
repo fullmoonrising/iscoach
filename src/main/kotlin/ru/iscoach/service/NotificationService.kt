@@ -63,9 +63,9 @@ class NotificationService(
             <i>Услуга:</i> <b>${orderInfo.payload.product.label}</b>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b>
             <i>Клиент:</i>
-                <i>Имя:</i> <b>${orderInfo.payment.orderInfo?.name ?: ""}</b>
-                <i>Телефон:</i> <b>+${orderInfo.payment.orderInfo?.phoneNumber ?: ""}</b>
-                <i>Почта:</i> <b>${orderInfo.payment.orderInfo?.email ?: ""}</b>
+                <i>Имя:</i> <b>${orderInfo.payment.orderInfo?.name.orEmpty()}</b>
+                <i>Телефон:</i> <b>+${orderInfo.payment.orderInfo?.phoneNumber.orEmpty()}</b>
+                <i>Почта:</i> <b>${orderInfo.payment.orderInfo?.email.orEmpty()}</b>
         """.trimIndent()
 
     private fun sendSellerMailNotification(orderInfo: OrderInfo, mailTo: String) {
@@ -86,9 +86,9 @@ class NotificationService(
             <i>Услуга:</i> <b>${orderInfo.payload.product.label}</b><br>
             <i>Оплаченная сумма:</i> <b>${(orderInfo.payment.totalAmount / 100.0).format()}₽</b><br>
             <i>Клиент:</i><br>
-            &emsp;&emsp;<i>Имя:</i> <b>${orderInfo.payment.orderInfo?.name ?: ""}</b><br>
-            &emsp;&emsp;<i>Телефон:</i> <b>+${orderInfo.payment.orderInfo?.phoneNumber ?: ""}</b><br>
-            &emsp;&emsp;<i>Почта:</i> <b>${orderInfo.payment.orderInfo?.email ?: ""}</b><br>
+            &emsp;&emsp;<i>Имя:</i> <b>${orderInfo.payment.orderInfo?.name.orEmpty()}</b><br>
+            &emsp;&emsp;<i>Телефон:</i> <b>+${orderInfo.payment.orderInfo?.phoneNumber.orEmpty()}</b><br>
+            &emsp;&emsp;<i>Почта:</i> <b>${orderInfo.payment.orderInfo?.email.orEmpty()}</b><br>
         """.trimIndent()
 
     private fun sendCustomerMailNotification(orderInfo: OrderInfo) {

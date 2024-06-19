@@ -7,6 +7,8 @@ enum class Product(val label: String, val category: ProductCategory) {
     REGRESSION("Регрессия", ProductCategory.SERVICE),
     PACKAGE("Пакет сессий", ProductCategory.SERVICE),
     PACKAGE2("Пакет сессий \"Глубинная терапия\"", ProductCategory.SERVICE),
+    SOUL_THERAPY("Терапия души", ProductCategory.SERVICE),
+    SOUL_THERAPY_GROUP("Терапия души, группа", ProductCategory.SERVICE),
     MEDITATION01("Медитация интуиции", ProductCategory.DIGITAL_GOODS),
     MEDITATION02("Медитация самоценности", ProductCategory.DIGITAL_GOODS),
     MEDITATION03("Настройка на лучший день", ProductCategory.DIGITAL_GOODS);
