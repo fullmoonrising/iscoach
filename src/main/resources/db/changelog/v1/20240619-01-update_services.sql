@@ -9,5 +9,5 @@ insert into price_list (id, category, "order", name, description, short_descript
      4000 * 100);
 
 update price_list
-    set order = 2
+    set "order" = 2
     where id = 'SESSION';
