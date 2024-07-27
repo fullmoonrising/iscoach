@@ -79,3 +79,11 @@ databaseChangeLog:
             encoding: utf8
             path: 20240619-01-update_services.sql
             relativeToChangelogFile: true
+  - changeSet:
+      id: 20240727-01
+      author: everbald
+      changes:
+        - sqlFile:
+            encoding: utf8
+            path: 20240727-01-update_services.sql
+            relativeToChangelogFile: true
