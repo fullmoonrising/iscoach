@@ -2,7 +2,7 @@ version: '3.6'
 
 services:
   app:
-    image: 'ghcr.io/everbald/iscoach:latest'
+    image: 'ghcr.io/fullmoonrising/iscoach:latest'
     build:
       context: .
       dockerfile: Dockerfile
