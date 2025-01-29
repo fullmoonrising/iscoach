@@ -1,7 +1,6 @@
 package ru.iscoach.service.handler.message
 
 import jakarta.annotation.Priority
-import mu.KLogging
 import org.springframework.stereotype.Component
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.iscoach.extrensions.addSuccessfulPaymentReceived
@@ -9,10 +8,9 @@ import ru.iscoach.extrensions.chat
 import ru.iscoach.extrensions.from
 import ru.iscoach.extrensions.isSuccessfulPayment
 import ru.iscoach.service.SuccessfulPaymentService
-import ru.iscoach.service.handler.Handler
 
 @Component
-@Priority(2)
+@Priority(3)
 class SuccessfulPaymentHandler(
     private val successfulPaymentService: SuccessfulPaymentService
 ) : AbstractMessageHandler() {

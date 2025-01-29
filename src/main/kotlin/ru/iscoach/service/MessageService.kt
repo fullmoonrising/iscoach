@@ -24,6 +24,7 @@ class MessageService(
         text: String,
         update: Update,
         replyMarkup: ReplyKeyboard? = null,
+        disableWebPagePreview: Boolean = false,
         reply: Boolean = false,
         parseMode: String = ParseMode.MARKDOWN
     ) = SendMessage.builder()
@@ -32,17 +33,48 @@ class MessageService(
         .text(text)
         .also { if (reply) it.replyToMessageId(update.message.messageId) }
         .also { sendMessage -> replyMarkup?.let<ReplyKeyboard, Unit> { sendMessage.replyMarkup(it) } }
+        .disableWebPagePreview(disableWebPagePreview)
+        .build()
+
+    private fun buildMessage(
+        text: String,
+        chatId: Long,
+        replyMarkup: ReplyKeyboard? = null,
+        disableWebPagePreview: Boolean = false,
+        parseMode: String = ParseMode.MARKDOWN
+    ) = SendMessage.builder()
+        .parseMode(parseMode)
+        .chatId(chatId)
+        .text(text)
+        .disableWebPagePreview(disableWebPagePreview)
+        .also { sendMessage -> replyMarkup?.let<ReplyKeyboard, Unit> { sendMessage.replyMarkup(it) } }
         .build()
 
     fun sendMessage(
         text: String,
         update: Update,
         replyMarkup: ReplyKeyboard? = null,
+        disableWebPagePreview: Boolean = false,
         reply: Boolean = false,
         parseMode: String = ParseMode.MARKDOWN
     ): Message? =
         try {
-            bot.execute(buildMessage(text, update, replyMarkup, reply, parseMode))
+            bot.execute(buildMessage(text, update, replyMarkup, disableWebPagePreview, reply, parseMode))
+        } catch (e: TelegramApiException) {
+            logger.error(e) { "Message text was: $text" }
+            null
+        }
+
+    fun sendMessage(
+        text: String,
+        chatId: Long,
+        replyMarkup: ReplyKeyboard? = null,
+        disableWebPagePreview: Boolean = false,
+        reply: Boolean = false,
+        parseMode: String = ParseMode.MARKDOWN
+    ): Message? =
+        try {
+            bot.execute(buildMessage(text, chatId, replyMarkup, disableWebPagePreview, parseMode))
         } catch (e: TelegramApiException) {
             logger.error(e) { "Message text was: $text" }
             null

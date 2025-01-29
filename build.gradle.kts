@@ -5,13 +5,13 @@ tasks.getByName<BootJar>("bootJar") { enabled = true; archiveBaseName.set(rootPr
 tasks.getByName<Jar>("jar") { enabled = false }
 
 plugins {
-    id("org.springframework.boot") version "3.1.5"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("plugin.jpa") version "1.9.20"
-    kotlin("plugin.noarg") version "1.9.20"
-    kotlin("plugin.allopen") version "1.9.20"
-    kotlin("jvm") version "1.9.20"
-    kotlin("plugin.spring") version "1.9.20"
+    id("org.springframework.boot") version "3.4.2"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("plugin.jpa") version "2.1.10"
+    kotlin("plugin.noarg") version "2.1.10"
+    kotlin("plugin.allopen") version "2.1.10"
+    kotlin("jvm") version "2.1.10"
+    kotlin("plugin.spring") version "2.1.10"
 }
 
 group = "ru"
@@ -68,6 +68,10 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "19"
     }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_19
 }
 
 tasks.withType<Test> {
