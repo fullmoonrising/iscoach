@@ -8,11 +8,12 @@ import ru.iscoach.service.model.ProductCategory
 @Service
 class CommandService(
     private val messageService: MessageService,
-    private val keyboardBuilder: KeyboardBuilder
+    private val keyboardBuilder: KeyboardBuilder,
 ) {
     fun sendStartMessage(update: Update) {
         messageService.sendMessage(
-            """
+            text =
+                """
                 _Добро пожаловать! 
                 Меня зовут Ирина Аравина, и я являюсь проводником и life коучем. 
                 
@@ -24,7 +25,9 @@ class CommandService(
 
                 *Готовы ли Вы начать этот увлекательный путь к лучшей версии себя?*
             """.trimIndent(),
-            update)
+            update = update,
+            replyMarkup = keyboardBuilder.buildMainMenu()
+        )
     }
 
     fun sendSessionMenu(update: Update) {
