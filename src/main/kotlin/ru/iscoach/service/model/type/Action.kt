@@ -1,5 +1,5 @@
 package ru.iscoach.service.model.type
 
 enum class Action {
-    COMMAND, CALLBACKCOMMAND
+    COMMAND, TEXTCOMMAND, CALLBACKCOMMAND, SCENARIO
 }

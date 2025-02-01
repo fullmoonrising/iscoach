@@ -43,3 +43,7 @@ bot:
   token: ${BOT_TOKEN}
   provider.token: ${BOT_PROVIDER_TOKEN}
   mail: ${BOT_MAIL}
+
+logging:
+  level:
+    org.hibernate: WARN
