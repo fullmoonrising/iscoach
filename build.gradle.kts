@@ -66,12 +66,12 @@ allOpen {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "19"
+        jvmTarget = "21"
     }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_19
+    sourceCompatibility = JavaVersion.VERSION_21
 }
 
 tasks.withType<Test> {
