@@ -1,88 +1,77 @@
 <!DOCTYPE html>
-<html style="font-size: 16px;" lang="ru">
+<html lang="ru">
 <head>
     {{>head}}
     <link rel="stylesheet" href="/css/index.css" media="screen">
 </head>
-<body class="u-body u-xl-mode" data-lang="ru"><header class="u-clearfix u-header u-header" id="sec-a386"><div class="u-clearfix u-sheet u-sheet-1">
-    <nav class="u-menu u-menu-one-level u-menu-open-right u-offcanvas u-menu-1">
-        <div class="menu-collapse" style="font-size: 1rem; letter-spacing: 0px;">
-            <a class="u-button-style u-custom-left-right-menu-spacing u-custom-padding-bottom u-custom-text-active-color u-custom-top-bottom-menu-spacing u-nav-link u-text-active-palette-1-base u-text-hover-palette-2-base" href="#">
-                <svg class="u-svg-link" viewBox="0 0 24 24"><use xlink:href="#menu-hamburger"></use></svg>
-                <svg class="u-svg-content" version="1.1" id="menu-hamburger" viewBox="0 0 16 16" x="0px" y="0px" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg"><g><rect y="1" width="16" height="2"></rect><rect y="7" width="16" height="2"></rect><rect y="13" width="16" height="2"></rect>
-                </g></svg>
-            </a>
-        </div>
-        <div class="u-custom-menu u-nav-container">
-            <ul class="u-nav u-spacing-2 u-unstyled u-nav-1"><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="#sec-about" style="padding: 10px 20px;">Обо мне</a>
-            </li><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="#sec-contacts" style="padding: 10px 20px;">Контакты</a>
-            </li><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="/about" style="padding: 10px 20px;">Консультация</a>
-<!--            </li><li class="u-nav-item"><a class="u-active-grey-5 u-border-active-palette-1-base u-border-hover-palette-1-base u-button-style u-hover-grey-10 u-nav-link u-text-active-custom-color-5 u-text-grey-90 u-text-hover-grey-90" href="/prices" style="padding: 10px 20px;">Стоимость</a>-->
-            </li></ul>
-        </div>
-        <div class="u-custom-menu u-nav-container-collapse">
-            <div class="u-container-style u-custom-color-5 u-inner-container-layout u-opacity u-opacity-95 u-sidenav">
-                <div class="u-inner-container-layout u-sidenav-overflow">
-                    <div class="u-menu-close"></div>
-                    <ul class="u-align-left u-nav u-popupmenu-items u-unstyled u-nav-2"><li class="u-nav-item"><a class="u-button-style u-nav-link" href="#sec-about">Обо мне</a>
-                    </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="#sec-contacts">Контакты</a>
-                    </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/about">Консультация</a>
-<!--                    </li><li class="u-nav-item"><a class="u-button-style u-nav-link" href="/prices">Стоимость</a>-->
-                    </li></ul>
+<body class="home-page">
+{{>header}}
+
+<main>
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="hero__inner">
+            <div class="hero__copy">
+                <p class="eyebrow">Индивидуальная работа · онлайн и очно</p>
+                <h1 id="hero-title">Найти ясность<br>и опору внутри себя</h1>
+                <p class="hero__lead">Помогаю разобраться в сложных жизненных ситуациях, отношениях и важных переменах — бережно, без оценок и готовых советов.</p>
+                <p class="hero__note">Психолог · коуч ICF · опыт работы более 12 лет</p>
+                <div class="hero__actions">
+                    <a class="button" href="https://t.me/monako_irina" target="_blank" rel="noopener">Обсудить запрос</a>
+                    <a class="text-link" href="/about">Как проходит консультация <span aria-hidden="true">→</span></a>
                 </div>
             </div>
-            <div class="u-menu-overlay"></div>
+            <figure class="hero__visual">
+                <div class="hero__portrait" role="img" aria-label="Ирина Аравина"></div>
+                <figcaption class="hero__caption"><span>Ирина Аравина</span><span>Психолог, автор метода «Глубинная терапия»</span></figcaption>
+            </figure>
         </div>
-    </nav>
-</div></header>
-<section class="u-align-center u-clearfix u-section-1" id="carousel_f9a7">
-    <div class="u-clearfix u-sheet u-sheet-1">
-        <div class="u-shape u-shape-svg u-text-custom-color-5 u-shape-1">
-            <svg class="u-svg-link" preserveAspectRatio="none" viewBox="0 0 160 160" style=""><use xlink:href="#svg-e858"></use></svg>
-            <svg class="u-svg-content" viewBox="0 0 160 160" x="0px" y="0px" id="svg-e858" style="enable-background:new 0 0 160 160;"><path d="M80,30c27.6,0,50,22.4,50,50s-22.4,50-50,50s-50-22.4-50-50S52.4,30,80,30 M80,0C35.8,0,0,35.8,0,80s35.8,80,80,80
-	s80-35.8,80-80S124.2,0,80,0L80,0z"></path></svg>
-        </div>
-        <div class="u-expanded-width-xs u-image u-image-circle u-image-1" data-image-width="853" data-image-height="1280"></div>
-        <div class="u-custom-color-5 u-shape u-shape-circle u-shape-2"></div>
-        <div class="u-shape u-shape-svg u-text-custom-color-5 u-shape-3">
-            <svg class="u-svg-link" preserveAspectRatio="none" viewBox="0 0 160 160" style=""><use xlink:href="#svg-a0bf"></use></svg>
-            <svg class="u-svg-content" viewBox="0 0 160 160" x="0px" y="0px" id="svg-a0bf" style="enable-background:new 0 0 160 160;"><path d="M80,30c27.6,0,50,22.4,50,50s-22.4,50-50,50s-50-22.4-50-50S52.4,30,80,30 M80,0C35.8,0,0,35.8,0,80s35.8,80,80,80
-	s80-35.8,80-80S124.2,0,80,0L80,0z"></path></svg>
-        </div>
-        <div class="u-container-style u-group u-white u-group-1" id="sec-about">
-            <div class="u-container-layout u-valign-bottom u-container-layout-1">
-                <h2 class="u-text u-text-1">Ирина Аравина</h2>
-                <p class="u-large-text u-text u-text-variant u-text-2">
-                    <b>Психолог, член Общероссийской Психотерапевтической Лиги, коуч ICF, автор метода «Глубинная Терапия»</b><br>
-                    <br>
-                    Образование:<br>
-                    • Международная Академия EDPRO, резидент Сколково, МИП (Московский Институт Психоанализа)<br>
-                    • Университет Торонто (Канада) - факультет межличностных отношений University of Toronto, The Arts and Science of Relationships: Understanding Human Needs<br>
-                    • Перинатальная психология<br>
-                    • Возрастная психология • Базовый курс кинезиологии, изучала множество направлений • Гештальт, КПТ, ОРКТ, Символдрама.<br>
-                    Создала свой метод, «Глубинной терапии» - симбиоз разных психологических техник.<br>
-                    Специалист метода «Терапия Души».<br>
-                    <br>
-                    Mне всегда было интересно, что хранится в памяти людей и как формируется травма. Ведь если знать, как все устроено - это можно починить. Помогаю людям в трудных жизненных ситуациях.<br>
-                    <br>
-                    Богатый опыт переговоров с первыми лицами, популярными артистами, топ крупных компаний, а также опыт управления и организации работы коллектива в 100 человек.<br>
-                    <br>
-                    Опыт более 12 лет работы с людьми. Постоянное повышение квалификации и подтверждение своей сертификации. Прохожу регулярные супервизии и практикумы. Поэтому и скорость решения вашего запроса у меня большая. Скорость и четкость.<br>
-                    Провожу очные терапевтические группы в Москве и других городах, а также индивидуальные онлайн консультации по всему миру.<br>
-                    <br>
-                    Работаю с темами: отношения, деньги, самооценка, бизнес.<br>
-                    <br>
-                    <b>Я помогаю сильным людям сохранять внутреннюю тишину, когда всё остальное слишком громко</b>
-                </p>
-                <h2 class="u-text u-text-1-1">
-                    Конфиденциальность и индивидуальный подход<br>
-                    Это не просто терапия<br>
-                    Это новый уровень внутренней ясности
-                </h2>
-                <a href="/about" class="u-active-palette-1-light-1 u-border-none u-btn u-btn-rectangle u-button-style u-custom-color-5 u-hover-palette-1-light-1 u-radius-0 u-text-active-white u-text-body-alt-color u-text-hover-white u-btn-1">Консультация</a>
+    </section>
+
+    <section class="section concerns" aria-labelledby="concerns-title">
+        <div class="section__inner">
+            <p class="eyebrow">С чем можно прийти</p>
+            <h2 id="concerns-title">Когда хочется понять,<br>что происходит и куда двигаться</h2>
+            <div class="concerns__grid">
+                <article class="concern"><span>01</span><h3>Отношения</h3><p>Близость, границы, повторяющиеся сценарии и перемены в отношениях.</p></article>
+                <article class="concern"><span>02</span><h3>Самооценка</h3><p>Внутренняя опора, уверенность в себе и бережное отношение к своим потребностям.</p></article>
+                <article class="concern"><span>03</span><h3>Деньги и работа</h3><p>Тревога о будущем, профессиональный выбор, рост и сложные решения.</p></article>
+                <article class="concern"><span>04</span><h3>Личные перемены</h3><p>Потеря ориентиров, кризисные периоды и поиск нового направления.</p></article>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    <section class="section approach" id="approach" aria-labelledby="approach-title">
+        <div class="section__inner approach__inner">
+            <div>
+                <p class="eyebrow">Спокойно и без давления</p>
+                <h2 id="approach-title">Как проходит работа</h2>
+            </div>
+            <div class="approach__text">
+                <p>На встрече мы вместе исследуем ваш запрос и то, что за ним стоит. Я внимательно слушаю, задаю вопросы и помогаю увидеть ситуацию яснее — без оценок, навязанных решений и необходимости быть «удобным».</p>
+                <ul class="approach__facts">
+                    <li>Индивидуальные онлайн-консультации</li>
+                    <li>Очные терапевтические группы в Москве и других городах</li>
+                    <li>Конфиденциальный и индивидуальный подход</li>
+                </ul>
+                <a class="text-link" href="/about">Подробнее о консультации <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="section about-preview" id="about-preview" aria-labelledby="about-title">
+        <div class="section__inner about-preview__inner">
+            <img class="about-preview__portrait" src="/images/index.jpg" alt="Ирина Аравина">
+            <div>
+                <p class="eyebrow">Немного обо мне</p>
+                <h2 id="about-title">Ирина Аравина</h2>
+                <p>Психолог, член Общероссийской профессиональной психотерапевтической лиги, коуч ICF. Более 12 лет работаю с людьми и продолжаю повышать квалификацию, прохожу супервизии и практикумы.</p>
+                <p>В работе соединяю психологические подходы и авторские техники, подбирая способ исследования под человека и его запрос.</p>
+                <a class="text-link" href="/about#credentials">Опыт и образование <span aria-hidden="true">→</span></a>
+            </div>
+        </div>
+    </section>
+
+</main>
 {{>contacts}}
-</body></html>
+</body>
+</html>
